@@ -18,7 +18,6 @@
     <ClCompile Include="Board.cpp">
       <Filter>Play</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="BlockBlue.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
@@ -33,6 +32,9 @@
     </ClCompile>
     <ClCompile Include="BlockYellow.cpp">
       <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,7 +54,6 @@
     <ClInclude Include="Board.h">
       <Filter>Play</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="BlockRed.h">
       <Filter>Play\Block</Filter>
     </ClInclude>
@@ -67,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="BlockYellow.h">
       <Filter>Play\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
