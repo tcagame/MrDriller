@@ -167,6 +167,7 @@
     <ClCompile Include="SceneTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
