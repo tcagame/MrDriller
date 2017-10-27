@@ -11,7 +11,6 @@ void updatePlayer( ) {
 }
 
 void drawPlayer( ) {
-	//DrawGraph( 0, 0, g_img_handle, TRUE);
 }
 
 void finalizePlayer( ) {
