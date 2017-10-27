@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenePlay.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneResult.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePlay.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneResult.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Play</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{6dcf611f-c931-410f-b153-6e729696e448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play">
+      <UniqueIdentifier>{93a5020b-d8ab-4b78-ad3f-530c9ac67459}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
