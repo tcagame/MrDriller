@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 //ブロック親クラス
 class Block {
@@ -15,13 +16,13 @@ public:
 public:
 	double x;
 	double y;
-	double tx;
-	double ty;
-	double tw;
-	double th;
+	int tx;
+	int ty;
+	int tw;
+	int th;
 };
 
-//仮A
+
 class BlueBlock : public Block {
 public:
 	BlueBlock( int x, int y ) :
@@ -54,3 +55,5 @@ public:
 	}
 	~YellowBlock( ) { };
 };
+
+extern void updateBlock( std::shared_ptr< Block > block );
