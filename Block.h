@@ -22,19 +22,35 @@ public:
 };
 
 //‰¼A
-class BlockA : public Block {
+class BlueBlock : public Block {
 public:
-	BlockA( int x, int y ) :
+	BlueBlock( int x, int y ) :
 		Block( x, y, 0, 0 ) {
 	}
-	~BlockA( ) { };
+	~BlueBlock( ) { };
 };
 
 //‰¼B
-class BlockB : public Block {
+class GreenBlock : public Block {
 public:
-	BlockB( int x, int y ) :
+	GreenBlock( int x, int y ) :
 		Block( x, y, 0, 16 * 5 ) {
 	}
-	~BlockB( ) { };
+	~GreenBlock( ) { };
+};
+
+class RedBlock : public Block {
+public:
+	RedBlock( int x, int y ) :
+		Block( x, y, 0, 16 * 10 ) {
+	}
+	~RedBlock( ) { };
+};
+
+class YellowBlock : public Block {
+public:
+	YellowBlock( int x, int y ) :
+		Block( x, y, 0, 16 * 15 ) {
+	}
+	~YellowBlock( ) { };
 };
