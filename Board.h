@@ -5,7 +5,7 @@
 class Board {
 public:
 	Board( );
-	~Board( );
+	virtual ~Board( );
 public:
 	void update( );
 	void draw( );

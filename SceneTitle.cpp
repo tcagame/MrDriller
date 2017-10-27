@@ -10,5 +10,5 @@ Scene::SCENE SceneTitle::update( ) {
 	return SCENE_TITLE;
 }
 
-void SceneTitle::draw( ) {
+void SceneTitle::draw( ) const {
 }

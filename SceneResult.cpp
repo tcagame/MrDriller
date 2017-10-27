@@ -10,5 +10,5 @@ Scene::SCENE SceneResult::update( ) {
 	return SCENE_RESULT;
 }
 
-void SceneResult::draw( ) {
+void SceneResult::draw( ) const {
 }

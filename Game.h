@@ -9,8 +9,6 @@ public:
 public:
 	void run( );
 private:
-	Scene::SCENE update( );
-	void draw( );
 	bool isLoop( ) const;
 	void changeScene( Scene::SCENE scene );
 private:

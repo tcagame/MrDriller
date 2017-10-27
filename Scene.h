@@ -11,6 +11,6 @@ public:
 	virtual ~Scene( );
 public:
 	virtual SCENE update( ) = 0;
-	virtual void draw( ) = 0;
+	virtual void draw( ) const = 0;
 };
 

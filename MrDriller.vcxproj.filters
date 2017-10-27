@@ -18,10 +18,22 @@
     <ClCompile Include="Board.cpp">
       <Filter>Play</Filter>
     </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>Play</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="BlockBlue.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockGreen.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockRed.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockYellow.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -40,10 +52,22 @@
     <ClInclude Include="Board.h">
       <Filter>Play</Filter>
     </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Play</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="BlockRed.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockBlue.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockGreen.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockYellow.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -51,6 +75,9 @@
     </Filter>
     <Filter Include="Play">
       <UniqueIdentifier>{93a5020b-d8ab-4b78-ad3f-530c9ac67459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Play\Block">
+      <UniqueIdentifier>{972e8f78-92e6-4c63-91c0-001ee5005eba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

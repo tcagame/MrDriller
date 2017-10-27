@@ -158,7 +158,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="block.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockBlue.cpp" />
+    <ClCompile Include="BlockGreen.cpp" />
+    <ClCompile Include="BlockRed.cpp" />
+    <ClCompile Include="BlockYellow.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -170,6 +174,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockBlue.h" />
+    <ClInclude Include="BlockGreen.h" />
+    <ClInclude Include="BlockRed.h" />
+    <ClInclude Include="BlockYellow.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />

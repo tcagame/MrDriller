@@ -4,8 +4,8 @@
 class SceneResult : public Scene {
 public:
 	SceneResult( );
-	~SceneResult( );
+	virtual ~SceneResult( );
 public:
 	SCENE update( );
-	void draw( );
+	void draw( ) const;
 };

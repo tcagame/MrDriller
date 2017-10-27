@@ -4,56 +4,22 @@
 //ブロック親クラス
 class Block {
 public:
-	Block( double x_, double y_, int tx_, int ty_ ) :
-		x( x_),
-		y( y_ ),
-		tx( tx_ ),
-		ty( ty_ ),
-		tw( 16 ),
-		th( 16 ) {
-	};
-	~Block( ) { };
+	Block( int x, int y, int tx, int ty );
+	virtual ~Block( );
 public:
-	double x;
-	double y;
-	int tx;
-	int ty;
-	int tw;
-	int th;
+	void update( );
+	void draw( int img_handle ) const;
+protected:
+	virtual void act( ) = 0;//固有処理
+protected:
+	//set系
+	void setTx( int tx );//画像内座標
+	void setTy( int ty );//画像内座標
+private:
+	double _x;
+	double _y;
+	int _tx;
+	int _ty;
 };
 
 
-class BlueBlock : public Block {
-public:
-	BlueBlock( int x, int y ) :
-		Block( x, y, 0, 0 ) {
-	}
-	~BlueBlock( ) { };
-};
-
-//仮B
-class GreenBlock : public Block {
-public:
-	GreenBlock( int x, int y ) :
-		Block( x, y, 0, 16 * 5 ) {
-	}
-	~GreenBlock( ) { };
-};
-
-class RedBlock : public Block {
-public:
-	RedBlock( int x, int y ) :
-		Block( x, y, 0, 16 * 10 ) {
-	}
-	~RedBlock( ) { };
-};
-
-class YellowBlock : public Block {
-public:
-	YellowBlock( int x, int y ) :
-		Block( x, y, 0, 16 * 15 ) {
-	}
-	~YellowBlock( ) { };
-};
-
-extern void updateBlock( std::shared_ptr< Block > block );

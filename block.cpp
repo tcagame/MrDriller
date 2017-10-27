@@ -1,5 +1,32 @@
 #include "Block.h"
+#include "DxLib.h"
 
-void updateBlock( std::shared_ptr< Block > block ) {
-	//ブロックの更新処理
+const int WIDTH = 100;
+const int HEIGHT = 60;
+const int SPRITE_SIZE = 16;
+
+Block::Block( int x, int y, int tx, int ty ) :
+_x( x ),
+_y( y ),
+_tx( tx ),
+_ty( ty ) {
 }
+
+Block::~Block( ) {
+}
+
+void Block::update( ) {
+	//ここに落下処理などを書く
+}
+
+void Block::draw( int img_handle ) const {
+	DrawRectExtendGraph( _x, _y, _x + WIDTH, _y + HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
+}
+
+void Block::setTx( int tx ) {
+	_tx = tx;
+};
+
+void Block::setTy( int ty ) {
+	_ty = ty;
+};

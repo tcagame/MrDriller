@@ -7,7 +7,7 @@
 class ScenePlay : public Scene {
 public:
 	ScenePlay( );
-	~ScenePlay( );
+	virtual ~ScenePlay( );
 public:
 	SCENE update( );
 	void draw( ) const;
@@ -18,4 +18,6 @@ private:
 private:
 	std::shared_ptr< Player > _player;
 	std::shared_ptr< Board > _board;
+	int _depth;
+	int _level;
 };

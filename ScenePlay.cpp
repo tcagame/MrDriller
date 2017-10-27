@@ -14,13 +14,10 @@ const int DRAW_Level_X = 1000;
 const int DRAW_Level_Y = 600;
 const int DRAW_STRING_COLOR = RGB( 255, 255, 255 );
 
-//ÉOÉçÅ[ÉoÉãïœêîêÈåæ
-static int g_depth = 0;
-static int g_level = 1;
-static int g_time = 0;
 
-
-ScenePlay::ScenePlay( ) {
+ScenePlay::ScenePlay( ) :
+_depth( 0 ),
+_level( 1 ) {
 	_player = std::shared_ptr< Player >( new Player( 100, 100 ) );
 	_board = std::shared_ptr< Board >( new Board( ) );
 }
@@ -46,7 +43,7 @@ void ScenePlay::draw( ) const {
 
 void ScenePlay::drawDepth( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "Depth:%d", g_depth );
+	sprintf_s( buf, "Depth:%d", _depth );
 	DrawString( DRAW_Depth_X, DRAW_Depth_Y, buf, DRAW_STRING_COLOR );
 }
 
@@ -58,6 +55,6 @@ void ScenePlay::drawAir( ) const {
 
 void ScenePlay::drawLevel( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "Level:%d", g_level );
+	sprintf_s( buf, "Level:%d", _level );
 	DrawString( DRAW_Level_X, DRAW_Level_Y, buf, DRAW_STRING_COLOR );
 }
