@@ -1,7 +1,11 @@
 #pragma once
-#include "Game.h"
+#include "Scene.h"
 
-extern void initTitle( );
-extern SCENE updateTitle( );
-extern void drawTitle( );
-extern void finalizeTitle( );
+class SceneTitle : public Scene {
+public:
+	SceneTitle( );
+	~SceneTitle( );
+public:
+	SCENE update( );
+	void draw( );
+};

@@ -1,6 +1,15 @@
 #pragma once
 
-extern void initPlayer( );
-extern void updatePlayer( );
-extern void drawPlayer( );
-extern void finalizePlayer( );
+
+class Player {
+public:
+	Player( int x, int y );
+	~Player( );
+public:
+	void update( );
+	void draw( );
+public://getån
+	int getAir( );
+private:
+	int _air;
+};

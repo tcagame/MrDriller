@@ -1,14 +1,22 @@
 #pragma once
+#include <memory>
+#include "Scene.h"
 
-/*-----------------—ñ‹“Œ^éŒ¾------------------*/
-enum SCENE {
-	SCENE_TITLE,
-	SCENE_PLAY,
-	SCENE_RESULT
+class Game {
+public:
+	Game( );
+	virtual ~Game( );
+public:
+	void run( );
+private:
+	Scene::SCENE update( );
+	void draw( );
+	bool isLoop( ) const;
+	void changeScene( Scene::SCENE scene );
+private:
+	std::shared_ptr< Scene > _scene;
+	Scene::SCENE _now_scene;
 };
-/*------------------’è”éŒ¾-------------------*/
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
-
-/*------------------ŠÖ”éŒ¾-------------------*/
-extern void run( );

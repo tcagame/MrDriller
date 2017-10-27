@@ -1,15 +1,14 @@
 #include "SceneResult.h"
 
-
-void initResult( ) {
+SceneResult::SceneResult( ) {
 }
 
-SCENE updateResult( ) {
+SceneResult::~SceneResult( ) {
+}
+
+Scene::SCENE SceneResult::update( ) {
 	return SCENE_RESULT;
 }
 
-void drawResult( ) {
-}
-
-void finalizeResult( ) {
+void SceneResult::draw( ) {
 }

@@ -1,16 +1,9 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "SceneTitle.h"
 #include "ScenePlay.h"
 #include "SceneResult.h"
 
-
-/*------------プロトタイプ関数宣言-------------*/
-bool initialize( );				  //初期化
-bool isLoop( );					  //ループチェック
-void update( );					  //更新
-void draw( );					  //描画
-void finalize( );				  //終了処理
-void changeScene( SCENE scene );  //シーン遷移
 
 /*------------------定数宣言-------------------*/
 //定数は大文字で宣言する
@@ -19,29 +12,11 @@ const char* TITLE_NAME = "Mr.Driller";
 /*-------------グローバル変数宣言--------------*/
 //staticを付けることによって外部からの変数へのアクセスを完全に遮断
 //変数は「g_」を付けて宣言をする
-static SCENE g_scene = SCENE_PLAY;
 
 /*------------------関数定義-------------------*/
 
-void run( ) {
-	//初期化
-	if ( !initialize( ) ) {
-		//初期化に失敗したら抜ける
-		return;
-	}
-	//ループ
-	while ( isLoop( ) ) {
-		//更新
-		update( );
-		//描画
-		draw( );
-	}
-
-	//終了処理
-	finalize( );
-}
-
-bool initialize( ) {
+Game::Game( ) :
+_now_scene( Scene::SCENE_PLAY ) {
 	bool result = true;
 	//ウィンドウモード
 	ChangeWindowMode( TRUE );
@@ -57,29 +32,37 @@ bool initialize( ) {
 
 	//DxLib初期化
 	if ( DxLib_Init( ) == -1 ) {
-		return false;
+		return;
 	}
 
 	//描画対象を指定
 	SetDrawScreen( DX_SCREEN_BACK );
 
 	//シーン初期化
-	switch ( g_scene ) {
-	case SCENE_TITLE:
-		initTitle();
-		break;
-	case SCENE_PLAY:
-		initPlay();
-		break;
-	case SCENE_RESULT:
-		initResult();
-		break;
-	};
-
-	return result;
+	changeScene( _now_scene );
 }
 
-bool isLoop( ) {
+Game::~Game( ) {
+	//DxLib終了処理
+	DxLib_End( );
+}
+
+void Game::run( ) {
+	//ループ
+	while ( isLoop( ) ) {
+		//更新
+		Scene::SCENE next = update( );
+		//描画
+		draw( );
+
+		//シーン遷移
+		if ( next != _now_scene ) {
+			changeScene( next );
+		}
+	}
+}
+
+bool Game::isLoop( ) const {
 	bool result = true;
 	//ウィンドウメッセージ処理
 	if ( ProcessMessage( ) != 0 ) {
@@ -94,87 +77,18 @@ bool isLoop( ) {
 	return result;
 }
 
-void update( ) {
-	SCENE next = g_scene;
-
-	switch ( g_scene ) {
-	case SCENE_TITLE:
-		next = updateTitle( );
-		break;
-	case SCENE_PLAY:
-		next = updatePlay( );
-		break;
-	case SCENE_RESULT:
-		next = updateResult( );
-		break;
-	}
-
-	//シーン変更
-	if ( next != g_scene ) {
-		changeScene( next );
-	}
+Scene::SCENE Game::update( ) {
+	return _scene->update( );
 }
 
-void draw( ) {
-	switch ( g_scene ) {
-	case SCENE_TITLE:
-		drawTitle( );
-		break;
-	case SCENE_PLAY:
-		drawPlay( );
-		break;
-	case SCENE_RESULT:
-		drawResult( );
-		break;
-	}
+void Game::draw( ) {
+	_scene->draw( );
 	ScreenFlip();
 	ClearDrawScreen();
 }
 
-void finalize( ) {
+void Game::changeScene( Scene::SCENE scene ) {
 	//シーン終了処理
-	switch ( g_scene ) {
-	case SCENE_TITLE:
-		finalizeTitle( );
-		break;
-	case SCENE_PLAY:
-		finalizePlay( );
-		break;
-	case SCENE_RESULT:
-		finalizeResult( );
-		break;
-	}
-
-	//DxLib終了処理
-	DxLib_End( );
-}
-
-void changeScene( SCENE scene ) {
-	//シーン終了処理
-	switch ( g_scene ) {
-	case SCENE_TITLE:
-		finalizeTitle( );
-		break;
-	case SCENE_PLAY:
-		finalizePlay( );
-		break;
-	case SCENE_RESULT:
-		finalizeResult( );
-		break;
-	}
-
-	//シーン初期化処理
-	switch ( scene ) {
-	case SCENE_TITLE:
-		initTitle( );
-		break;
-	case SCENE_PLAY:
-		initPlay( );
-		break;
-	case SCENE_RESULT:
-		initResult( );
-		break;
-	};
-
-	g_scene = scene;
+	//_scene.reset( new Scene );
+	_now_scene = scene;
 }

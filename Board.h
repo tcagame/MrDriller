@@ -1,6 +1,15 @@
 #pragma once
+#include "Block.h"
+#include <list>
 
-extern void initBoard( );
-extern void updateBoard( );
-extern void drawBoard( );
-extern void finalizeBoard( );
+class Board {
+public:
+	Board( );
+	~Board( );
+public:
+	void update( );
+	void draw( );
+private:
+	int _img_handle;
+	std::list< std::shared_ptr< Block > > _blocks;
+};

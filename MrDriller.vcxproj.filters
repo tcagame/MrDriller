@@ -18,7 +18,10 @@
     <ClCompile Include="Board.cpp">
       <Filter>Play</Filter>
     </ClCompile>
-    <ClCompile Include="block.cpp" />
+    <ClCompile Include="block.cpp">
+      <Filter>Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -40,6 +43,7 @@
     <ClInclude Include="Block.h">
       <Filter>Play</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

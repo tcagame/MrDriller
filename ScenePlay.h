@@ -1,7 +1,21 @@
 #pragma once
-#include "Game.h"
+#include "Scene.h"
+#include <memory>
+#include "Player.h"
+#include "Board.h"
 
-extern void initPlay( );
-extern SCENE updatePlay( );
-extern void drawPlay( );
-extern void finalizePlay( );
+class ScenePlay : public Scene {
+public:
+	ScenePlay( );
+	~ScenePlay( );
+public:
+	SCENE update( );
+	void draw( ) const;
+private:
+	void drawDepth( ) const;
+	void drawAir( ) const;
+	void drawLevel( ) const;
+private:
+	std::shared_ptr< Player > _player;
+	std::shared_ptr< Board > _board;
+};

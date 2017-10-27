@@ -9,11 +9,9 @@ const int BLOCK_WIDTH_SIZE = 100;
 const int BLOCK_HEIGHT_SIZE = 60;
 const int KIND_OF_BLOCK = 4;
 
-static int g_img_handle = 0;
-static std::list< std::shared_ptr< Block > > _blocks = { };
 
-void initBoard( ) {
-	g_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
+Board::Board( ) {
+	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 	for ( int i = 0; i < 100; i++ ) {
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
 		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
@@ -29,7 +27,11 @@ void initBoard( ) {
 	}
 }
 
-void updateBoard( ) {
+Board::~Board( ) {
+	DeleteGraph( _img_handle );
+}
+
+void Board::update( ) {
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
 	while ( ite != _blocks.end( ) ) {
 		updateBlock( *ite );
@@ -37,18 +39,14 @@ void updateBoard( ) {
 	}
 }
 
-void drawBoard( ) {
+void Board::draw( ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
 
 	while ( ite != _blocks.end( ) ) {
 	 	std::shared_ptr< Block > block = *ite;
-		DrawRectExtendGraph( ( int )block->x, ( int )block->y, ( int )block->x + BLOCK_WIDTH_SIZE, ( int )block->y + BLOCK_HEIGHT_SIZE, block->tx, block->ty, block->tw, block->th, g_img_handle, TRUE );
+		DrawRectExtendGraph( ( int )block->x, ( int )block->y, ( int )block->x + BLOCK_WIDTH_SIZE, ( int )block->y + BLOCK_HEIGHT_SIZE, block->tx, block->ty, block->tw, block->th, _img_handle, TRUE );
 		ite++;
 	}
-}
-
-void finalizeBoard( ) {
-	DeleteGraph( g_img_handle );
 }

@@ -1,7 +1,11 @@
 #pragma once
-#include "Game.h"
+#include "Scene.h"
 
-extern void initResult( );
-extern SCENE updateResult( );
-extern void drawResult( );
-extern void finalizeResult( );
+class SceneResult : public Scene {
+public:
+	SceneResult( );
+	~SceneResult( );
+public:
+	SCENE update( );
+	void draw( );
+};

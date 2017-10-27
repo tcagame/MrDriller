@@ -1,14 +1,14 @@
 #include "SceneTitle.h"
 
-void initTitle( ) {
+SceneTitle::SceneTitle( ) {
 }
 
-SCENE updateTitle( ) {
+SceneTitle::~SceneTitle( ) {
+}
+
+Scene::SCENE SceneTitle::update( ) {
 	return SCENE_TITLE;
 }
 
-void drawTitle( ) {
-}
-
-void finalizeTitle( ) {
+void SceneTitle::draw( ) {
 }
