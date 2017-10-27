@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 
 //ブロック親クラス
 class Block {
@@ -38,3 +39,5 @@ public:
 	}
 	~BlockB( ) { };
 };
+
+void updateBlock( std::shared_ptr< Block > block );

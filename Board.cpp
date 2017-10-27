@@ -2,7 +2,6 @@
 #include "DxLib.h"
 #include "Block.h"
 #include <list>
-#include <memory>
 
 
 const int BLOCK_WIDTH_NUM = 9;
@@ -26,7 +25,11 @@ void initBoard( ) {
 }
 
 void updateBoard( ) {
-
+	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
+	while ( ite != _blocks.end( ) ) {
+		updateBlock( *ite );
+		ite++;
+	}
 }
 
 void drawBoard( ) {
@@ -34,12 +37,11 @@ void drawBoard( ) {
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
 
-while ( ite != _blocks.end( ) ) {
- 	std::shared_ptr< Block > block = *ite;
-	DrawRectExtendGraph( block->x, block->y, block->x + BLOCK_WIDTH_SIZE, block->y + BLOCK_HEIGHT_SIZE, block->tx, block->ty, block->tw, block->th, g_img_handle, TRUE );
-	ite++;
-}
-	DrawRectExtendGraph( 0, 0, 100, 60, 0, 0, 16, 16, g_img_handle, TRUE);
+	while ( ite != _blocks.end( ) ) {
+	 	std::shared_ptr< Block > block = *ite;
+		DrawRectExtendGraph( block->x, block->y, block->x + BLOCK_WIDTH_SIZE, block->y + BLOCK_HEIGHT_SIZE, block->tx, block->ty, block->tw, block->th, g_img_handle, TRUE );
+		ite++;
+	}
 }
 
 void finalizeBoard( ) {
