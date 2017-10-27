@@ -11,7 +11,9 @@ void updateBoard( ) {
 }
 
 void drawBoard( ) {
-	DrawGraph( 0, 0, g_img_handle, TRUE);
+	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
+	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
+	DrawRectExtendGraph( 0, 0, 100, 60, 0, 0, 16, 16, g_img_handle, TRUE);
 }
 
 void finalizeBoard( ) {
