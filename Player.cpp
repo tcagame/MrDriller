@@ -149,13 +149,13 @@ void Player::move( ) {
 
 
 void Player::fall( ) {
-	int central_y = _y + CHARACTER_SIZE/2-65 ;
+	int future_y = _y + PLAYER_SPEED;
+	int check_y = future_y + CHARACTER_SIZE-20;
 	int check_x =  CHARACTER_WIDTH / 2;
-	int check_y = central_y  + CHARACTER_SIZE ;
-	if ( !_board->isExistence( check_x, check_y ) ) {
-		_y += PLAYER_SPEED;
-	} else {
+	if ( _board->isExistence( check_x, check_y ) ) {
 		_standing = true;
+	} else {
+		_y = future_y;
 	}
 }
 
