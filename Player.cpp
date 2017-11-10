@@ -13,6 +13,7 @@ const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
+const int REVIVE_TIME = 3;
 const double TIME_ANIMATION = 0.5;
 
 
@@ -97,7 +98,7 @@ void Player::drawDeathAnimation( ) {
 	}
 
 	//•œŠˆ
-	if ( (double)_angel_time / 60 == 3 && _life > 0 ) {
+	if ( (double)_angel_time / 60 == REVIVE_TIME && _life > 0 ) {
 		_life--;
 		_air = 100;
 		_death_anime_time = 0;
