@@ -15,10 +15,12 @@ private:
 	void drawDepth( ) const;
 	void drawAir( ) const;
 	void drawLevel( ) const;
+	void drawUIBack( ) const;
 	void drawLife( ) const;
 private:
 	std::shared_ptr< Player > _player;
 	std::shared_ptr< Board > _board;
+	int _img_ui;
 	int _depth;
 	int _level;
 	int _life;
