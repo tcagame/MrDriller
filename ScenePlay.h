@@ -18,6 +18,7 @@ private:
 	void drawUIBack( ) const;
 	void drawLife( ) const;
 	void drawBack( ) const;
+	void drawScoore( ) const;
 private:
 	std::shared_ptr< Player > _player;
 	std::shared_ptr< Board > _board;
@@ -26,4 +27,5 @@ private:
 	int _depth;
 	int _level;
 	int _life;
+	int _scoore;
 };
