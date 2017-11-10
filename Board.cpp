@@ -15,7 +15,7 @@ const int KIND_OF_BLOCK = 4;
 
 Board::Board( ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
-	for ( int i = 0; i < 100; i++ ) {
+	for ( int i = 0; i < 10; i++ ) {
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
 		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
 		if ( i % KIND_OF_BLOCK == 0 ) {
