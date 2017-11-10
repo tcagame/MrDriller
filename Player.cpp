@@ -127,8 +127,13 @@ void Player::move( ) {
 
 
 void Player::fall( ) {
-	if ( isStanding( ) ) {
+	int central_y = _y + CHARACTER_SIZE/2-65 ;
+	int check_x =  CHARACTER_WIDTH / 2;
+	int check_y = central_y  + CHARACTER_SIZE ;
+	if ( !_board->isExistence( check_x, check_y ) ) {
 		_y += PLAYER_SPEED;
+	} else {
+		_standing = true;
 	}
 }
 
