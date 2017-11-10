@@ -10,8 +10,8 @@ const int PLAYER_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
 const int CHARACTER_WIDTH = 70;
 const int BLOCK_DEPTH = 5;
-const int _MOVE_WAIT = 2;
-const int _MOVE_PATTERN = 4;
+const int MOVE_WAIT = 2;
+const int MOVE_PATTERN = 4;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -43,23 +43,9 @@ void Player::update( ) {
 		move( );
 	}
 	//ブロックに乗っている場合
-	//fall( );
+	fall( );
+	dig( );
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
-
-	//キー入力で_xを動かす
-	int check_x = 0;
-	int check_y = 0;
-
-	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
-	//ポインタが存在する場合true
-	if ( block ) {
-		block -> erase( );
-	}
-	if ( _board->isExistence( check_x, check_y ) ) {
-		//block->erase( );
-		//check_x, check_yの位置にブロックがある場合true
-	}
-
 }
 
 void Player::draw( ) {
@@ -67,9 +53,9 @@ void Player::draw( ) {
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / _MOVE_WAIT % _MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / _MOVE_WAIT % _MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		drawDeathAnimation( );
@@ -143,5 +129,38 @@ void Player::move( ) {
 void Player::fall( ) {
 	if ( isStanding( ) ) {
 		_y += PLAYER_SPEED;
+	}
+}
+
+void Player::dig( ) {
+	int check_x = 0;
+	int check_y = 0;
+	switch ( _direct ) {
+	case DIR_UP:
+	//上の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_DOWN:
+	//下の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_LEFT:
+	//左の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_RIGHT:
+	//右の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	}
+
+	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
+	//ポインタが存在する場合true
+	if ( block ) {
+		block->erase( );
 	}
 }
