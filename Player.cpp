@@ -13,6 +13,7 @@ const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
+const int REVIVE_TIME = 3;
 const double TIME_ANIMATION = 0.5;
 
 
@@ -21,6 +22,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_air( 100 ),
 	_count( 0 ),
 	_depth( 0 ),
+	_life( 2 ),
 	_x( x ),
 	_y( y ),
 	_death_anime_time( 0 ),
@@ -47,8 +49,6 @@ void Player::update( ) {
 	//ƒuƒƒbƒN‚Éæ‚Á‚Ä‚¢‚éê‡
 	//fall( );
 
-	dig( );
-	//fall( );
 	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 ) {
 		dig( );
 	}
@@ -97,7 +97,12 @@ void Player::drawDeathAnimation( ) {
 		DrawRectExtendGraph( _x + ANGEL_X, _y + ANGEL_Y, _x + CHARACTER_SIZE + ANGEL_X, _y + CHARACTER_SIZE + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 
-//	if()
+	//•œŠˆ
+	if ( (double)_angel_time / 60 == REVIVE_TIME && _life > 0 ) {
+		_life--;
+		_air = 100;
+		_death_anime_time = 0;
+	}
 		
 }
 
@@ -114,6 +119,10 @@ int Player::getAir( ) {
 
 int Player::getDepth( ) {
 	return _depth;
+}
+
+int Player::getLife( ) {
+	return _life;
 }
 
 

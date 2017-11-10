@@ -28,7 +28,7 @@ _life( 3 ) {
 	_img_back = LoadGraph( "Resource/back.jpg" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
-	_player = std::shared_ptr< Player >( new Player( 100, 600, _board ) );
+	_player = std::shared_ptr< Player >( new Player( 100, 100, _board ) );
 }
 
 ScenePlay::~ScenePlay( ) {
@@ -83,7 +83,7 @@ void ScenePlay::drawUIBack( ) const {
 
 void ScenePlay::drawLife( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "Lives:%d", _life );
+	sprintf_s( buf, "Lives:%d", _player->getLife( ) );
 	DrawString( DRAW_Life_X, DRAW_Life_Y, buf, DRAW_STRING_COLOR );
 }
 
