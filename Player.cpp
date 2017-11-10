@@ -3,11 +3,15 @@
 
 //定数宣言
 const int TIME_AIR_DECREASE = 1;//AIRの減る速度
+const double TIME_ANIMATION = 0.5;
+const int IMG_SIZE_X = 27;
+const int IMG_SIZE_Y = 27;
 
 
 Player::Player( int x, int y ) :
 _air( 100 ),
-_count( 0 ) {
+_count( 0 ),
+_anime_time( 0 ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -25,9 +29,32 @@ void Player::update( ) {
 void Player::draw( ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
-	DrawRectExtendGraph(0, 0, 100, 100, 0, 0, 25, 25, _img_handle, TRUE);
+	if ( !death( ) ) {
+		DrawRectExtendGraph( 0, 0, 100, 100, 0, 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	} else {
+		drawDeathAnimation( );
+	}
 }
 
+void Player::drawDeathAnimation( ) {
+	//酸欠
+	_anime_time++;
+	int anim = 0;
+	if ( _anime_time / ( int )( 60 * TIME_ANIMATION ) > 0 ) {
+		anim = 4;
+	} else {
+		anim = 3;
+	}
+	DrawRectExtendGraph( 0, 0, 100, 100, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	//つぶれる
+}
+
+bool Player::death( ) {
+	if ( _air <= 0 ) {
+		return true;
+	}
+	return false;
+}
 
 int Player::getAir( ) {
 	return _air;
