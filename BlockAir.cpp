@@ -10,3 +10,6 @@ Block( x, y, 0, 16 * 20 ) {
 BlockAir::~BlockAir()
 {
 }
+
+void BlockAir::act( ) {
+}
