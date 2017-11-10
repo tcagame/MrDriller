@@ -14,4 +14,6 @@ private:
 	int _air;
 	int _img_handle;
 	int _count;
+	int _x, _y;
+	
 };
