@@ -3,7 +3,6 @@
 
 //íËêîêÈåæ
 const int TIME_AIR_DECREASE = 1;//AIRÇÃå∏ÇÈë¨ìx
-const double TIME_ANIMATION = 0.5;
 const int CHARACTER_SIZE = 100;
 const int PLAYER_SIZE_X = 27;
 const int PLAYER_SIZE_Y = 27;
@@ -12,6 +11,7 @@ const int CHARACTER_WIDTH = 70;
 const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
+const double TIME_ANIMATION = 0.5;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -108,10 +108,8 @@ void Player::move( ) {
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x -= PLAYER_SPEED;
 			_direct = DIR_LEFT;
+			_move_anime_time++;
 		}
-		_x -= PLAYER_SPEED;
-		_direct = DIR_LEFT;
-		_move_anime_time++;
 
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
@@ -123,7 +121,7 @@ void Player::move( ) {
 			_move_anime_time++;
 		}
 	}
-	if ( !CheckHitKey( KEY_INPUT_LEFT ) || !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
+	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
 }
 
 
