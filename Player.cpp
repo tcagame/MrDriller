@@ -3,7 +3,6 @@
 
 //íËêîêÈåæ
 const int TIME_AIR_DECREASE = 1;//AIRÇÃå∏ÇÈë¨ìx
-const double TIME_ANIMATION = 0.5;
 const int CHARACTER_SIZE = 100;
 const int PLAYER_SIZE_X = 27;
 const int PLAYER_SIZE_Y = 27;
@@ -13,6 +12,7 @@ const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
+const double TIME_ANIMATION = 0.5;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -59,7 +59,11 @@ void Player::draw( ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		}
+		} else if ( _direct == DIR_UP ) {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		} else if ( _direct == DIR_DOWN ) {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		} 
 	} else {
 		drawDeathAnimation( );
 	}
@@ -79,6 +83,7 @@ void Player::drawDeathAnimation( ) {
 	} else if ( _direct == DIR_RIGHT ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
+		
 	//Ç¬Ç‘ÇÍÇÈ
 }
 
@@ -110,10 +115,8 @@ void Player::move( ) {
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x -= PLAYER_SPEED;
 			_direct = DIR_LEFT;
+			_move_anime_time++;
 		}
-		_x -= PLAYER_SPEED;
-		_direct = DIR_LEFT;
-		_move_anime_time++;
 
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
@@ -125,7 +128,13 @@ void Player::move( ) {
 			_move_anime_time++;
 		}
 	}
-	if ( !CheckHitKey( KEY_INPUT_LEFT ) || !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
+	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
+		_direct = DIR_UP;
+	}
+	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
+		_direct = DIR_DOWN;
+	}
+	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
 }
 
 
