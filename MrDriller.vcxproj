@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockAir.cpp" />
     <ClCompile Include="BlockBlue.cpp" />
     <ClCompile Include="BlockGreen.cpp" />
     <ClCompile Include="BlockRed.cpp" />
@@ -174,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockAir.h" />
     <ClInclude Include="BlockBlue.h" />
     <ClInclude Include="BlockGreen.h" />
     <ClInclude Include="BlockRed.h" />

@@ -16,6 +16,8 @@ protected:
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
 private:
+	void fall( );//—‰ºˆ—
+private:
 	double _x;
 	double _y;
 	int _tx;
