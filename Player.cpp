@@ -8,6 +8,7 @@ const int CHARACTER_SIZE = 100;
 const int PLAYER_SIZE_X = 27;
 const int PLAYER_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
+const int CHARACTER_WIDTH = 70;
 const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
@@ -22,8 +23,8 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_y( y ),
 	_death_anime_time( 0 ),
 	_move_anime_time( 0 ),
-_direct( DIR_RIGHT ),
-_standing( true ) {
+	_direct( DIR_RIGHT ),
+	_standing( true ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -43,22 +44,9 @@ void Player::update( ) {
 	}
 	//ブロックに乗っている場合
 	fall( );
+
+	dig( );
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
-
-	//キー入力で_xを動かす
-	int check_x = 0;
-	int check_y = 0;
-
-	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
-	//ポインタが存在する場合true
-	if ( block ) {
-		block -> erase( );
-	}
-	if ( _board->isExistence( check_x, check_y ) ) {
-		//block->erase( );
-		//check_x, check_yの位置にブロックがある場合true
-	}
-
 }
 
 void Player::draw( ) {
@@ -113,22 +101,67 @@ bool Player::isStanding( ) const {
 }
 
 void Player::move( ) {
+	int central_x = _x + CHARACTER_SIZE / 2 + 5;
 	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
+		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
+		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		if ( !_board->isExistence( check_x, check_y ) ) {
+			_x -= PLAYER_SPEED;
+			_direct = DIR_LEFT;
+		}
 		_x -= PLAYER_SPEED;
 		_direct = DIR_LEFT;
 		_move_anime_time++;
 
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
-		_x += PLAYER_SPEED;
-		_direct = DIR_RIGHT;
-		_move_anime_time++;
+		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
+		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		if ( !_board->isExistence( check_x, check_y ) ) {
+			_x += PLAYER_SPEED;
+			_direct = DIR_RIGHT;
+			_move_anime_time++;
+		}
 	}
 	if ( !CheckHitKey( KEY_INPUT_LEFT ) || !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
 }
 
+
 void Player::fall( ) {
 	if ( isStanding( ) ) {
 		_y += PLAYER_SPEED;
+	}
+}
+
+void Player::dig( ) {
+	int check_x = 0;
+	int check_y = 0;
+	switch ( _direct ) {
+	case DIR_UP:
+	//上の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_DOWN:
+	//下の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_LEFT:
+	//左の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	case DIR_RIGHT:
+	//右の位置
+		check_x = _x + 0;
+		check_y = _y + 0;
+		break;
+	}
+
+	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
+	//ポインタが存在する場合true
+	if ( block ) {
+		block->erase( );
 	}
 }
