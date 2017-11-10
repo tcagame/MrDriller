@@ -10,7 +10,8 @@ const int IMG_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
 
 
-Player::Player( int x, int y ) :
+Player::Player( int x, int y, std::shared_ptr< Board > board ) :
+_board( board ),
 _air( 100 ),
 _count( 0 ),
 _x( x ),

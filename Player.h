@@ -1,9 +1,11 @@
 #pragma once
+#include <memory>
 
+class Board;
 
 class Player {
 public:
-	Player( int x, int y );
+	Player( int x, int y, std::shared_ptr< Board > board );
 	virtual ~Player( );
 public:
 	void update( );
@@ -19,4 +21,5 @@ private:
 	int _x;
 	int _y;
 	int _anime_time;
+	std::shared_ptr< Board > _board;
 };

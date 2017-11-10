@@ -18,8 +18,8 @@ const int DRAW_STRING_COLOR = RGB( 255, 255, 255 );
 ScenePlay::ScenePlay( ) :
 _depth( 0 ),
 _level( 1 ) {
-	_player = std::shared_ptr< Player >( new Player( 100, 100 ) );
 	_board = std::shared_ptr< Board >( new Board( ) );
+	_player = std::shared_ptr< Player >( new Player( 100, 100, _board ) );
 }
 
 ScenePlay::~ScenePlay( ) {
