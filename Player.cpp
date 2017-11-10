@@ -8,6 +8,7 @@ const int CHARACTER_SIZE = 100;
 const int IMG_SIZE_X = 27;
 const int IMG_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
+const int CHARACTER_WIDTH = 70;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -83,7 +84,7 @@ void Player::drawDeathAnimation( ) {
 }
 
 bool Player::death( ) {
-	if ( _air <= 99 ) {
+	if ( _air <= 0 ) {
 		return true;
 	}
 	return false;
@@ -99,15 +100,25 @@ bool Player::isStanding( ) const {
 }
 
 void Player::move( ) {
+	int central_x = _x + CHARACTER_SIZE / 2 + 5;
 	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
-		_x -= PLAYER_SPEED;
-		_direct = DIR_LEFT;
+		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
+		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		if ( !_board->isExistence( check_x, check_y ) ) {
+			_x -= PLAYER_SPEED;
+			_direct = DIR_LEFT;
+		}
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
+		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
+		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		if ( !_board->isExistence( check_x, check_y ) ) {
 		_x += PLAYER_SPEED;
 		_direct = DIR_RIGHT;
 	}
+	}
 }
+
 
 void Player::fall( ) {
 	if ( isStanding( ) ) {
