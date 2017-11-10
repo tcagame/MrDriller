@@ -102,7 +102,7 @@ bool Player::isStanding( ) const {
 void Player::move( ) {
 	int central_x = _x + CHARACTER_SIZE / 2 + 5;
 	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
-		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端
+		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x -= PLAYER_SPEED;
@@ -114,7 +114,7 @@ void Player::move( ) {
 
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
-		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの右端
+		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x += PLAYER_SPEED;
@@ -148,7 +148,7 @@ void Player::dig( ) {
 		break;
 	case DIR_LEFT:
 	//左の位置
-		check_x = _x + CHARACTER_SIZE / 2;
+		check_x = _x + 0;
 		check_y = _y + 0;
 		break;
 	case DIR_RIGHT:
