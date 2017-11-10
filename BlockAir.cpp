@@ -1,15 +1,22 @@
 #include "BlockAir.h"
 
+const int TY = 16 * 20;
+const int WAIT_ANIM_TIME = 10;
+const int MAX_ANIM_PATTERN = 4;
 
 
 BlockAir::BlockAir( int x, int y ) :
-Block( x, y, 0, 16 * 20 ) {
+Block( x, y, 0, TY ),
+_count( 0 ) {
 }
 
 
-BlockAir::~BlockAir()
-{
+BlockAir::~BlockAir( ) {
 }
 
 void BlockAir::act( ) {
+	int tx = _count / WAIT_ANIM_TIME % MAX_ANIM_PATTERN * 16;
+	setTx( tx );
+	setTy( TY );
+	_count++;
 }
