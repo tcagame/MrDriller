@@ -26,6 +26,7 @@ private:
 private:
 	void move( );
 	void fall( );
+	void dig( );
 private:
 	int _air;
 	int _depth;
