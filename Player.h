@@ -15,6 +15,7 @@ public:
 	bool isStanding( ) const;
 public://getån
 	int getAir( );
+	int getDepth( );
 private:
 	enum DIR {
 		DIR_LEFT,
@@ -27,11 +28,13 @@ private:
 	void fall( );
 private:
 	int _air;
+	int _depth;
 	int _img_handle;
 	int _count;
 	int _x;
 	int _y;
-	int _anime_time;
+	int _death_anime_time;
+	int _move_anime_time;
 	bool _standing;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;

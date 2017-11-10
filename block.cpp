@@ -1,8 +1,7 @@
 #include "Block.h"
 #include "DxLib.h"
 
-const int WIDTH = 100;
-const int HEIGHT = 60;
+
 const int SPRITE_SIZE = 16;
 const double FALL_SPEED = 2;
 
@@ -24,7 +23,7 @@ void Block::update( ) {
 }
 
 void Block::draw( int img_handle ) const {
-	DrawRectExtendGraph( ( int )_x, ( int )_y, ( int )_x + WIDTH, ( int )_y + HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
+	DrawRectExtendGraph( ( int )_x, ( int )_y, ( int )_x + BLOCK_WIDTH, ( int )_y + BLOCK_HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
 }
 
 void Block::setTx( int tx ) {
@@ -50,11 +49,11 @@ bool Block::isExistence( int x, int y ) const {
 		result = false;
 	}
 	//‰E
-	if ( x > _x + WIDTH ) {
+	if ( x > _x + BLOCK_WIDTH ) {
 		result = false;
 	}
 	//‰º
-	if ( y >  _y + HEIGHT ) {
+	if ( y >  _y + BLOCK_HEIGHT ) {
 		result = false;
 	}
 	return result;

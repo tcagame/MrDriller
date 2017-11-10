@@ -6,5 +6,7 @@ public:
 	virtual ~BlockAir( );
 protected:
 	void act( );//ŒÅ—Lˆ—H
+private:
+	int _count;
 };
 

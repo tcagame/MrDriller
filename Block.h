@@ -1,6 +1,9 @@
 #pragma once
 #include <memory>
 
+const int BLOCK_WIDTH = 100;
+const int BLOCK_HEIGHT = 60;
+
 //ブロック親クラス
 class Block {
 public:
