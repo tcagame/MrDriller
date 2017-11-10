@@ -35,21 +35,17 @@ void Player::update( ) {
 	if ( !death( ) ) {
 		//キー入力で_xを動かす
 		move( );
-		//ブロックに乗っている場合
-		fall( );
 	}
+	//ブロックに乗っている場合
+	fall( );
+
 	//キー入力で_xを動かす
 	int check_x = 0;
 	int check_y = 0;
 	if ( _board->isExistence( check_x, check_y ) ) {
 		//check_x, check_yの位置にブロックがある場合true
 	}
-	if ( CheckHitKey (KEY_INPUT_LEFT) == 1){
-		_x -= PLAYER_SPEED;
-	}
-	if ( CheckHitKey (KEY_INPUT_RIGHT) == 1){
-		_x += PLAYER_SPEED;
-	}
+
 }
 
 void Player::draw( ) {
