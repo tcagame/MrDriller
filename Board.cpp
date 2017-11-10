@@ -54,3 +54,17 @@ void Board::draw( ) {
 		ite++;
 	}
 }
+
+bool Board::isExistence( int x, int y ) const {
+	bool result = false;
+	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
+	while ( ite != _blocks.end( ) ) {
+		std::shared_ptr< Block > block = *ite;
+		if ( block->isExistence( x, y ) ) {
+			result = true;
+			break;
+		}
+		ite++;
+	}
+	return result;
+}

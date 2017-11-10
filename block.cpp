@@ -23,7 +23,7 @@ void Block::update( ) {
 }
 
 void Block::draw( int img_handle ) const {
-	DrawRectExtendGraph( _x, _y, _x + WIDTH, _y + HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
+	DrawRectExtendGraph( ( int )_x, ( int )_y, ( int )_x + WIDTH, ( int )_y + HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
 }
 
 void Block::setTx( int tx ) {
@@ -36,4 +36,25 @@ void Block::setTy( int ty ) {
 
 void Block::fall( ) {
 	_y += FALL_SPEED;
+}
+
+bool Block::isExistence( int x, int y ) const {
+	bool result = true;
+	//ç∂
+	if ( x < _x ) {
+		result = false;
+	}
+	//è„
+	if ( y < _y ) {
+		result = false;
+	}
+	//âE
+	if ( x > _x + WIDTH ) {
+		result = false;
+	}
+	//â∫
+	if ( y >  _y + HEIGHT ) {
+		result = false;
+	}
+	return result;
 }
