@@ -83,9 +83,9 @@ void Player::drawDeathAnimation( ) {
 	} else {
 		anim = 3;
 	}
-	if ( _direct == DIR_LEFT ) {
+	if ( _direct == DIR_LEFT  ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-	} else if ( _direct == DIR_RIGHT ) {
+	} else {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 	if ( anim == 4 ) {
