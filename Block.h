@@ -9,6 +9,7 @@ public:
 public:
 	void update( );
 	void draw( int img_handle ) const;
+	bool isExistence( int x, int y ) const;
 protected:
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 protected:

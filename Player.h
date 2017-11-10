@@ -1,13 +1,11 @@
 #pragma once
 
-enum DIR {
-	DIR_LEFT,
-	DIR_RIGHT
-};
+#include <memory>
+#include "Board.h"
 
 class Player {
 public:
-	Player( int x, int y );
+	Player( int x, int y, std::shared_ptr< Board > board );
 	virtual ~Player( );
 public:
 	void update( );
@@ -17,6 +15,13 @@ public:
 	bool isStanding( ) const;
 public://getån
 	int getAir( );
+private:
+	enum DIR {
+		DIR_LEFT,
+		DIR_RIGHT,
+		DIR_UP,
+		DIR_DOWN,
+	};
 private:
 	void move( );
 	void fall( );
@@ -29,4 +34,5 @@ private:
 	int _anime_time;
 	bool _standing;
 	enum DIR _direct;
+	std::shared_ptr< Board > _board;
 };

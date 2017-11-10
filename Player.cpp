@@ -10,7 +10,8 @@ const int IMG_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
 
 
-Player::Player( int x, int y ) :
+Player::Player( int x, int y, std::shared_ptr< Board > board ) :
+_board( board ),
 _air( 100 ),
 _count( 0 ),
 _x( x ),
@@ -34,9 +35,20 @@ void Player::update( ) {
 	if ( !death( ) ) {
 		//キー入力で_xを動かす
 		move( );
-
 		//ブロックに乗っている場合
 		fall( );
+	}
+	//キー入力で_xを動かす
+	int check_x = 0;
+	int check_y = 0;
+	if ( _board->isExistence( check_x, check_y ) ) {
+		//check_x, check_yの位置にブロックがある場合true
+	}
+	if ( CheckHitKey (KEY_INPUT_LEFT) == 1){
+		_x -= PLAYER_SPEED;
+	}
+	if ( CheckHitKey (KEY_INPUT_RIGHT) == 1){
+		_x += PLAYER_SPEED;
 	}
 }
 
