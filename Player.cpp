@@ -12,6 +12,7 @@ const int CHARACTER_WIDTH = 70;
 const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
+const int DRILL_RANGE = 7;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -44,8 +45,9 @@ void Player::update( ) {
 	}
 	//ブロックに乗っている場合
 	fall( );
-
-	dig( );
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 ) {
+		dig( );
+	}
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 }
 
@@ -136,26 +138,27 @@ void Player::fall( ) {
 void Player::dig( ) {
 	int check_x = 0;
 	int check_y = 0;
+	int central_x = _x + CHARACTER_SIZE / 2 + 5;
 	switch ( _direct ) {
 	case DIR_UP:
 	//上の位置
-		check_x = _x + 0;
-		check_y = _y + 0;
+		check_x = central_x;
+		check_y = _y - DRILL_RANGE;
 		break;
 	case DIR_DOWN:
 	//下の位置
-		check_x = _x + 0;
-		check_y = _y + 0;
+		check_x = central_x;
+		check_y = _y + CHARACTER_SIZE + DRILL_RANGE;
 		break;
 	case DIR_LEFT:
 	//左の位置
-		check_x = _x + 0;
-		check_y = _y + 0;
+		check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
+		check_y = _y + CHARACTER_SIZE / 2;
 		break;
 	case DIR_RIGHT:
 	//右の位置
-		check_x = _x + 0;
-		check_y = _y + 0;
+		check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
+		check_y = _y + CHARACTER_SIZE / 2;
 		break;
 	}
 
