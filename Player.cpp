@@ -74,7 +74,6 @@ void Player::draw( ) {
 }
 
 void Player::drawDeathAnimation( ) {
-	//Ž_Œ‡
 	_death_anime_time++;
 	int _angel_time = _death_anime_time - 60 * TIME_ANIMATION;
 	int anim = 0;
@@ -83,18 +82,23 @@ void Player::drawDeathAnimation( ) {
 	} else {
 		anim = 3;
 	}
+	//Ž_Œ‡
 	if ( _direct == DIR_LEFT  ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	} else {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
+	//‚Â‚Ô‚ê‚é
+	
+	//“VŽg‚ð•`‰æ
 	if ( anim == 4 ) {
 		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
 		double ANGEL_Y = -_angel_time * 3;
 		DrawRectExtendGraph( _x + ANGEL_X, _y + ANGEL_Y, _x + CHARACTER_SIZE + ANGEL_X, _y + CHARACTER_SIZE + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
+
+//	if()
 		
-	//‚Â‚Ô‚ê‚é
 }
 
 bool Player::death( ) {
