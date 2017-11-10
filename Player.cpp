@@ -106,7 +106,7 @@ void Player::drawDeathAnimation( ) {
 }
 
 bool Player::death( ) {
-	if ( _air <= 98 ) {
+	if ( _air <= 0 ) {
 		return true;
 	}
 	return false;
