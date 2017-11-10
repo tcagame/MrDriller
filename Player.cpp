@@ -3,14 +3,19 @@
 
 //’è”éŒ¾
 const int TIME_AIR_DECREASE = 1;//AIR‚ÌŒ¸‚é‘¬“x
+const double TIME_ANIMATION = 0.5;
 const int CHARACTER_SIZE = 100;
+const int IMG_SIZE_X = 27;
+const int IMG_SIZE_Y = 27;
+const int PLAYER_SPEED = 4;
 
 
 Player::Player( int x, int y ) :
 _air( 100 ),
 _count( 0 ),
 _x( x ),
-_y( y ) {
+_y( y ),
+_anime_time( 0 ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -26,10 +31,10 @@ void Player::update( ) {
 
 	//ƒL[“ü—Í‚Å_x‚ð“®‚©‚·
 	if ( CheckHitKey (KEY_INPUT_LEFT) == 1){
-		_x -= PLAYER_SPEED * 1.0f;
+		_x -= PLAYER_SPEED;
 	}
 	if ( CheckHitKey (KEY_INPUT_RIGHT) == 1){
-		_x += PLAYER_SPEED * 1.0f;
+		_x += PLAYER_SPEED;
 	}
 }
 
@@ -39,8 +44,32 @@ void Player::draw( ) {
 
 
 	DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, 0, 0, 25, 25, _img_handle, TRUE );
+	if ( !death( ) ) {
+		DrawRectExtendGraph( 0, 0, 100, 100, 0, 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	} else {
+		drawDeathAnimation( );
+	}
 }
 
+void Player::drawDeathAnimation( ) {
+	//Ž_Œ‡
+	_anime_time++;
+	int anim = 0;
+	if ( _anime_time / ( int )( 60 * TIME_ANIMATION ) > 0 ) {
+		anim = 4;
+	} else {
+		anim = 3;
+	}
+	DrawRectExtendGraph( 0, 0, 100, 100, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	//‚Â‚Ô‚ê‚é
+}
+
+bool Player::death( ) {
+	if ( _air <= 0 ) {
+		return true;
+	}
+	return false;
+}
 
 int Player::getAir( ) {
 	return _air;
