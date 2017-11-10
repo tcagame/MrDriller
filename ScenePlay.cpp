@@ -43,7 +43,7 @@ void ScenePlay::draw( ) const {
 
 void ScenePlay::drawDepth( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "Depth:%d", _depth );
+	sprintf_s( buf, "Depth:%d", _player->getDepth( ) );
 	DrawString( DRAW_Depth_X, DRAW_Depth_Y, buf, DRAW_STRING_COLOR );
 }
 
