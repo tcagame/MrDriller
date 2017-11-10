@@ -57,7 +57,11 @@ void Player::draw( ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		}
+		} else if ( _direct == DIR_UP ) {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		} else if ( _direct == DIR_DOWN ) {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		} 
 	} else {
 		drawDeathAnimation( );
 	}
@@ -77,6 +81,7 @@ void Player::drawDeathAnimation( ) {
 	} else if ( _direct == DIR_RIGHT ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
+		
 	//‚Â‚Ô‚ê‚é
 }
 
@@ -120,6 +125,12 @@ void Player::move( ) {
 			_direct = DIR_RIGHT;
 			_move_anime_time++;
 		}
+	}
+	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
+		_direct = DIR_UP;
+	}
+	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
+		_direct = DIR_DOWN;
 	}
 	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
 }
