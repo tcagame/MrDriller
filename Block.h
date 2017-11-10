@@ -10,6 +10,8 @@ public:
 	void update( );
 	void draw( int img_handle ) const;
 	bool isExistence( int x, int y ) const;
+	bool isFinished( ) const;
+	void erase( );
 protected:
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 protected:
@@ -23,6 +25,7 @@ private:
 	double _y;
 	int _tx;
 	int _ty;
+	bool _finished;
 };
 
 

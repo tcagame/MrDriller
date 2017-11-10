@@ -41,6 +41,11 @@ void Board::update( ) {
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
 	while ( ite != _blocks.end( ) ) {
 		std::shared_ptr< Block > block = *ite;
+		if ( block->isFinished( ) ) {
+			ite = _blocks.erase( ite );
+			continue;
+		}
+
 		block->update( );
 		ite++;
 	}
@@ -62,6 +67,21 @@ bool Board::isExistence( int x, int y ) const {
 		std::shared_ptr< Block > block = *ite;
 		if ( block->isExistence( x, y ) ) {
 			result = true;
+			break;
+		}
+		ite++;
+	}
+	return result;
+}
+
+std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
+	std::shared_ptr< Block > result = std::shared_ptr< Block >( );
+	
+	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
+	while ( ite != _blocks.end( ) ) {
+		std::shared_ptr< Block > block = *ite;
+		if ( block->isExistence( x, y ) ) {
+			result = block;
 			break;
 		}
 		ite++;
