@@ -16,7 +16,9 @@ _air( 100 ),
 _count( 0 ),
 _x( x ),
 _y( y ),
-_anime_time( 0 ) {
+_anime_time( 0 ),
+_direct( DIR_RIGHT ),
+_standing( true ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -30,6 +32,12 @@ void Player::update( ) {
 		_air--;
 	}
 
+	if ( !death( ) ) {
+		//キー入力で_xを動かす
+		move( );
+		//ブロックに乗っている場合
+		fall( );
+	}
 	//キー入力で_xを動かす
 	int check_x = 0;
 	int check_y = 0;
@@ -54,8 +62,6 @@ void Player::update( ) {
 void Player::draw( ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
-
-
 	if ( !death( ) ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, 0, 0, 25, 25, _img_handle, TRUE );
 	} else {
@@ -72,12 +78,16 @@ void Player::drawDeathAnimation( ) {
 	} else {
 		anim = 3;
 	}
-	DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	if ( _direct == DIR_LEFT ) {
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 1, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	} else if ( _direct == DIR_RIGHT ) {
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	}
 	//つぶれる
 }
 
 bool Player::death( ) {
-	if ( _air <= 0 ) {
+	if ( _air <= 99 ) {
 		return true;
 	}
 	return false;
@@ -85,4 +95,26 @@ bool Player::death( ) {
 
 int Player::getAir( ) {
 	return _air;
+}
+
+
+bool Player::isStanding( ) const {
+	return _standing;
+}
+
+void Player::move( ) {
+	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
+		_x -= PLAYER_SPEED;
+		_direct = DIR_LEFT;
+	}
+	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
+		_x += PLAYER_SPEED;
+		_direct = DIR_RIGHT;
+	}
+}
+
+void Player::fall( ) {
+	if ( isStanding( ) ) {
+		_y += PLAYER_SPEED;
+	}
 }
