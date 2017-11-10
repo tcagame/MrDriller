@@ -31,6 +31,11 @@ void Player::update( ) {
 	}
 
 	//キー入力で_xを動かす
+	int check_x = 0;
+	int check_y = 0;
+	if ( _board->isExistence( check_x, check_y ) ) {
+		//check_x, check_yの位置にブロックがある場合true
+	}
 	if ( CheckHitKey (KEY_INPUT_LEFT) == 1){
 		_x -= PLAYER_SPEED;
 	}
