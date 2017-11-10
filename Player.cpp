@@ -21,7 +21,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_air( 100 ),
 	_count( 0 ),
 	_depth( 0 ),
-	_life( 3 ),
+	_life( 2 ),
 	_x( x ),
 	_y( y ),
 	_death_anime_time( 0 ),
