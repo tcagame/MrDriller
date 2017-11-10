@@ -9,8 +9,8 @@ const int PLAYER_SIZE_X = 27;
 const int PLAYER_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
 const int BLOCK_DEPTH = 5;
-const int _MOVE_WAIT = 2;
-const int _MOVE_PATTERN = 4;
+const int MOVE_WAIT = 5;
+const int MOVE_PATTERN = 4;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
@@ -42,7 +42,7 @@ void Player::update( ) {
 		move( );
 	}
 	//ブロックに乗っている場合
-	//fall( );
+	fall( );
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 
 	//キー入力で_xを動かす
@@ -66,9 +66,9 @@ void Player::draw( ) {
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / _MOVE_WAIT % _MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / _MOVE_WAIT % _MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		drawDeathAnimation( );
@@ -124,7 +124,7 @@ void Player::move( ) {
 		_direct = DIR_RIGHT;
 		_move_anime_time++;
 	}
-	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
+	if ( !CheckHitKey( KEY_INPUT_LEFT ) || !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
 }
 
 void Player::fall( ) {
