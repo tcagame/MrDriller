@@ -15,6 +15,7 @@ public:
 	bool isStanding( ) const;
 public://getån
 	int getAir( );
+	int getDepth( );
 private:
 	enum DIR {
 		DIR_LEFT,
@@ -27,6 +28,7 @@ private:
 	void fall( );
 private:
 	int _air;
+	int _depth;
 	int _img_handle;
 	int _count;
 	int _x;

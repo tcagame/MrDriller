@@ -5,15 +5,17 @@
 const int TIME_AIR_DECREASE = 1;//AIRの減る速度
 const double TIME_ANIMATION = 0.5;
 const int CHARACTER_SIZE = 100;
-const int IMG_SIZE_X = 27;
-const int IMG_SIZE_Y = 27;
+const int PLAYER_SIZE_X = 27;
+const int PLAYER_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
+const int BLOCK_DEPTH = 5;
 
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 _board( board ),
 _air( 100 ),
 _count( 0 ),
+_depth( 0 ),
 _x( x ),
 _y( y ),
 _anime_time( 0 ),
@@ -38,6 +40,7 @@ void Player::update( ) {
 	}
 	//ブロックに乗っている場合
 	fall( );
+	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 
 	//キー入力で_xを動かす
 	int check_x = 0;
@@ -75,9 +78,9 @@ void Player::drawDeathAnimation( ) {
 		anim = 3;
 	}
 	if ( _direct == DIR_LEFT ) {
-		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 1, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	} else if ( _direct == DIR_RIGHT ) {
-		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 	//つぶれる
 }
@@ -91,6 +94,10 @@ bool Player::death( ) {
 
 int Player::getAir( ) {
 	return _air;
+}
+
+int Player::getDepth( ) {
+	return _depth;
 }
 
 
