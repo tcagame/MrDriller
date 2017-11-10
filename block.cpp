@@ -10,7 +10,8 @@ Block::Block( int x, int y, int tx, int ty ) :
 _x( x ),
 _y( y ),
 _tx( tx ),
-_ty( ty ) {
+_ty( ty ),
+_finished( false ) {
 }
 
 Block::~Block( ) {
@@ -57,4 +58,12 @@ bool Block::isExistence( int x, int y ) const {
 		result = false;
 	}
 	return result;
+}
+
+bool Block::isFinished( ) const {
+	return _finished;
+}
+
+void Block::erase( ) {
+	_finished = true;
 }

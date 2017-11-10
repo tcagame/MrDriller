@@ -42,7 +42,14 @@ void Player::update( ) {
 	//キー入力で_xを動かす
 	int check_x = 0;
 	int check_y = 0;
+
+	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
+	//ポインタが存在する場合true
+	if ( block ) {
+		block -> erase( );
+	}
 	if ( _board->isExistence( check_x, check_y ) ) {
+		//block->erase( );
 		//check_x, check_yの位置にブロックがある場合true
 	}
 
