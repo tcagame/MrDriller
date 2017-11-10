@@ -43,9 +43,8 @@ void Player::draw( ) {
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 
 
-	DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, 0, 0, 25, 25, _img_handle, TRUE );
 	if ( !death( ) ) {
-		DrawRectExtendGraph( 0, 0, 100, 100, 0, 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, 0, 0, 25, 25, _img_handle, TRUE );
 	} else {
 		drawDeathAnimation( );
 	}
@@ -60,7 +59,7 @@ void Player::drawDeathAnimation( ) {
 	} else {
 		anim = 3;
 	}
-	DrawRectExtendGraph( 0, 0, 100, 100, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
+	DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, IMG_SIZE_X * anim, IMG_SIZE_Y * 0, IMG_SIZE_X, IMG_SIZE_Y, _img_handle, TRUE );
 	//つぶれる
 }
 
