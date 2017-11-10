@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "DxLib.h"
+#include <math.h>
 
 //定数宣言
 const int TIME_AIR_DECREASE = 1;//AIRの減る速度
@@ -43,7 +44,7 @@ void Player::update( ) {
 		move( );
 	}
 	//ブロックに乗っている場合
-	fall( );
+	//fall( );
 
 	dig( );
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
@@ -70,6 +71,7 @@ void Player::draw( ) {
 void Player::drawDeathAnimation( ) {
 	//酸欠
 	_death_anime_time++;
+	int _angel_time = _death_anime_time - 60 * TIME_ANIMATION;
 	int anim = 0;
 	if ( _death_anime_time / ( int )( 60 * TIME_ANIMATION ) > 0 ) {
 		anim = 4;
@@ -81,12 +83,17 @@ void Player::drawDeathAnimation( ) {
 	} else if ( _direct == DIR_RIGHT ) {
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
+	if ( anim == 4 ) {
+		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
+		double ANGEL_Y = -_angel_time * 3;
+		DrawRectExtendGraph( _x + ANGEL_X, _y + ANGEL_Y, _x + CHARACTER_SIZE + ANGEL_X, _y + CHARACTER_SIZE + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+	}
 		
 	//つぶれる
 }
 
 bool Player::death( ) {
-	if ( _air <= 0 ) {
+	if ( _air <= 98 ) {
 		return true;
 	}
 	return false;
