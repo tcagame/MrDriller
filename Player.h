@@ -2,6 +2,8 @@
 
 #include <memory>
 #include "Board.h"
+#include "BlockIDList.h"
+
 
 class Player {
 public:
@@ -28,6 +30,7 @@ private:
 	void move( );
 	void fall( );
 	void dig( );
+	void ifAirRecover( );
 private:
 	int _air;
 	int _depth;

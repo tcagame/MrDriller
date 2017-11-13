@@ -78,6 +78,7 @@
     <ClInclude Include="BlockAir.h">
       <Filter>Play\Block</Filter>
     </ClInclude>
+    <ClInclude Include="BlockIDList.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

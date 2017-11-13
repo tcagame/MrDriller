@@ -5,6 +5,8 @@
 const int SPRITE_SIZE = 16;
 const double FALL_SPEED = 2;
 
+
+
 Block::Block( int x, int y, int tx, int ty ) :
 _x( x ),
 _y( y ),
@@ -65,4 +67,8 @@ bool Block::isFinished( ) const {
 
 void Block::erase( ) {
 	_finished = true;
+}
+
+int Block::getBlockID() {
+	return 0;
 }

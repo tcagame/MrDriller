@@ -178,6 +178,7 @@
     <ClInclude Include="BlockAir.h" />
     <ClInclude Include="BlockBlue.h" />
     <ClInclude Include="BlockGreen.h" />
+    <ClInclude Include="BlockIDList.h" />
     <ClInclude Include="BlockRed.h" />
     <ClInclude Include="BlockYellow.h" />
     <ClInclude Include="Board.h" />

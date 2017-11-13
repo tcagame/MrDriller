@@ -14,6 +14,8 @@ const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 3;
+const int AIR_RECOVERY_POINT = 20;
+const int AIR_MAX = 100;
 const double TIME_ANIMATION = 0.5;
 
 
@@ -45,6 +47,7 @@ void Player::update( ) {
 	if ( !death( ) ) {
 		//キー入力で_xを動かす
 		move( );
+		ifAirRecover( );
 	}
 	//ブロックに乗っている場合
 	//fall( );
@@ -203,5 +206,17 @@ void Player::dig( ) {
 	//ポインタが存在する場合true
 	if ( block ) {
 		block->erase( );
+	}
+}
+
+void Player::ifAirRecover( ) {
+	if (_board->isExistence(_x, _y)) {
+		if (_board->getBlock(_x, _y)->getBlockID()==BLOCK_ID_AIR) {
+			_board->getBlock(_x, _y)->erase();
+			_air += AIR_RECOVERY_POINT;
+			if (_air > AIR_MAX) {
+				_air = AIR_MAX;
+			}
+		}
 	}
 }
