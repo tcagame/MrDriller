@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "BlockIDList.h"
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
@@ -15,6 +16,8 @@ public:
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	void erase( );
+
+	virtual int getBlockID();
 protected:
 	virtual void act( ) = 0;//å≈óLèàóù
 protected:
