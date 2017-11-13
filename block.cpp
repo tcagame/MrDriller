@@ -19,7 +19,7 @@ Block::~Block( ) {
 void Block::update( ) {
 	//‚±‚±‚É—‰ºˆ—‚È‚Ç‚ğ‘‚­
 	act( );
-	fall( );
+	//fall( );
 }
 
 void Block::draw( int img_handle ) const {

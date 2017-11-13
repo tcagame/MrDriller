@@ -14,6 +14,7 @@ const int MOVE_WAIT = 5;
 const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 3;
+const int CHECK_AIR = 0;
 const double TIME_ANIMATION = 0.5;
 
 
@@ -28,7 +29,8 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_death_anime_time( 0 ),
 	_move_anime_time( 0 ),
 	_direct( DIR_RIGHT ),
-	_standing( true ) {
+	_standing( true ),
+	_hitspace ( false ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -36,9 +38,10 @@ Player::~Player( ) {
 	DeleteGraph( _img_handle );
 }
 
+
 void Player::update( ) {
 	_count++;
-	if ( _count % ( 60 * TIME_AIR_DECREASE ) == 0 ) {
+	if ( _count % ( 60 * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
 		_air--;
 	}
 
@@ -47,10 +50,14 @@ void Player::update( ) {
 		move( );
 	}
 	//ブロックに乗っている場合
-	//fall( );
+	fall( );
 
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 ) {
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 && !_hitspace ) {
 		dig( );
+		_hitspace = true;
+	}
+	if( CheckHitKey( KEY_INPUT_SPACE ) == 0 ) {
+		_hitspace = false;
 	}
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 }
@@ -83,13 +90,17 @@ void Player::drawDeathAnimation( ) {
 		anim = 3;
 	}
 	//酸欠
-	if ( _direct == DIR_LEFT  ) {
-		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+	if( _air == CHECK_AIR ) {
+		if( _direct == DIR_LEFT ) {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		} else {
+			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		}
 	} else {
-		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		//つぶれる
+		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+
 	}
-	//つぶれる
-	
 	//天使を描画
 	if ( anim == 4 ) {
 		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
@@ -107,7 +118,7 @@ void Player::drawDeathAnimation( ) {
 }
 
 bool Player::death( ) {
-	if ( _air <= 0 ) {
+	if ( _air == CHECK_AIR ) {
 		return true;
 	}
 	return false;
@@ -135,9 +146,9 @@ void Player::move( ) {
 	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
 		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		_direct = DIR_LEFT;
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x -= PLAYER_SPEED;
-			_direct = DIR_LEFT;
 			_move_anime_time++;
 		}
 
@@ -145,9 +156,9 @@ void Player::move( ) {
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
 		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
+		_direct = DIR_RIGHT;
 		if ( !_board->isExistence( check_x, check_y ) ) {
 			_x += PLAYER_SPEED;
-			_direct = DIR_RIGHT;
 			_move_anime_time++;
 		}
 	}
@@ -163,8 +174,8 @@ void Player::move( ) {
 
 void Player::fall( ) {
 	int future_y = _y + PLAYER_SPEED;
-	int check_y = future_y + CHARACTER_SIZE-20;
-	int check_x =  CHARACTER_WIDTH / 2;
+	int check_x =  _x + CHARACTER_WIDTH / 2;
+	int check_y = future_y + CHARACTER_SIZE - 20;
 	if ( _board->isExistence( check_x, check_y ) ) {
 		_standing = true;
 	} else {

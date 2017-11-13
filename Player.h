@@ -39,6 +39,7 @@ private:
 	int _death_anime_time;
 	int _move_anime_time;
 	bool _standing;
+	bool _hitspace;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 };

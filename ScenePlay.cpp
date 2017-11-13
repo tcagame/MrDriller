@@ -15,8 +15,8 @@ const int DRAW_Level_X = 1000;
 const int DRAW_Level_Y = 600;
 const int DRAW_Life_X = 1000;
 const int DRAW_Life_Y = 700;
-const int DRAW_Scoore_X = 1000;
-const int DRAW_Scoore_Y = 300;
+const int DRAW_Score_X = 1000;
+const int DRAW_Score_Y = 300;
 const int DRAW_STRING_COLOR = RGB( 255, 255, 255 );
 
 
@@ -50,7 +50,7 @@ void ScenePlay::draw( ) const {
 	drawDepth( );
 	drawLevel( );
 	drawLife( );
-	drawScoore( );
+	drawScore( );
 }
 
 void ScenePlay::drawDepth( ) const {
@@ -71,10 +71,10 @@ void ScenePlay::drawLevel( ) const {
 	DrawString( DRAW_Level_X, DRAW_Level_Y, buf, DRAW_STRING_COLOR );
 }
 
-void ScenePlay::drawScoore( ) const {
-	char duf[ 20 ];
-	sprintf_s( duf, "SCOORE:%d", _scoore );
-	DrawString( DRAW_Scoore_X, DRAW_Scoore_Y, duf, DRAW_STRING_COLOR );
+void ScenePlay::drawScore( ) const {
+	char buf[ 20 ];
+	sprintf_s( buf, "SCOORE:%d", _score );
+	DrawString( DRAW_Score_X, DRAW_Score_Y, buf, DRAW_STRING_COLOR );
 }
 
 void ScenePlay::drawUIBack( ) const {

@@ -16,19 +16,21 @@ const int KIND_OF_BLOCK = 5;
 
 Board::Board( ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
-	for ( int i = 0; i < 10; i++ ) {
+	for( int i = 0; i < 100; i++ ) {
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
 		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
-		if ( i % KIND_OF_BLOCK == 0 ) {
-			_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) ); 
-		} else if ( i % KIND_OF_BLOCK == 1 ) {
-			_blocks.push_back( std::shared_ptr< Block >( new BlockGreen( x, y ) ) );
-		} else if ( i % KIND_OF_BLOCK == 2 ) {
-			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
-		} else if ( i % KIND_OF_BLOCK == 3 ) {
-			_blocks.push_back( std::shared_ptr< Block >( new BlockYellow( x, y ) ) );
-		} else if ( i % KIND_OF_BLOCK == 4 ) {
-			_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x, y ) ) );
+		if( y != 0 && y != BLOCK_HEIGHT_SIZE ) {
+			if( i % KIND_OF_BLOCK == 0 ) {
+				_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) );
+			} else if( i % KIND_OF_BLOCK == 1 ) {
+				_blocks.push_back( std::shared_ptr< Block >( new BlockGreen( x, y ) ) );
+			} else if( i % KIND_OF_BLOCK == 2 ) {
+				_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
+			} else if( i % KIND_OF_BLOCK == 3 ) {
+				_blocks.push_back( std::shared_ptr< Block >( new BlockYellow( x, y ) ) );
+			} else if( i % KIND_OF_BLOCK == 4 ) {
+				_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x, y ) ) );
+			}
 		}
 	}
 }
