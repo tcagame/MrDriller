@@ -20,6 +20,7 @@ const int JUMP_X = 50;
 const int JUMP_Y = BLOCK_HEIGHT + 10;
 const int AIR_RECOVERY_POINT = 20;
 const int AIR_MAX = 100;
+const double UP_TIME = 0.3;
 const double TIME_ANIMATION = 0.5;
 
 
@@ -164,7 +165,7 @@ void Player::move( ) {
 			_up = 0;
 		} else {
 			_up++;
-			if ( _up >= FRAME && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
+			if ( _up >= ( int )( FRAME * UP_TIME ) && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
 				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR ) ) {
 				_x -= JUMP_X;
 				_y -= JUMP_Y;
@@ -185,8 +186,8 @@ void Player::move( ) {
 		} else if( _board->isExistence( check_x, check_y ) &&
 			_board->getBlock( check_x, check_y )->getBlockID( ) != 1 ) {
 			_up++;
-			if ( _up >= FRAME && (!_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
-				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR )) {
+			if ( _up >= ( int )( FRAME * UP_TIME ) && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
+				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR ) ) {
 				_x += JUMP_X;
 				_y -= JUMP_Y;
 			}
@@ -201,6 +202,7 @@ void Player::move( ) {
 	}
 	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) {
 		_move_anime_time = 0;
+		_up = 0;
 	}
 }
 

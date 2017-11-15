@@ -31,7 +31,7 @@ _life( 3 ) {
 	_img_back = LoadGraph( "Resource/back.jpg" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
-	_player = std::shared_ptr< Player >( new Player( 100, 50, _board ) );
+	_player = std::shared_ptr< Player >( new Player( 300, 0, _board ) );
 }
 
 ScenePlay::~ScenePlay( ) {
