@@ -66,7 +66,7 @@ void ScenePlay::drawAir( ) const {
 	char buf[ 20 ];
 	sprintf_s( buf, "Air:%d%%", _player->getAir( ) );
 	DrawString( DRAW_AIR_X, DRAW_AIR_Y + 50, buf, DRAW_STRING_COLOR );
-	DrawBox( DRAW_AIR_X, DRAW_AIR_Y, ( int )DRAW_AIR_X + GAGE_WIDTH * _player->getAir( ) / 100, DRAW_AIR_Y+GAGE_HEIGHT, GAGE_COLOR, TRUE );
+	DrawBox( DRAW_AIR_X, DRAW_AIR_Y, DRAW_AIR_X +( int )( GAGE_WIDTH * _player->getAir( ) / 100 ), DRAW_AIR_Y+GAGE_HEIGHT, GAGE_COLOR, TRUE );
 }
 
 void ScenePlay::drawLevel( ) const {
