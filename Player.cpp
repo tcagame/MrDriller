@@ -4,10 +4,11 @@
 
 //定数宣言
 const int TIME_AIR_DECREASE = 1;//AIRの減る速度
-const int CHARACTER_SIZE = 100;
+const int FRAME = 60;
 const int PLAYER_SIZE_X = 27;
 const int PLAYER_SIZE_Y = 27;
 const int PLAYER_SPEED = 4;
+const int CHARACTER_SIZE = 100;
 const int CHARACTER_WIDTH = 70;
 const int BLOCK_DEPTH = 5;
 const int MOVE_WAIT = 5;
@@ -15,12 +16,14 @@ const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 3;
 const int CHECK_AIR = 0;
+const int JUMP_X = 50;
+const int JUMP_Y = BLOCK_HEIGHT + 10;
 const int AIR_RECOVERY_POINT = 20;
 const int AIR_MAX = 100;
 const double TIME_ANIMATION = 0.5;
 
 
-Player::Player( int x, int y, std::shared_ptr< Board > board ) :
+Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
 	_air( 100 ),
 	_count( 0 ),
@@ -28,11 +31,12 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_life( 2 ),
 	_x( x ),
 	_y( y ),
+	_up( 0 ),
 	_death_anime_time( 0 ),
 	_move_anime_time( 0 ),
 	_direct( DIR_RIGHT ),
 	_standing( true ),
-	_hitspace ( false ) {
+	_hitspace( false ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
 }
 
@@ -43,25 +47,29 @@ Player::~Player( ) {
 
 void Player::update( ) {
 	_count++;
-	if ( _count % ( 60 * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
+	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
 		_air--;
 	}
 
 	if ( !death( ) ) {
-		//キー入力で_xを動かす
+		//移動
 		move( );
+		//エア回復
 		ifAirRecover( );
 	}
-	//ブロックに乗っている場合
+	//ブロックに乗っていない場合
 	fall( );
 
 	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 && !_hitspace ) {
 		dig( );
 		_hitspace = true;
 	}
-	if( CheckHitKey( KEY_INPUT_SPACE ) == 0 ) {
+	//連続ディッグを防止
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == 0 ) {
 		_hitspace = false;
 	}
+
+	//深さ
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 }
 
@@ -77,7 +85,7 @@ void Player::draw( ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_DOWN ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		} 
+		}
 	} else {
 		drawDeathAnimation( );
 	}
@@ -85,16 +93,16 @@ void Player::draw( ) {
 
 void Player::drawDeathAnimation( ) {
 	_death_anime_time++;
-	int _angel_time = _death_anime_time - 60 * TIME_ANIMATION;
+	int _angel_time = ( int )( _death_anime_time - FRAME * TIME_ANIMATION );
 	int anim = 0;
-	if ( _death_anime_time / ( int )( 60 * TIME_ANIMATION ) > 0 ) {
+	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 4;
 	} else {
 		anim = 3;
 	}
 	//酸欠
-	if( _air == CHECK_AIR ) {
-		if( _direct == DIR_LEFT ) {
+	if ( _air == CHECK_AIR ) {
+		if ( _direct == DIR_LEFT ) {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else {
 			DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
@@ -102,22 +110,21 @@ void Player::drawDeathAnimation( ) {
 	} else {
 		//つぶれる
 		DrawRectExtendGraph( _x, _y, _x + CHARACTER_SIZE, _y + CHARACTER_SIZE, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-
 	}
 	//天使を描画
 	if ( anim == 4 ) {
 		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
-		double ANGEL_Y = -_angel_time * 3;
-		DrawRectExtendGraph( _x + ANGEL_X, _y + ANGEL_Y, _x + CHARACTER_SIZE + ANGEL_X, _y + CHARACTER_SIZE + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		int ANGEL_Y = -_angel_time * 3;
+		DrawRectExtendGraph( _x + ( int )ANGEL_X, _y + ANGEL_Y, _x + CHARACTER_SIZE + ( int )ANGEL_X, _y + CHARACTER_SIZE + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 
 	//復活
-	if ( (double)_angel_time / 60 == REVIVE_TIME && _life > 0 ) {
+	if ( ( double )_angel_time / FRAME == REVIVE_TIME && _life > 0 ) {
 		_life--;
 		_air = 100;
 		_death_anime_time = 0;
 	}
-		
+
 }
 
 bool Player::death( ) {
@@ -150,20 +157,41 @@ void Player::move( ) {
 		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
 		_direct = DIR_LEFT;
-		if ( !_board->isExistence( check_x, check_y ) ) {
+		_move_anime_time++;
+		if ( !_board->isExistence( check_x, check_y ) ||
+			_board->getBlock( check_x, check_y )->getBlockID( ) == BLOCK_ID_AIR ) {
 			_x -= PLAYER_SPEED;
-			_move_anime_time++;
+			_up = 0;
+		} else {
+			_up++;
+			if ( _up >= FRAME && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
+				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR ) ) {
+				_x -= JUMP_X;
+				_y -= JUMP_Y;
+			}
 		}
+		if ( _x < 0 ) _x = 0;
 
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
 		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
 		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
 		_direct = DIR_RIGHT;
-		if ( !_board->isExistence( check_x, check_y ) ) {
+		_move_anime_time++;
+		if ( !_board->isExistence( check_x, check_y ) ||
+			_board->getBlock( check_x, check_y )->getBlockID( ) == BLOCK_ID_AIR ) {
 			_x += PLAYER_SPEED;
-			_move_anime_time++;
+			_up = 0;
+		} else if( _board->isExistence( check_x, check_y ) &&
+			_board->getBlock( check_x, check_y )->getBlockID( ) != 1 ) {
+			_up++;
+			if ( _up >= FRAME && (!_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
+				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR )) {
+				_x += JUMP_X;
+				_y -= JUMP_Y;
+			}
 		}
+		if ( _x > 900 - CHARACTER_SIZE ) _x = 900 - CHARACTER_SIZE;
 	}
 	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
 		_direct = DIR_UP;
@@ -171,19 +199,23 @@ void Player::move( ) {
 	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
 		_direct = DIR_DOWN;
 	}
-	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) _move_anime_time = 0;
+	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) {
+		_move_anime_time = 0;
+	}
 }
 
 
 void Player::fall( ) {
 	int future_y = _y + PLAYER_SPEED;
-	int check_x =  _x + CHARACTER_WIDTH / 2;
+	int check_x = _x + CHARACTER_WIDTH / 2;
 	int check_y = future_y + CHARACTER_SIZE - 20;
-	if ( _board->isExistence( check_x, check_y ) ) {
+	if ( _board->isExistence( check_x, check_y ) &&
+		_board->getBlock( check_x, check_y )->getBlockID( ) != BLOCK_ID_AIR ) {
 		_standing = true;
 	} else {
 		_y = future_y;
 	}
+	if ( _y > 720 - CHARACTER_SIZE ) _y = 720 - CHARACTER_SIZE;
 }
 
 void Player::dig( ) {
@@ -193,39 +225,40 @@ void Player::dig( ) {
 	switch ( _direct ) {
 	case DIR_UP:
 	//上の位置
-		check_x = central_x;
-		check_y = _y - DRILL_RANGE;
-		break;
+	check_x = central_x;
+	check_y = _y - DRILL_RANGE;
+	break;
 	case DIR_DOWN:
 	//下の位置
-		check_x = central_x;
-		check_y = _y + CHARACTER_SIZE + DRILL_RANGE;
-		break;
+	check_x = central_x;
+	check_y = _y + CHARACTER_SIZE + DRILL_RANGE;
+	break;
 	case DIR_LEFT:
 	//左の位置
-		check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
-		check_y = _y + CHARACTER_SIZE / 2;
-		break;
+	check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
+	check_y = _y + CHARACTER_SIZE / 2;
+	break;
 	case DIR_RIGHT:
 	//右の位置
-		check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
-		check_y = _y + CHARACTER_SIZE / 2;
-		break;
+	check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
+	check_y = _y + CHARACTER_SIZE / 2;
+	break;
 	}
 
-	std::shared_ptr < Block > block = _board -> getBlock( check_x, check_y );
+	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
 	//ポインタが存在する場合true
-	if ( block ) {
+	if ( block &&
+		block->getBlockID( ) != BLOCK_ID_AIR ) {
 		block->erase( );
 	}
 }
 
 void Player::ifAirRecover( ) {
-	if (_board->isExistence(_x, _y)) {
-		if (_board->getBlock(_x, _y)->getBlockID()==BLOCK_ID_AIR) {
-			_board->getBlock(_x, _y)->erase();
+	if ( _board->isExistence( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 ) ) {
+		if ( _board->getBlock( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 )->getBlockID( ) == BLOCK_ID_AIR ) {
+			_board->getBlock( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 )->erase( );
 			_air += AIR_RECOVERY_POINT;
-			if (_air > AIR_MAX) {
+			if ( _air > AIR_MAX ) {
 				_air = AIR_MAX;
 			}
 		}

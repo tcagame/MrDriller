@@ -7,8 +7,10 @@
 
 //íËêîêÈåæ
 const int UI_X = 900;
-const int DRAW_AIR_X = 1000;
-const int DRAW_AIR_Y = 350;
+const int DRAW_AIR_X = 922;
+const int DRAW_AIR_Y = 365;
+const int GAGE_WIDTH = 330;
+const int GAGE_HEIGHT = 45;
 const int DRAW_Depth_X = 1000;
 const int DRAW_Depth_Y = 100;
 const int DRAW_Level_X = 1000;
@@ -18,6 +20,7 @@ const int DRAW_Life_Y = 700;
 const int DRAW_Score_X = 1000;
 const int DRAW_Score_Y = 300;
 const int DRAW_STRING_COLOR = RGB( 255, 255, 255 );
+const int GAGE_COLOR = RGB( 0, 0, 255);
 
 
 ScenePlay::ScenePlay( ) :
@@ -28,7 +31,7 @@ _life( 3 ) {
 	_img_back = LoadGraph( "Resource/back.jpg" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
-	_player = std::shared_ptr< Player >( new Player( 100, 300, _board ) );
+	_player = std::shared_ptr< Player >( new Player( 100, 50, _board ) );
 }
 
 ScenePlay::~ScenePlay( ) {
@@ -62,7 +65,8 @@ void ScenePlay::drawDepth( ) const {
 void ScenePlay::drawAir( ) const {
 	char buf[ 20 ];
 	sprintf_s( buf, "Air:%d%%", _player->getAir( ) );
-	DrawString( DRAW_AIR_X, DRAW_AIR_Y, buf, DRAW_STRING_COLOR );
+	DrawString( DRAW_AIR_X, DRAW_AIR_Y + 50, buf, DRAW_STRING_COLOR );
+	DrawBox( DRAW_AIR_X, DRAW_AIR_Y, ( int )DRAW_AIR_X + GAGE_WIDTH * _player->getAir( ) / 100, DRAW_AIR_Y+GAGE_HEIGHT, GAGE_COLOR, TRUE );
 }
 
 void ScenePlay::drawLevel( ) const {
@@ -73,7 +77,7 @@ void ScenePlay::drawLevel( ) const {
 
 void ScenePlay::drawScore( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "SCOORE:%d", _score );
+	sprintf_s( buf, "SCORE:%d", _score );
 	DrawString( DRAW_Score_X, DRAW_Score_Y, buf, DRAW_STRING_COLOR );
 }
 

@@ -39,6 +39,7 @@ private:
 	int _count;
 	int _x;
 	int _y;
+	int _up;
 	int _death_anime_time;
 	int _move_anime_time;
 	bool _standing;
