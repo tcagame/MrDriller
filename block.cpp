@@ -12,6 +12,7 @@ _x( x ),
 _y( y ),
 _tx( tx ),
 _ty( ty ),
+_connect( 0 ),
 _finished( false ) {
 }
 
@@ -69,6 +70,24 @@ void Block::erase( ) {
 	_finished = true;
 }
 
-int Block::getBlockID() {
+int Block::getBlockID( ) {
 	return 0;
+}
+
+void Block::checkConnect( std::shared_ptr< Board > board ) {
+	//周りに同種類のブロックがないかチェックする
+	if ( !( _connect & CONNECT_UP ) ) {
+		std::shared_ptr< Block > block = board->getBlock( _x, _y - BLOCK_HEIGHT );
+		if ( block ) {
+			if ( block->getBlockID( ) == getBlockID( ) ) {
+				_connect |= CONNECT_UP;
+			}
+		}
+	}
+	if ( !( _connect & CONNECT_DWON ) ) {
+	}
+	if ( !( _connect & CONNECT_LEFT ) ) {
+	}
+	if ( !( _connect & CONNECT_RIGHT ) ) {
+	}
 }

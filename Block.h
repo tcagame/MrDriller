@@ -1,9 +1,14 @@
 #pragma once
 #include <memory>
+#include "Board.h"
 #include "BlockIDList.h"
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
+const int CONNECT_UP    = 0b0000001;
+const int CONNECT_DWON  = 0b0000010;
+const int CONNECT_LEFT  = 0b0000100;
+const int CONNECT_RIGHT = 0b0001000;
 
 //ブロック親クラス
 class Block {
@@ -16,8 +21,8 @@ public:
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	void erase( );
-
-	virtual int getBlockID();
+	void checkConnect( std::shared_ptr< Board > board );
+	virtual int getBlockID( );
 protected:
 	virtual void act( ) = 0;//固有処理
 protected:
@@ -32,6 +37,7 @@ private:
 	int _tx;
 	int _ty;
 	bool _finished;
+	char _connect;
 };
 
 
