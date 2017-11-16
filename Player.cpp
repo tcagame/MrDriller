@@ -153,54 +153,88 @@ bool Player::isStanding( ) const {
 }
 
 void Player::move( ) {
-	int central_x = _x + CHARACTER_SIZE / 2 + 5;
-	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
-		int check_x = central_x - CHARACTER_WIDTH / 2;//キャラクターの左端より、少し左に足した位置
-		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
-		_direct = DIR_LEFT;
-		_move_anime_time++;
-		if ( !_board->isExistence( check_x, check_y ) ||
-			_board->getBlock( check_x, check_y )->getBlockID( ) == BLOCK_ID_AIR ) {
-			_x -= PLAYER_SPEED;
-			_up = 0;
-		} else {
-			_up++;
-			if ( _up >= ( int )( FRAME * UP_TIME ) && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
-				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR ) ) {
-				_x -= JUMP_X;
-				_y -= JUMP_Y;
-			}
-		}
-		if ( _x < 0 ) _x = 0;
-
-	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
-		int check_x = central_x + CHARACTER_WIDTH / 2;//キャラクターの左端+横幅+少し右に足した位置
-		int check_y = _y + CHARACTER_SIZE / 2;//キャラクターの高さの半分を足した位置(真ん中)
-		_direct = DIR_RIGHT;
-		_move_anime_time++;
-		if ( !_board->isExistence( check_x, check_y ) ||
-			_board->getBlock( check_x, check_y )->getBlockID( ) == BLOCK_ID_AIR ) {
-			_x += PLAYER_SPEED;
-			_up = 0;
-		} else if( _board->isExistence( check_x, check_y ) &&
-			_board->getBlock( check_x, check_y )->getBlockID( ) != 1 ) {
-			_up++;
-			if ( _up >= ( int )( FRAME * UP_TIME ) && ( !_board->isExistence( check_x, check_y - BLOCK_HEIGHT ) ||
-				_board->getBlock( check_x, check_y - BLOCK_HEIGHT )->getBlockID( ) == BLOCK_ID_AIR ) ) {
-				_x += JUMP_X;
-				_y -= JUMP_Y;
-			}
-		}
-		if ( _x > 900 - CHARACTER_SIZE ) _x = 900 - CHARACTER_SIZE;
-	}
 	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
 		_direct = DIR_UP;
 	}
 	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
 		_direct = DIR_DOWN;
 	}
-	if ( !CheckHitKey( KEY_INPUT_LEFT ) && !CheckHitKey( KEY_INPUT_RIGHT ) ) {
+
+
+
+	//移動キーチェック
+	DIR move = DIR_NONE;
+	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
+		move = DIR_LEFT;
+	}
+	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
+		move = DIR_RIGHT;
+	}
+
+	if ( move != DIR_NONE ) {
+		_direct = move;
+		_move_anime_time++;
+		//左:-1 右:1
+		int dir = -1;
+		if ( move == DIR_RIGHT ) {
+			dir = 1;
+		}
+		//移動ベクトル
+		int vec_x = PLAYER_SPEED * dir;
+		int vec_y = 0;
+		//キャラクターのx:端y:中央 +vec
+		int central_x = _x + CHARACTER_SIZE / 2 + 5;
+		int check_x = central_x + CHARACTER_WIDTH / 2 * dir + vec_x;
+		int check_y = _y + CHARACTER_SIZE / 2;
+		//ブロックが存在するかチェック
+		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		if ( block ) {//ブロックに当たった場合
+			if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
+				//横のブロックがエアー
+				_up = 0;
+			} else {
+				//横のブロックが通常
+				//移動しない
+				vec_x = 0;
+				//登れるかチェック
+				_up++;
+				if ( _up >= ( int )( FRAME * UP_TIME ) ) {
+					std::shared_ptr< Block > up_block = _board->getBlock( check_x, check_y - BLOCK_HEIGHT );
+					bool up = false;
+					if ( up_block ) {
+						if ( up_block->getBlockID( ) == BLOCK_ID_AIR ) {
+							up = true;
+						}
+					} else {
+						up = true;
+					}
+					if ( up ) {
+						//登る
+						vec_x += JUMP_X * dir;
+						vec_y -= JUMP_Y;
+					}
+				}
+			}
+		} else {
+			_up = 0;
+		}
+		//画面端
+		if ( vec_x < 0 ) {
+			if ( check_x + vec_x < 0 ) {
+				vec_x = 0 - check_x;
+			}
+		}
+		if ( vec_x > 0 ) {
+			if ( check_x + vec_x > 900 ) {
+				vec_x = 900 - check_x;
+			}
+		}
+		//移動
+		_x += vec_x;
+		_y += vec_y;
+
+	} else {
+		//移動キーを押していない
 		_move_anime_time = 0;
 		_up = 0;
 	}
@@ -208,16 +242,27 @@ void Player::move( ) {
 
 
 void Player::fall( ) {
-	int future_y = _y + PLAYER_SPEED;
-	int check_x = _x + CHARACTER_WIDTH / 2;
-	int check_y = future_y + CHARACTER_SIZE - 20;
-	if ( _board->isExistence( check_x, check_y ) &&
-		_board->getBlock( check_x, check_y )->getBlockID( ) != BLOCK_ID_AIR ) {
-		_standing = true;
-	} else {
-		_y = future_y;
+	int vec_y = PLAYER_SPEED;
+	int check_x = _x + CHARACTER_SIZE / 2 + 3;
+	int check_y = _y + CHARACTER_SIZE - 20 + vec_y;
+
+	//落下場所にブロックが存在しているかチェック
+	std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+	if ( block ) {
+		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+			_standing = true;
+			vec_y = 0;
+		}
 	}
-	if ( _y > 720 - CHARACTER_SIZE ) _y = 720 - CHARACTER_SIZE;
+
+	//画面外
+	if ( _y + vec_y + CHARACTER_SIZE  > 720 ) {
+		vec_y = 720 - _y - CHARACTER_SIZE;
+	}
+
+	//移動
+	_y += vec_y;
+
 }
 
 void Player::dig( ) {
@@ -226,39 +271,43 @@ void Player::dig( ) {
 	int central_x = _x + CHARACTER_SIZE / 2 + 5;
 	switch ( _direct ) {
 	case DIR_UP:
-	//上の位置
-	check_x = central_x;
-	check_y = _y - DRILL_RANGE;
-	break;
+		//上の位置
+		check_x = central_x;
+		check_y = _y - DRILL_RANGE;
+		break;
 	case DIR_DOWN:
-	//下の位置
-	check_x = central_x;
-	check_y = _y + CHARACTER_SIZE + DRILL_RANGE;
-	break;
+		//下の位置
+		check_x = central_x;
+		check_y = _y + CHARACTER_SIZE + DRILL_RANGE;
+		break;
 	case DIR_LEFT:
-	//左の位置
-	check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
-	check_y = _y + CHARACTER_SIZE / 2;
-	break;
+		//左の位置
+		check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
+		check_y = _y + CHARACTER_SIZE / 2;
+		break;
 	case DIR_RIGHT:
-	//右の位置
-	check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
-	check_y = _y + CHARACTER_SIZE / 2;
-	break;
+		//右の位置
+		check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
+		check_y = _y + CHARACTER_SIZE / 2;
+		break;
 	}
 
 	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
 	//ポインタが存在する場合true
-	if ( block &&
-		block->getBlockID( ) != BLOCK_ID_AIR ) {
-		block->erase( );
+	if ( block ) {
+		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+			block->erase( );
+		}
 	}
 }
 
 void Player::ifAirRecover( ) {
-	if ( _board->isExistence( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 ) ) {
-		if ( _board->getBlock( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 )->getBlockID( ) == BLOCK_ID_AIR ) {
-			_board->getBlock( _x + CHARACTER_SIZE / 2, _y + CHARACTER_SIZE / 2 )->erase( );
+	int check_x = _x + CHARACTER_SIZE / 2;
+	int check_y = _y + CHARACTER_SIZE / 2;
+	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
+	if ( block ) {
+		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
+			block->erase( );
 			_air += AIR_RECOVERY_POINT;
 			if ( _air > AIR_MAX ) {
 				_air = AIR_MAX;

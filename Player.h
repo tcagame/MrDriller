@@ -25,6 +25,7 @@ private:
 		DIR_RIGHT,
 		DIR_UP,
 		DIR_DOWN,
+		DIR_NONE,
 	};
 private:
 	void move( );
