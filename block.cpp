@@ -23,10 +23,10 @@ _finished( false ) {
 Block::~Block( ) {
 }
 
-void Block::update( ) {
+void Block::update( std::shared_ptr< Board > board ) {
 	//‚±‚±‚É—‰ºˆ—‚È‚Ç‚ğ‘‚­
 	act( );
-	fall( );
+	fall( board );
 	eraseAnimation( );
 }
 
@@ -42,8 +42,16 @@ void Block::setTy( int ty ) {
 	_ty = ty;
 };
 
-void Block::fall( ) {
-	_y += FALL_SPEED;
+void Block::fall( std::shared_ptr< Board > board ) {
+	double vec = FALL_SPEED;
+	double check_y = _y + BLOCK_HEIGHT + vec;
+
+	std::shared_ptr< Block > other = board->getBlock( ( int )_x, ( int )check_y );
+	if ( other ) {
+		//‰º‚ÉƒuƒƒbƒN‚ª‚ ‚é
+		vec = 0;
+	}
+	_y += vec;
 }
 
 bool Block::isExistence( int x, int y ) const {

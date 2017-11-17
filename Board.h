@@ -3,7 +3,7 @@
 #include "Block.h"
 #include <list>
 
-class Board {
+class Board : public std::enable_shared_from_this< Board > {
 public:
 	Board( );
 	virtual ~Board( );

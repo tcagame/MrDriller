@@ -6,5 +6,5 @@ public:
 	virtual ~BlockLevel();
 protected:
 	void act( );
-	void fall( ) { };
+	void fall( std::shared_ptr< class Board > ) { };
 };

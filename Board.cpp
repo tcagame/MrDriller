@@ -51,7 +51,7 @@ void Board::update( ) {
 			continue;
 		}
 
-		block->update( );
+		block->update( shared_from_this( ) );
 		ite++;
 	}
 }

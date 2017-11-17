@@ -16,7 +16,7 @@ public:
 	Block( int x, int y, int tx, int ty );
 	virtual ~Block( );
 public:
-	void update( );
+	void update( std::shared_ptr< class Board > board );
 	void draw( int img_handle ) const;
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
@@ -28,7 +28,7 @@ protected:
 	void setFinished( bool finish );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
-	virtual void fall( );//—‰ºˆ—
+	virtual void fall( std::shared_ptr< class Board > board );//—‰ºˆ—
 protected:
 	//setŒn
 	void setTx( int tx );//‰æ‘œ“àÀ•W
