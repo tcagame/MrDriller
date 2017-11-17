@@ -6,9 +6,8 @@ public:
 	virtual ~BlockAir( );
 protected:
 	void act( );//ŒÅ—Lˆ—H
-
+	void eraseAnimation( );
 	int getBlockID();
-
 private:
 	int _count;
 };
