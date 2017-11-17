@@ -24,9 +24,7 @@ const int GAGE_COLOR = RGB( 0, 0, 255);
 
 
 ScenePlay::ScenePlay( ) :
-_depth( 0 ),
-_level( 1 ),
-_life( 3 ) {
+_level( 1 ) {
 	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
 	_img_back = LoadGraph( "Resource/back.jpg" );
 
@@ -77,7 +75,7 @@ void ScenePlay::drawLevel( ) const {
 
 void ScenePlay::drawScore( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "SCORE:%d", _score );
+	sprintf_s( buf, "SCORE:%d", _player->getScore( ) );
 	DrawString( DRAW_Score_X, DRAW_Score_Y, buf, DRAW_STRING_COLOR );
 }
 

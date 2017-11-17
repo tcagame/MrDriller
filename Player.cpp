@@ -30,6 +30,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_count( 0 ),
 	_depth( 0 ),
 	_life( 2 ),
+	_score( 0 ),
 	_x( x ),
 	_y( y ),
 	_up( 0 ),
@@ -147,6 +148,9 @@ int Player::getLife( ) {
 	return _life;
 }
 
+int Player::getScore( ) {
+	return _score;
+}
 
 bool Player::isStanding( ) const {
 	return _standing;

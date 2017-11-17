@@ -19,6 +19,7 @@ public://getŒn
 	int getAir( );
 	int getDepth( );
 	int getLife( );
+	int getScore( );
 private:
 	enum DIR {
 		DIR_LEFT,
@@ -36,6 +37,7 @@ private:
 	int _air;
 	int _depth;
 	int _life;
+	int _score;
 	int _img_handle;
 	int _count;
 	int _x;
