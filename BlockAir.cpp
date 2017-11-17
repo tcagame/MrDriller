@@ -25,3 +25,9 @@ void BlockAir::act( ) {
 int BlockAir::getBlockID() {
 	return BLOCK_ID_AIR;
 }
+
+void BlockAir::eraseAnimation( ) {
+	if ( isErase( ) ) {	
+		setFinished( true );
+	}
+}

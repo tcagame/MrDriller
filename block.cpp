@@ -5,7 +5,8 @@
 
 const int SPRITE_SIZE = 16;
 const double FALL_SPEED = 2;
-
+const int MAX_ERASE_COUNT = 20;
+const int ANIMATION_PATTERN = 6;
 
 
 Block::Block( int x, int y, int tx, int ty ) :
@@ -14,6 +15,8 @@ _y( y ),
 _tx( tx ),
 _ty( ty ),
 _connect( 0 ),
+_count_erase( 0 ),
+_erase( false ),
 _finished( false ) {
 }
 
@@ -24,6 +27,7 @@ void Block::update( ) {
 	//Ç±Ç±Ç…óéâ∫èàóùÇ»Ç«ÇèëÇ≠
 	act( );
 	//fall( );
+	eraseAnimation( );
 }
 
 void Block::draw( int img_handle ) const {
@@ -67,8 +71,13 @@ bool Block::isFinished( ) const {
 	return _finished;
 }
 
+bool Block::isErase( ) const {
+	return _erase;
+}
+
+
 void Block::erase( ) {
-	_finished = true;
+	_erase = true;
 }
 
 int Block::getBlockID( ) {
@@ -85,10 +94,27 @@ void Block::checkConnect( std::shared_ptr< Board > board ) {
 			}
 		}
 	}
-	if ( !( _connect & CONNECT_DWON ) ) {
+	if ( !( _connect & CONNECT_DOWN ) ) {
 	}
 	if ( !( _connect & CONNECT_LEFT ) ) {
 	}
 	if ( !( _connect & CONNECT_RIGHT ) ) {
 	}
+}
+
+void Block::eraseAnimation( ) {
+	if ( !_erase ) {
+		_count_erase = 0;
+		return;
+	}
+	_count_erase++;
+	if ( _count_erase > MAX_ERASE_COUNT ) {
+		_finished = true;
+	}
+	int cx = _count_erase * ANIMATION_PATTERN / MAX_ERASE_COUNT + 16;
+	_tx = cx * SPRITE_SIZE;
+}
+
+void Block::setFinished( bool finish ) {
+	_finished = finish;
 }

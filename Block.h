@@ -5,7 +5,7 @@
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
 const int CONNECT_UP    = 0b0000001;
-const int CONNECT_DWON  = 0b0000010;
+const int CONNECT_DOWN  = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
 
@@ -20,10 +20,13 @@ public:
 	void draw( int img_handle ) const;
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
+	bool isErase( ) const;
 	void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
 	virtual int getBlockID( );
 protected:
+	void setFinished( bool finish );
+	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//å≈óLèàóù
 protected:
 	//setån
@@ -36,6 +39,8 @@ private:
 	double _y;
 	int _tx;
 	int _ty;
+	int _count_erase;
+	bool _erase;
 	bool _finished;
 	char _connect;
 };
