@@ -20,10 +20,13 @@ public:
 	void draw( int img_handle ) const;
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
+	bool isErase( ) const;
 	void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
 	virtual int getBlockID( );
 protected:
+	void setFinished( bool finish );
+	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 protected:
 	//setŒn
@@ -36,6 +39,8 @@ private:
 	double _y;
 	int _tx;
 	int _ty;
+	int _count_erase;
+	bool _erase;
 	bool _finished;
 	char _connect;
 };

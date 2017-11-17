@@ -33,6 +33,7 @@ private:
 	void fall( );
 	void dig( );
 	void ifAirRecover( );
+	void eraseUpBlock( );
 private:
 	int _air;
 	int _depth;

@@ -30,7 +30,7 @@ const double TIME_ANIMATION = 0.5;
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
-	_air( 100 ),
+	_air( 5 ),
 	_count( 0 ),
 	_depth( 0 ),
 	_life( 2 ),
@@ -103,6 +103,7 @@ void Player::drawDeathAnimation( ) {
 	int anim = 0;
 	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 4;
+		eraseUpBlock( );
 	} else {
 		anim = 3;
 	}
@@ -324,5 +325,46 @@ void Player::ifAirRecover( ) {
 				_air = AIR_MAX;
 			}
 		}
+	}
+}
+
+void Player::eraseUpBlock( ) {
+	//キャラクターの上のブロックを消す
+	for ( int i = 0; i < 3; i++ ) {
+		//3列分
+		int central_x = _x + CHARACTER_WIDTH / 2 + 5;
+		int check_x = 0;
+		int check_y = 0;
+		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
+		//中央列
+		check_x = central_x ;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		block = _board->getBlock( check_x, check_y );
+		if ( block ) {
+			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+				block->erase( );
+			}
+		}
+		
+		//左列
+		check_x = central_x - BLOCK_WIDTH;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		block = _board->getBlock( check_x, check_y );
+		if ( block ) {
+			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
+				block->erase( );
+			}
+		}
+
+		//右列
+		check_x = central_x + BLOCK_WIDTH;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		block = _board->getBlock( check_x, check_y );
+		if ( block ) {
+			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
+				block->erase( );
+			}
+		}
+
 	}
 }
