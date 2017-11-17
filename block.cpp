@@ -44,9 +44,10 @@ void Block::setTy( int ty ) {
 
 void Block::fall( std::shared_ptr< Board > board ) {
 	double vec = FALL_SPEED;
+	double check_x = _x + BLOCK_WIDTH / 2;
 	double check_y = _y + BLOCK_HEIGHT + vec;
 
-	std::shared_ptr< Block > other = board->getBlock( ( int )_x, ( int )check_y );
+	std::shared_ptr< Block > other = board->getBlock( ( int )check_x, ( int )check_y );
 	if ( other ) {
 		//â∫Ç…ÉuÉçÉbÉNÇ™Ç†ÇÈ
 		vec = 0;
