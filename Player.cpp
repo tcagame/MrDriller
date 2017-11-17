@@ -62,18 +62,11 @@ void Player::update( ) {
 		move( );
 		//エア回復
 		ifAirRecover( );
+		//掘る
+		dig( );
 	}
 	//ブロックに乗っていない場合
 	fall( );
-
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 && !_hitspace ) {
-		dig( );
-		_hitspace = true;
-	}
-	//連続ディッグを防止
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == 0 ) {
-		_hitspace = false;
-	}
 
 	//深さ
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
@@ -278,6 +271,16 @@ void Player::fall( ) {
 }
 
 void Player::dig( ) {
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		if ( !_hitspace ) {
+			//連続は出来ない
+			return;
+		}
+	} else {
+		_hitspace = true;
+		return;
+	}
+	_hitspace = false;
 	int check_x = 0;
 	int check_y = 0;
 	int central_x = _x + ADJUST_X;
