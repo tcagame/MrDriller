@@ -19,6 +19,10 @@ const int BLOCK_HEIGHT_SIZE = 60;
 Board::Board( ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 	for( int i = 0; i < MAP_WIDTH_NUM * MAP_HEIGHT_NUM; i++ ) {
+		//ˆ—‚ªd‚¢‚½‚ß•Û—¯
+		if ( i > 100 ) {
+			break;
+		}
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
 		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
 		switch ( MAP1[ i ] ) {

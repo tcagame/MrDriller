@@ -35,6 +35,8 @@ private:
 	void dig( );
 	void ifAirRecover( );
 	void eraseUpBlock( );
+	void decreaseAir( );
+	void checkCrushed( );
 private:
 	int _air;
 	int _depth;
@@ -47,6 +49,7 @@ private:
 	int _up;
 	int _death_anime_time;
 	int _move_anime_time;
+	bool _dead;
 	bool _standing;
 	bool _hitspace;
 	bool _erase_block;
