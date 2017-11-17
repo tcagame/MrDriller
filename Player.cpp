@@ -276,11 +276,6 @@ void Player::fall( ) {
 		}
 	}
 
-	//‰æ–ÊŠO
-	if ( _y + vec_y + DRAW_HEIGHT - 20  > 720 ) {
-		vec_y = 720 - _y - ( DRAW_HEIGHT - 20 );
-	}
-
 	//ˆÚ“®
 	_y += vec_y;
 
