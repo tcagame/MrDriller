@@ -26,7 +26,7 @@ Block::~Block( ) {
 void Block::update( ) {
 	//‚±‚±‚É—‰ºˆ—‚È‚Ç‚ğ‘‚­
 	act( );
-	//fall( );
+	fall( );
 	eraseAnimation( );
 }
 

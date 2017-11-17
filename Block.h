@@ -28,12 +28,11 @@ protected:
 	void setFinished( bool finish );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
+	virtual void fall( );//—‰ºˆ—
 protected:
 	//setŒn
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
-private:
-	void fall( );//—‰ºˆ—
 private:
 	double _x;
 	double _y;
