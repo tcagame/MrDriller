@@ -30,7 +30,7 @@ const double TIME_ANIMATION = 0.5;
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
-	_air( 5 ),
+	_air( 100 ),
 	_count( 0 ),
 	_depth( 0 ),
 	_life( 2 ),
@@ -337,7 +337,7 @@ void Player::eraseUpBlock( ) {
 		int check_y = 0;
 		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
 		//’†‰›—ñ
-		check_x = central_x ;
+		check_x = central_x;
 		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
@@ -345,13 +345,13 @@ void Player::eraseUpBlock( ) {
 				block->erase( );
 			}
 		}
-		
+
 		//¶—ñ
 		check_x = central_x - BLOCK_WIDTH;
 		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
-			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
+			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 				block->erase( );
 			}
 		}
@@ -361,7 +361,7 @@ void Player::eraseUpBlock( ) {
 		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
-			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
+			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 				block->erase( );
 			}
 		}
