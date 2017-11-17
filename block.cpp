@@ -85,7 +85,7 @@ void Block::checkConnect( std::shared_ptr< Board > board ) {
 			}
 		}
 	}
-	if ( !( _connect & CONNECT_DWON ) ) {
+	if ( !( _connect & CONNECT_DOWN ) ) {
 	}
 	if ( !( _connect & CONNECT_LEFT ) ) {
 	}
