@@ -83,13 +83,13 @@ void Player::draw( int camera_y ) {
 		int y1 = _y - camera_y;
 		int y2 =  y1 + DRAW_HEIGHT;
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_UP ) {
-			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_DOWN ) {
-			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		drawDeathAnimation( camera_y );
@@ -108,20 +108,20 @@ void Player::drawDeathAnimation( int camera_y ) {
 		anim = 3;
 	}
 	//Ž_Œ‡
-	int x1 = _x;
-	int x2 = _x + DRAW_WIDTH;
-	int y1 = _y - camera_y;
-	int y2 =  y1 + DRAW_HEIGHT;
+	double x1 = _x;
+	double x2 = _x + DRAW_WIDTH;
+	double y1 = _y - camera_y;
+	double y2 =  y1 + DRAW_HEIGHT;
 
 	if ( _air == CHECK_AIR ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, x2, y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else {
-			DrawRectExtendGraph( _x, _y, x2, y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		//‚Â‚Ô‚ê‚é
-		DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 	//“VŽg‚ð•`‰æ
 	if ( anim == 4 ) {

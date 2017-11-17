@@ -39,6 +39,7 @@ ScenePlay::~ScenePlay( ) {
 Scene::SCENE ScenePlay::update( ) {
 	_board->update( );
 	_player->update( );
+	_camera->update( );
 	return SCENE_PLAY;
 }
 
@@ -46,7 +47,7 @@ void ScenePlay::draw( ) const {
 	//Œã‚ë‚©‚ç‡‚É•`‰æ
 	drawBack( );
 	drawUIBack( );
-	_board->draw(  );
+	_board->draw( _camera->getY( ) );
 	_player->draw( _camera->getY( ) );
 	drawAir( );
 	drawDepth( );
