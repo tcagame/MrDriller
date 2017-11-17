@@ -20,5 +20,7 @@ int BlockSolid::getBlockID( ){
 
 void BlockSolid::erase( ) {
 	_hp--;
-	if ( _hp <= 0 ) erase( );
+	if ( _hp <= 0 ) {
+		Block::erase( );
+	}
 }
