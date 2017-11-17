@@ -37,6 +37,7 @@ ScenePlay::ScenePlay( ) :
 
 	_board = std::shared_ptr< Board >( new Board( ) );
 	_player = std::shared_ptr< Player >( new Player( 300, 0, _board ) );
+	_camera = std::shared_ptr< Camera >( new Camera( _player ) );
 }
 
 ScenePlay::~ScenePlay( ) {
@@ -45,6 +46,7 @@ ScenePlay::~ScenePlay( ) {
 Scene::SCENE ScenePlay::update( ) {
 	_board->update( );
 	_player->update( );
+	_camera->update( );
 	return SCENE_PLAY;
 }
 
@@ -52,8 +54,8 @@ void ScenePlay::draw( ) const {
 	//Œã‚ë‚©‚ç‡‚É•`‰æ
 	drawBack( );
 	drawUIBack( );
-	_board->draw( );
-	_player->draw( );
+	_board->draw( _camera->getY( ) );
+	_player->draw( _camera->getY( ) );
 	drawAir( );
 	drawDepth( );
 	drawLevel( );
@@ -64,7 +66,7 @@ void ScenePlay::draw( ) const {
 void ScenePlay::drawDepth( ) const {
 	char buf[ 7 ];
 	sprintf_s( buf, "%6d", _player->getDepth( ) );
-	DrawBox( 1220 - ( log10( _player->getDepth( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+	DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
 	for ( int i = 0; i < 6; i++ ) {
 		DrawRectExtendGraph( DRAW_Depth_X + i * DRAW_NUM_SIZE_X, DRAW_Depth_Y, DRAW_Depth_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Depth_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 	}
@@ -82,7 +84,7 @@ void ScenePlay::drawAir( ) const {
 void ScenePlay::drawLevel( ) const {
 	char buf[ 4 ];
 	sprintf_s( buf, "%3d", _level );
-	DrawBox( 1260 - ( log10( _level ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
+	DrawBox( 1260 - ( ( int )log10( _level ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
 	for ( int i = 0; i < 3; i++ ) {
 		DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 	}
@@ -91,7 +93,7 @@ void ScenePlay::drawLevel( ) const {
 void ScenePlay::drawScore( ) const {
 	char buf[ 7 ];
 	sprintf_s( buf, "%6d", _player->getScore( ) );
-	DrawBox( 1220 - ( log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+	DrawBox( 1220 - ( ( int )log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
 	for ( int i = 0; i < 6; i++ ) {
 		DrawRectExtendGraph( DRAW_Score_X + i * DRAW_NUM_SIZE_X, DRAW_Score_Y, DRAW_Score_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Score_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 	}

@@ -12,3 +12,7 @@ BlockBlue::~BlockBlue( ) {
 
 void BlockBlue::act( ) {
 }
+
+int BlockBlue::getBlockID( ) {
+	return BLOCK_ID_BLUE;
+}

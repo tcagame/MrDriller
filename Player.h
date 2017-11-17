@@ -11,8 +11,8 @@ public:
 	virtual ~Player( );
 public:
 	void update( );
-	void draw( );
-	void drawDeathAnimation( );
+	void draw( int camera_y );
+	void drawDeathAnimation( int camera_y );
 	bool death( );
 	bool isStanding( ) const;
 public://getån
@@ -20,6 +20,7 @@ public://getån
 	int getDepth( );
 	int getLife( );
 	int getScore( );
+	int getY( );
 private:
 	enum DIR {
 		DIR_LEFT,
@@ -48,6 +49,7 @@ private:
 	int _move_anime_time;
 	bool _standing;
 	bool _hitspace;
+	bool _erase_block;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 };

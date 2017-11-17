@@ -62,61 +62,66 @@ void Player::update( ) {
 		move( );
 		//エア回復
 		ifAirRecover( );
+		//掘る
+		dig( );
+	} else {
+		_erase_block = false;
 	}
 	//ブロックに乗っていない場合
 	fall( );
-
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == 1 && !_hitspace ) {
-		dig( );
-		_hitspace = true;
-	}
-	//連続ディッグを防止
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == 0 ) {
-		_hitspace = false;
-	}
 
 	//深さ
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 }
 
-void Player::draw( ) {
+void Player::draw( int camera_y ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
+		int x1 = _x;
+		int x2 = _x + DRAW_WIDTH;
+		int y1 = _y - camera_y;
+		int y2 =  y1 + DRAW_HEIGHT;
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_UP ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_DOWN ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
-		drawDeathAnimation( );
+		drawDeathAnimation( camera_y );
 	}
 }
 
-void Player::drawDeathAnimation( ) {
+void Player::drawDeathAnimation( int camera_y ) {
 	_death_anime_time++;
 	int _angel_time = ( int )( _death_anime_time - FRAME * TIME_ANIMATION );
 	int anim = 0;
 	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 4;
 		eraseUpBlock( );
+		_erase_block = false;
 	} else {
 		anim = 3;
 	}
 	//酸欠
+	double x1 = _x;
+	double x2 = _x + DRAW_WIDTH;
+	double y1 = _y - camera_y;
+	double y2 =  y1 + DRAW_HEIGHT;
+
 	if ( _air == CHECK_AIR ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		//つぶれる
-		DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 	//天使を描画
 	if ( anim == 4 ) {
@@ -155,6 +160,10 @@ int Player::getLife( ) {
 
 int Player::getScore( ) {
 	return _score;
+}
+
+int Player::getY( ) {
+	return _y;
 }
 
 bool Player::isStanding( ) const {
@@ -217,9 +226,9 @@ void Player::move( ) {
 				//登れるかチェック
 				_up++;
 				if ( _up >= ( int )( FRAME * UP_TIME ) ) {
-					std::shared_ptr< Block > slant_block = _board->getBlock( check_x, central_y - BLOCK_HEIGHT );
-					std::shared_ptr< Block > up_block = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
-					if ( ( !up_block    ||    up_block->getBlockID( )== BLOCK_ID_AIR ) &&
+					std::shared_ptr< Block > slant_block = _board->getBlock(   check_x, central_y - BLOCK_HEIGHT );
+					std::shared_ptr< Block > up_block    = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
+					if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
 						 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
 						//登る
 						vec_x += JUMP_X * dir;
@@ -278,6 +287,16 @@ void Player::fall( ) {
 }
 
 void Player::dig( ) {
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		if ( !_hitspace ) {
+			//連続は出来ない
+			return;
+		}
+	} else {
+		_hitspace = true;
+		return;
+	}
+	_hitspace = false;
 	int check_x = 0;
 	int check_y = 0;
 	int central_x = _x + ADJUST_X;
@@ -329,16 +348,22 @@ void Player::ifAirRecover( ) {
 }
 
 void Player::eraseUpBlock( ) {
+	if ( _erase_block ) {
+		return;
+	}
 	//キャラクターの上のブロックを消す
-	for ( int i = 0; i < 3; i++ ) {
+	for ( int i = 0; i < 10; i++ ) {
 		//3列分
-		int central_x = _x + CHARACTER_WIDTH / 2 + 5;
+		int central_x = _x + ADJUST_X;
+		int central_y = _y + ADJUST_Y;
 		int check_x = 0;
 		int check_y = 0;
 		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
 		//中央列
 		check_x = central_x;
 		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_x = central_x ;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -348,7 +373,7 @@ void Player::eraseUpBlock( ) {
 
 		//左列
 		check_x = central_x - BLOCK_WIDTH;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -358,7 +383,7 @@ void Player::eraseUpBlock( ) {
 
 		//右列
 		check_x = central_x + BLOCK_WIDTH;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
