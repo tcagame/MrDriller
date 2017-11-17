@@ -32,8 +32,12 @@ void Block::update( std::shared_ptr< Board > board ) {
 	eraseAnimation( );
 }
 
-void Block::draw( int img_handle ) const {
-	DrawRectExtendGraph( ( int )_x, ( int )_y, ( int )_x + BLOCK_WIDTH, ( int )_y + BLOCK_HEIGHT, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
+void Block::draw( int camera_y, int img_handle ) const {
+	double x1 = _x;
+	double x2 = _x + BLOCK_WIDTH;
+	double y1 = _y - camera_y;
+	double y2 =  y1 + BLOCK_HEIGHT;
+	DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, _tx, _ty, SPRITE_SIZE, SPRITE_SIZE, img_handle, TRUE );
 }
 
 void Block::setTx( int tx ) {

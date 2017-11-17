@@ -17,7 +17,7 @@ public:
 	virtual ~Block( );
 public:
 	void update( std::shared_ptr< class Board > board );
-	void draw( int img_handle ) const;
+	void draw( int camera_y, int img_handle ) const;
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;

@@ -30,6 +30,7 @@ _level( 1 ) {
 
 	_board = std::shared_ptr< Board >( new Board( ) );
 	_player = std::shared_ptr< Player >( new Player( 300, 0, _board ) );
+	_camera = std::shared_ptr< Camera >( new Camera( _player ) );
 }
 
 ScenePlay::~ScenePlay( ) {
@@ -38,6 +39,7 @@ ScenePlay::~ScenePlay( ) {
 Scene::SCENE ScenePlay::update( ) {
 	_board->update( );
 	_player->update( );
+	_camera->update( );
 	return SCENE_PLAY;
 }
 
@@ -45,8 +47,8 @@ void ScenePlay::draw( ) const {
 	//Œã‚ë‚©‚ç‡‚É•`‰æ
 	drawBack( );
 	drawUIBack( );
-	_board->draw( );
-	_player->draw( );
+	_board->draw( _camera->getY( ) );
+	_player->draw( _camera->getY( ) );
 	drawAir( );
 	drawDepth( );
 	drawLevel( );

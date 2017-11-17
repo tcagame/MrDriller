@@ -9,7 +9,7 @@ public:
 	virtual ~Board( );
 public:
 	void update( );
-	void draw( );
+	void draw( int camera_y ) const;
 	std::shared_ptr< Block > getBlock( int x, int y ) const;
 private:
 	int _img_handle;

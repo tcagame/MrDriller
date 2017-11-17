@@ -65,9 +65,9 @@ void Board::update( ) {
 	}
 }
 
-void Board::draw( ) {
+void Board::draw( int camera_y ) const {
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->draw( _img_handle );
+		block->draw( camera_y, _img_handle );
 	}
 }
 
