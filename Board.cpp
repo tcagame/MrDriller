@@ -57,39 +57,16 @@ void Board::update( ) {
 }
 
 void Board::draw( ) {
-	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
+	for ( std::shared_ptr< Block > block : _blocks ) {
 		block->draw( _img_handle );
-		ite++;
 	}
-}
-
-bool Board::isExistence( int x, int y ) const {
-	bool result = false;
-	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
-		if ( block->isExistence( x, y ) ) {
-			result = true;
-			break;
-		}
-		ite++;
-	}
-	return result;
 }
 
 std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
-	std::shared_ptr< Block > result = std::shared_ptr< Block >( );
-	
-	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
+	for ( std::shared_ptr< Block > block : _blocks ) {
 		if ( block->isExistence( x, y ) ) {
-			result = block;
-			break;
+			return block;
 		}
-		ite++;
 	}
-	return result;
+	return std::shared_ptr< Block >( );
 }

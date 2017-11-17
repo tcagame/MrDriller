@@ -64,6 +64,8 @@ void Player::update( ) {
 		ifAirRecover( );
 		//掘る
 		dig( );
+	} else {
+		_erase_block = false;
 	}
 	//ブロックに乗っていない場合
 	fall( );
@@ -97,6 +99,7 @@ void Player::drawDeathAnimation( ) {
 	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 4;
 		eraseUpBlock( );
+		_erase_block = false;
 	} else {
 		anim = 3;
 	}
@@ -210,9 +213,9 @@ void Player::move( ) {
 				//登れるかチェック
 				_up++;
 				if ( _up >= ( int )( FRAME * UP_TIME ) ) {
-					std::shared_ptr< Block > slant_block = _board->getBlock( check_x, central_y - BLOCK_HEIGHT );
-					std::shared_ptr< Block > up_block = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
-					if ( ( !up_block    ||    up_block->getBlockID( )== BLOCK_ID_AIR ) &&
+					std::shared_ptr< Block > slant_block = _board->getBlock(   check_x, central_y - BLOCK_HEIGHT );
+					std::shared_ptr< Block > up_block    = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
+					if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
 						 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
 						//登る
 						vec_x += JUMP_X * dir;
@@ -332,16 +335,20 @@ void Player::ifAirRecover( ) {
 }
 
 void Player::eraseUpBlock( ) {
+	if ( _erase_block ) {
+		return;
+	}
 	//キャラクターの上のブロックを消す
-	for ( int i = 0; i < 3; i++ ) {
+	for ( int i = 0; i < 10; i++ ) {
 		//3列分
-		int central_x = _x + CHARACTER_WIDTH / 2 + 5;
+		int central_x = _x + ADJUST_X;
+		int central_y = _y + ADJUST_Y;
 		int check_x = 0;
 		int check_y = 0;
 		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
 		//中央列
 		check_x = central_x ;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -351,7 +358,7 @@ void Player::eraseUpBlock( ) {
 		
 		//左列
 		check_x = central_x - BLOCK_WIDTH;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -361,7 +368,7 @@ void Player::eraseUpBlock( ) {
 
 		//右列
 		check_x = central_x + BLOCK_WIDTH;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
+		check_y = central_y - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
