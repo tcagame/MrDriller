@@ -30,7 +30,7 @@ const double TIME_ANIMATION = 0.5;
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
-	_air( 5 ),
+	_air( 100 ),
 	_count( 0 ),
 	_depth( 0 ),
 	_life( 2 ),

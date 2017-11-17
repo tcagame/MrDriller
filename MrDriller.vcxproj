@@ -164,6 +164,7 @@
     <ClCompile Include="BlockGreen.cpp" />
     <ClCompile Include="BlockLevel.cpp" />
     <ClCompile Include="BlockRed.cpp" />
+    <ClCompile Include="BlockSolid.cpp" />
     <ClCompile Include="BlockYellow.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -182,9 +183,11 @@
     <ClInclude Include="BlockIDList.h" />
     <ClInclude Include="BlockLevel.h" />
     <ClInclude Include="BlockRed.h" />
+    <ClInclude Include="BlockSolid.h" />
     <ClInclude Include="BlockYellow.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ScenePlay.h" />
