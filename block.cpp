@@ -56,7 +56,7 @@ void Block::fall( std::shared_ptr< Board > board ) {
 	std::shared_ptr< Block > other = board->getBlock( ( int )check_x, ( int )check_y );
 	if ( other ) {
 		//‰º‚ÉƒuƒƒbƒN‚ª‚ ‚é
-		int target_y = (int)(other->getY( ) - BLOCK_HEIGHT);
+		int target_y = ( int )( other->getY( ) - BLOCK_HEIGHT );
 		vec = target_y - _y;
 	}
 	_y += vec;

@@ -7,5 +7,8 @@ public:
 	void act( );
 	int getBlockID( );
 	void changeTxByConnect( ) { };
+	void erase( );
+private:
+	int _hp;
 };
 

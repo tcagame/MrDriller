@@ -21,7 +21,7 @@ public:
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
-	void erase( );
+	virtual void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
 	double getY( ) const;
 	virtual int getBlockID( ) = 0;
