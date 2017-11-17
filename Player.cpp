@@ -127,7 +127,7 @@ void Player::drawDeathAnimation( int camera_y ) {
 	if ( anim == 4 ) {
 		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
 		int ANGEL_Y = -_angel_time * 3;
-		DrawRectExtendGraph( _x + ( int )ANGEL_X, _y + ANGEL_Y, _x + DRAW_WIDTH + ( int )ANGEL_X, _y + DRAW_HEIGHT + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( ( int ) x1 + ( int )ANGEL_X, ( int ) y1 + ANGEL_Y, x2 + ( int )ANGEL_X, ( int ) y2 + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 	}
 
 	//•œŠˆ
