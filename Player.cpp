@@ -323,13 +323,13 @@ void Player::eraseUpBlock( ) {
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 3; i++ ) {
 		//3列分
-		int central_x = _x + CHARACTER_SIZE / 2 + 5;
+		int central_x = _x + CHARACTER_WIDTH / 2 + 5;
 		int check_x = 0;
 		int check_y = 0;
 		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
 		//中央列
 		check_x = central_x ;
-		check_y = _y + CHARACTER_SIZE / 2 - BLOCK_HEIGHT * i;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -339,7 +339,7 @@ void Player::eraseUpBlock( ) {
 		
 		//左列
 		check_x = central_x - BLOCK_WIDTH;
-		check_y = _y + CHARACTER_SIZE / 2 - BLOCK_HEIGHT * i;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -349,7 +349,7 @@ void Player::eraseUpBlock( ) {
 
 		//右列
 		check_x = central_x + BLOCK_WIDTH;
-		check_y = _y + CHARACTER_SIZE / 2 - BLOCK_HEIGHT * i;
+		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
 		block = _board->getBlock( check_x, check_y );
 		if ( block ) {
 			if( block->getBlockID( ) != BLOCK_ID_AIR ) {
