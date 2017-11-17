@@ -33,6 +33,9 @@ void Block::update( std::shared_ptr< Board > board ) {
 }
 
 void Block::draw( int camera_y, int img_handle ) const {
+	if ( !isInCamera( camera_y ) ) {
+		return;
+	}
 	double x1 = _x;
 	double x2 = _x + BLOCK_WIDTH;
 	double y1 = _y - camera_y;
@@ -156,4 +159,14 @@ void Block::setFinished( bool finish ) {
 
 void Block::changeTxByConnect( ) {
 	_tx = _connect * SPRITE_SIZE;
+}
+
+bool Block::isInCamera( int camera_y ) const {
+	if ( _y + BLOCK_HEIGHT < camera_y ) {
+		return false;
+	}
+	if ( _y > camera_y + 720 ) {
+		return false;
+	}
+	return true;
 }
