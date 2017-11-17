@@ -165,6 +165,7 @@
     <ClCompile Include="BlockRed.cpp" />
     <ClCompile Include="BlockYellow.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="BlockRed.h" />
     <ClInclude Include="BlockYellow.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />

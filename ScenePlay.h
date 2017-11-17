@@ -3,6 +3,7 @@
 #include <memory>
 #include "Player.h"
 #include "Board.h"
+#include "Camera.h"
 
 class ScenePlay : public Scene {
 public:
@@ -22,6 +23,7 @@ private:
 private:
 	std::shared_ptr< Player > _player;
 	std::shared_ptr< Board > _board;
+	std::shared_ptr< Camera > _camera;
 	int _img_ui;
 	int _img_back;
 	int _level;

@@ -79,25 +79,29 @@ void Player::update( ) {
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
 }
 
-void Player::draw( ) {
+void Player::draw( int camera_y ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
+		int x1 = _x;
+		int x2 = _x + DRAW_WIDTH;
+		int y1 = _y - camera_y;
+		int y2 =  y1 + DRAW_HEIGHT;
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_UP ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else if ( _direct == DIR_DOWN ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
-		drawDeathAnimation( );
+		drawDeathAnimation( camera_y );
 	}
 }
 
-void Player::drawDeathAnimation( ) {
+void Player::drawDeathAnimation( int camera_y ) {
 	_death_anime_time++;
 	int _angel_time = ( int )( _death_anime_time - FRAME * TIME_ANIMATION );
 	int anim = 0;
@@ -108,11 +112,16 @@ void Player::drawDeathAnimation( ) {
 		anim = 3;
 	}
 	//酸欠
+	int x1 = _x;
+	int x2 = _x + DRAW_WIDTH;
+	int y1 = _y - camera_y;
+	int y2 =  y1 + DRAW_HEIGHT;
+
 	if ( _air == CHECK_AIR ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, x2, y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		} else {
-			DrawRectExtendGraph( _x, _y, _x + DRAW_WIDTH, _y + DRAW_HEIGHT, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			DrawRectExtendGraph( _x, _y, x2, y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
 		}
 	} else {
 		//つぶれる
@@ -155,6 +164,10 @@ int Player::getLife( ) {
 
 int Player::getScore( ) {
 	return _score;
+}
+
+int Player::getY( ) {
+	return _y;
 }
 
 bool Player::isStanding( ) const {

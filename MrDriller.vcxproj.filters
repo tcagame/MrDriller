@@ -39,6 +39,7 @@
     <ClCompile Include="BlockAir.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -79,6 +80,7 @@
       <Filter>Play\Block</Filter>
     </ClInclude>
     <ClInclude Include="BlockIDList.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
