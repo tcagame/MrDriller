@@ -41,6 +41,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_death_anime_time( 0 ),
 	_move_anime_time( 0 ),
 	_direct( DIR_RIGHT ),
+	_dead( false ),
 	_standing( true ),
 	_hitspace( false ) {
 	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
@@ -53,9 +54,8 @@ Player::~Player( ) {
 
 void Player::update( ) {
 	_count++;
-	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
-		_air--;
-	}
+	decreaseAir( );
+	checkCrushed( );
 
 	if ( !death( ) ) {
 		//移動
@@ -134,16 +134,14 @@ void Player::drawDeathAnimation( int camera_y ) {
 	if ( ( double )_angel_time / FRAME == REVIVE_TIME && _life > 0 ) {
 		_life--;
 		_air = 100;
+		_dead = false;
 		_death_anime_time = 0;
 	}
 
 }
 
 bool Player::death( ) {
-	if ( _air == CHECK_AIR ) {
-		return true;
-	}
-	return false;
+	return _dead;
 }
 
 int Player::getAir( ) {
@@ -206,7 +204,7 @@ void Player::move( ) {
 		int central_x = _x + ADJUST_X;
 		int central_y = _y + ADJUST_Y;
 		int check_x = central_x + CHARACTER_WIDTH / 2 * dir + vec_x;
-		int check_y1 = central_y - CHARACTER_HEIGHT / 2;
+		int check_y1 = central_y - CHARACTER_HEIGHT / 2 + 20;
 		int check_y2 = central_y + CHARACTER_HEIGHT / 2 - 20;
 		//ブロックが存在するかチェック
 		std::shared_ptr< Block > block1 = _board->getBlock( check_x, check_y1 );
@@ -393,3 +391,25 @@ void Player::eraseUpBlock( ) {
 
 	}
 }
+
+void Player::decreaseAir( ) {	
+	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
+		_air--;
+		if ( _air <= 0 ) {
+			_dead = true;
+		}
+	}
+}
+
+void Player::checkCrushed( ) {
+	//頭の位置にブロックが当たっているか確かめる
+	int check_x = _x + ADJUST_X;
+	int check_y = _y + ADJUST_Y - CHARACTER_HEIGHT + 1;
+	std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+	if ( block ) {
+		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+			_dead = true;
+		}
+	}
+}
+
