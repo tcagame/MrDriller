@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-const int CAMERA_MOVE_SPEED = 4;
+const int CAMERA_MOVE_SPEED = 8;
 
 Camera::Camera( std::shared_ptr< Player > player ) :
 _player( player ),
