@@ -7,5 +7,6 @@ public:
 	virtual ~BlockYellow( );
 protected:
 	void act( );
+	int getBlockID( );
 };
 

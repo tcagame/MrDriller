@@ -6,5 +6,6 @@ public:
 	virtual ~BlockGreen( );
 protected:
 	void act( );//ŒÅ—Lˆ—
+	int getBlockID( );
 };
 

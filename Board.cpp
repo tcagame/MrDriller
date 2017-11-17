@@ -5,13 +5,14 @@
 #include "BlockRed.h"
 #include "BlockYellow.h"
 #include "BlockAir.h"
+#include "BlockLevel.h"
 #include <list>
 
 
 const int BLOCK_WIDTH_NUM = 9;
 const int BLOCK_WIDTH_SIZE = 100;
 const int BLOCK_HEIGHT_SIZE = 60;
-const int KIND_OF_BLOCK = 5;
+const int KIND_OF_BLOCK = 2;
 
 
 Board::Board( ) {
@@ -23,13 +24,7 @@ Board::Board( ) {
 			if( i % KIND_OF_BLOCK == 0 ) {
 				_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) );
 			} else if( i % KIND_OF_BLOCK == 1 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockGreen( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 2 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 3 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockYellow( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 4 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x, y ) ) );
+				_blocks.push_back( std::shared_ptr< Block >( new BlockLevel( x, y ) ) );
 			}
 		}
 	}
@@ -48,45 +43,22 @@ void Board::update( ) {
 			continue;
 		}
 
-		block->update( );
+		block->update( shared_from_this( ) );
 		ite++;
 	}
 }
 
 void Board::draw( ) {
-	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
+	for ( std::shared_ptr< Block > block : _blocks ) {
 		block->draw( _img_handle );
-		ite++;
 	}
-}
-
-bool Board::isExistence( int x, int y ) const {
-	bool result = false;
-	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
-		if ( block->isExistence( x, y ) ) {
-			result = true;
-			break;
-		}
-		ite++;
-	}
-	return result;
 }
 
 std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
-	std::shared_ptr< Block > result = std::shared_ptr< Block >( );
-	
-	std::list< std::shared_ptr< Block > >::const_iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
+	for ( std::shared_ptr< Block > block : _blocks ) {
 		if ( block->isExistence( x, y ) ) {
-			result = block;
-			break;
+			return block;
 		}
-		ite++;
 	}
-	return result;
+	return std::shared_ptr< Block >( );
 }

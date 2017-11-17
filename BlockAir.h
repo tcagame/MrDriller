@@ -8,6 +8,7 @@ protected:
 	void act( );//ŒÅ—Lˆ—H
 	void eraseAnimation( );
 	int getBlockID();
+	void changeTxByConnect( ) { };
 private:
 	int _count;
 };

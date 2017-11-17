@@ -4,8 +4,8 @@
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
-const int CONNECT_UP    = 0b0000001;
-const int CONNECT_DOWN  = 0b0000010;
+const int CONNECT_DOWN  = 0b0000001;
+const int CONNECT_UP    = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
 
@@ -16,24 +16,25 @@ public:
 	Block( int x, int y, int tx, int ty );
 	virtual ~Block( );
 public:
-	void update( );
+	void update( std::shared_ptr< class Board > board );
 	void draw( int img_handle ) const;
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
-	virtual int getBlockID( );
+	double getY( ) const;
+	virtual int getBlockID( ) = 0;
 protected:
 	void setFinished( bool finish );
+	virtual void changeTxByConnect( );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
+	virtual void fall( std::shared_ptr< class Board > board );//—‰ºˆ—
 protected:
 	//setŒn
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
-private:
-	void fall( );//—‰ºˆ—
 private:
 	double _x;
 	double _y;

@@ -40,6 +40,9 @@
       <Filter>Play\Block</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="BlockLevel.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -81,6 +84,9 @@
     </ClInclude>
     <ClInclude Include="BlockIDList.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="BlockLevel.h">
+      <Filter>Play\Block</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
