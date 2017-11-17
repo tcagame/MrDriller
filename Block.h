@@ -36,6 +36,8 @@ protected:
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
 private:
+	bool isInCamera( int camera_y ) const;
+private:
 	double _x;
 	double _y;
 	int _tx;
