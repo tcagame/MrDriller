@@ -6,26 +6,43 @@
 #include "BlockYellow.h"
 #include "BlockAir.h"
 #include "BlockLevel.h"
+#include "BlockSolid.h"
+#include "map.h"
 #include <list>
 
 
 const int BLOCK_WIDTH_NUM = 9;
 const int BLOCK_WIDTH_SIZE = 100;
 const int BLOCK_HEIGHT_SIZE = 60;
-const int KIND_OF_BLOCK = 2;
 
 
 Board::Board( ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
-	for( int i = 0; i < 100; i++ ) {
+	for( int i = 0; i < MAP_WIDTH_NUM * MAP_HEIGHT_NUM; i++ ) {
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
 		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
-		if( y != 0 && y != BLOCK_HEIGHT_SIZE ) {
-			if( i % KIND_OF_BLOCK == 0 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 1 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockLevel( x, y ) ) );
-			}
+		switch ( MAP1[ i ] ) {
+		case 'R':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
+			break;
+		case 'B':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x,y ) ) );
+			break;
+		case 'G':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockGreen(x, y) ) );
+			break;
+		case 'Y':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockYellow(x,y) ) );
+			break;
+		case 'A':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x,y ) ) );
+			break;
+		case 'L':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockLevel( x,y) ) );
+			break;
+		case '*':
+			_blocks.push_back( std::shared_ptr< Block >( new BlockSolid( x,y) ) );
+			break;
 		}
 	}
 }
