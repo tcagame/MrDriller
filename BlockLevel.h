@@ -7,4 +7,6 @@ public:
 protected:
 	void act( );
 	void fall( std::shared_ptr< class Board > ) { };
+	int getBlockID( );
+	void changeTxByConnect( ) { };
 };

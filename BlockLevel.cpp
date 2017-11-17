@@ -13,3 +13,6 @@ BlockLevel::~BlockLevel()
 
 void BlockLevel::act( ) {
 }
+int BlockLevel::getBlockID( ){
+	return BLOCK_ID_LEVEL;
+}

@@ -12,7 +12,7 @@
 const int BLOCK_WIDTH_NUM = 9;
 const int BLOCK_WIDTH_SIZE = 100;
 const int BLOCK_HEIGHT_SIZE = 60;
-const int KIND_OF_BLOCK = 6;
+const int KIND_OF_BLOCK = 2;
 
 
 Board::Board( ) {
@@ -24,14 +24,6 @@ Board::Board( ) {
 			if( i % KIND_OF_BLOCK == 0 ) {
 				_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) );
 			} else if( i % KIND_OF_BLOCK == 1 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockGreen( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 2 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 3 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockYellow( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 4 ) {
-				_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x, y ) ) );
-			} else if( i % KIND_OF_BLOCK == 5 ) {
 				_blocks.push_back( std::shared_ptr< Block >( new BlockLevel( x, y ) ) );
 			}
 		}

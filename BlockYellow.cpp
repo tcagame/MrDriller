@@ -12,3 +12,6 @@ BlockYellow::~BlockYellow( ) {
 
 void BlockYellow::act( ) {
 }
+int BlockYellow::getBlockID( ){
+	return BLOCK_ID_YELLOW;
+}

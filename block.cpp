@@ -27,6 +27,8 @@ void Block::update( std::shared_ptr< Board > board ) {
 	//ここに落下処理などを書く
 	act( );
 	fall( board );
+	checkConnect( board );
+	changeTxByConnect( );
 	eraseAnimation( );
 }
 
@@ -50,7 +52,8 @@ void Block::fall( std::shared_ptr< Board > board ) {
 	std::shared_ptr< Block > other = board->getBlock( ( int )check_x, ( int )check_y );
 	if ( other ) {
 		//下にブロックがある
-		vec = 0;
+		int target_y = other->getY( ) - BLOCK_HEIGHT;
+		vec = target_y - _y;
 	}
 	_y += vec;
 }
@@ -84,19 +87,20 @@ bool Block::isErase( ) const {
 	return _erase;
 }
 
-
 void Block::erase( ) {
 	_erase = true;
 }
 
-int Block::getBlockID( ) {
-	return 0;
+double Block::getY( ) const {
+	return _y;
 }
 
 void Block::checkConnect( std::shared_ptr< Board > board ) {
 	//周りに同種類のブロックがないかチェックする
+	double centra_x = _x + BLOCK_WIDTH / 2;
+	double centra_y = _y + BLOCK_HEIGHT / 2;
 	if ( !( _connect & CONNECT_UP ) ) {
-		std::shared_ptr< Block > block = board->getBlock( ( int )_x, ( int )_y - BLOCK_HEIGHT );
+		std::shared_ptr< Block > block = board->getBlock( ( int )centra_x, ( int )centra_y - BLOCK_HEIGHT );
 		if ( block ) {
 			if ( block->getBlockID( ) == getBlockID( ) ) {
 				_connect |= CONNECT_UP;
@@ -104,10 +108,28 @@ void Block::checkConnect( std::shared_ptr< Board > board ) {
 		}
 	}
 	if ( !( _connect & CONNECT_DOWN ) ) {
+		std::shared_ptr< Block > block = board->getBlock( ( int )centra_x, ( int )centra_y + BLOCK_HEIGHT );
+		if ( block ) {
+			if ( block->getBlockID( ) == getBlockID( ) ) {
+				_connect |= CONNECT_DOWN;
+			}
+		}
 	}
 	if ( !( _connect & CONNECT_LEFT ) ) {
+		std::shared_ptr< Block > block = board->getBlock( ( int )centra_x - BLOCK_WIDTH, ( int )centra_y );
+		if ( block ) {
+			if ( block->getBlockID( ) == getBlockID( ) ) {
+				_connect |= CONNECT_LEFT;
+			}
+		}
 	}
 	if ( !( _connect & CONNECT_RIGHT ) ) {
+		std::shared_ptr< Block > block = board->getBlock( ( int )centra_x + BLOCK_WIDTH, ( int )centra_y );
+		if ( block ) {
+			if ( block->getBlockID( ) == getBlockID( ) ) {
+				_connect |= CONNECT_RIGHT;
+			}
+		}
 	}
 }
 
@@ -126,4 +148,8 @@ void Block::eraseAnimation( ) {
 
 void Block::setFinished( bool finish ) {
 	_finished = finish;
+}
+
+void Block::changeTxByConnect( ) {
+	_tx = _connect * SPRITE_SIZE;
 }

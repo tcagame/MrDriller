@@ -12,3 +12,6 @@ BlockGreen::~BlockGreen( ) {
 
 void BlockGreen::act( ) {
 }
+int BlockGreen::getBlockID( ){
+	return BLOCK_ID_GREEN;
+}

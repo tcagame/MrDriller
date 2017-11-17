@@ -4,8 +4,8 @@
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
-const int CONNECT_UP    = 0b0000001;
-const int CONNECT_DOWN  = 0b0000010;
+const int CONNECT_DOWN  = 0b0000001;
+const int CONNECT_UP    = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
 
@@ -23,9 +23,11 @@ public:
 	bool isErase( ) const;
 	void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
-	virtual int getBlockID( );
+	double getY( ) const;
+	virtual int getBlockID( ) = 0;
 protected:
 	void setFinished( bool finish );
+	virtual void changeTxByConnect( );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//å≈óLèàóù
 	virtual void fall( std::shared_ptr< class Board > board );//óéâ∫èàóù
