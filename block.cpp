@@ -1,5 +1,6 @@
 #include "Block.h"
 #include "DxLib.h"
+#include "Board.h"
 
 
 const int SPRITE_SIZE = 16;
@@ -77,7 +78,7 @@ int Block::getBlockID( ) {
 void Block::checkConnect( std::shared_ptr< Board > board ) {
 	//周りに同種類のブロックがないかチェックする
 	if ( !( _connect & CONNECT_UP ) ) {
-		std::shared_ptr< Block > block = board->getBlock( _x, _y - BLOCK_HEIGHT );
+		std::shared_ptr< Block > block = board->getBlock( ( int )_x, ( int )_y - BLOCK_HEIGHT );
 		if ( block ) {
 			if ( block->getBlockID( ) == getBlockID( ) ) {
 				_connect |= CONNECT_UP;
