@@ -27,9 +27,6 @@
     <ClCompile Include="BlockRed.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>Play\Block</Filter>
-    </ClCompile>
     <ClCompile Include="BlockYellow.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
@@ -44,6 +41,9 @@
       <Filter>Play\Block</Filter>
     </ClCompile>
     <ClCompile Include="BlockSolid.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,6 +96,7 @@
     <ClInclude Include="BlockSolid.h">
       <Filter>Play\Block</Filter>
     </ClInclude>
+    <ClInclude Include="define.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

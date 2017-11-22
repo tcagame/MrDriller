@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "define.h"
 #include "Board.h"
 #include "BlockIDList.h"
 
@@ -22,14 +23,6 @@ public://getån
 	int getScore( );
 	int getY( );
 private:
-	enum DIR {
-		DIR_LEFT,
-		DIR_RIGHT,
-		DIR_UP,
-		DIR_DOWN,
-		DIR_NONE,
-	};
-private:
 	void move( );
 	void fall( );
 	void dig( );
@@ -37,6 +30,8 @@ private:
 	void eraseUpBlock( );
 	void decreaseAir( );
 	void checkCrushed( );
+	void checkDepth( );
+	void control( );
 private:
 	int _air;
 	int _depth;
@@ -44,8 +39,10 @@ private:
 	int _score;
 	int _img_handle;
 	int _count;
-	int _x;
-	int _y;
+	double _x;
+	double _y;
+	double _vec_x;
+	double _vec_y;
 	int _up;
 	int _death_anime_time;
 	int _move_anime_time;

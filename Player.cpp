@@ -2,31 +2,39 @@
 #include "DxLib.h"
 #include <math.h>
 
-//定数宣言
-const int TIME_AIR_DECREASE = 1;//AIRの減る速度
-const int FRAME = 60;
-const int PLAYER_SIZE_X = 27;
-const int PLAYER_SIZE_Y = 27;
+//-----------定数宣言------------//
+//レベルデザイン系
 const int PLAYER_SPEED = 4;
-const int DRAW_WIDTH = 100;
-const int DRAW_HEIGHT = 90;
-const int CHARACTER_WIDTH = 70;
-const int CHARACTER_HEIGHT = 60;
-const int ADJUST_X = DRAW_WIDTH / 2 + 5;
-const int ADJUST_Y = DRAW_HEIGHT / 2;
-const int BLOCK_DEPTH = 5;
+const int TIME_AIR_DECREASE = 1;//AIRの減る速度
 const int MOVE_WAIT = 5;
-const int MOVE_PATTERN = 4;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 3;
 const int CHECK_AIR = 0;
 const int JUMP_X = 50;
-const int JUMP_Y = BLOCK_HEIGHT + 10;
+const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
-const int AIR_MAX = 100;
 const double UP_TIME = 0.3;
-const double TIME_ANIMATION = 0.5;
 
+//その他
+const int AIR_MAX = 100;
+const int MOVE_PATTERN = 4;
+const int BLOCK_DEPTH = 5;
+const int FRAME = 60;
+
+//描画系
+const double TIME_ANIMATION = 0.5;
+const int SPRITE_SIZE = 27;
+const int DRAW_WIDTH = 100;
+const int DRAW_HEIGHT = 90;
+//座標系
+const int CENTRAL_X = DRAW_WIDTH / 2 + 5;
+const int CENTRAL_Y = DRAW_HEIGHT / 2;
+const int UP_Y = 5 * DRAW_HEIGHT / SPRITE_SIZE;
+const int DOWN_Y = 22 * DRAW_HEIGHT / SPRITE_SIZE;
+const int LEFT_X = 5 * DRAW_WIDTH / SPRITE_SIZE;
+const int RIGHT_X = 21 * DRAW_WIDTH / SPRITE_SIZE;
+
+//-----------関数定義------------//
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
@@ -54,45 +62,64 @@ Player::~Player( ) {
 
 void Player::update( ) {
 	_count++;
-	decreaseAir( );
-	checkCrushed( );
 
+	fall( );    //落下
 	if ( !death( ) ) {
-		//移動
-		move( );
-		//エア回復
-		ifAirRecover( );
-		//掘る
-		dig( );
+		control( ); //操作
+		move( );    //移動
+		ifAirRecover( ); //エア回復
 	} else {
 		_erase_block = false;
 	}
+
 	//ブロックに乗っていない場合
-	fall( );
 
 	//深さ
-	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH;
+	checkDepth( );
+	decreaseAir( );
+	checkCrushed( );
+
 }
 
 void Player::draw( int camera_y ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
-		int x1 = _x;
-		int x2 = _x + DRAW_WIDTH;
-		int y1 = _y - camera_y;
-		int y2 =  y1 + DRAW_HEIGHT;
-		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 5, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		} else if ( _direct == DIR_RIGHT ) {
-			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN ), PLAYER_SIZE_Y * 4, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		} else if ( _direct == DIR_UP ) {
-			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 3, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
-		} else if ( _direct == DIR_DOWN ) {
-			DrawRectExtendGraph( x1, y1, x2, y2, PLAYER_SIZE_X * 0, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		int x1 = ( int )_x;
+		int x2 = ( int )( _x + DRAW_WIDTH );
+		int y1 = ( int )( _y - camera_y );
+		int y2 = ( int )( y1 + DRAW_HEIGHT );
+		int tx = 0;
+		int ty = 0;
+		switch ( _direct ) {
+		case DIR_UP:
+			tx = SPRITE_SIZE * 0;
+			ty = SPRITE_SIZE * 3;
+			break;
+		case DIR_DOWN:
+			tx = SPRITE_SIZE * 0;
+			ty = SPRITE_SIZE * 0;
+			break;
+		case DIR_LEFT:
+			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+			ty = SPRITE_SIZE * 5;
+			break;
+		case DIR_RIGHT:
+			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+			ty = SPRITE_SIZE * 4;
+			break;
 		}
+		DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	} else {
 		drawDeathAnimation( camera_y );
+	}
+	{//debug
+		int left  = _x + LEFT_X;
+		int right = _x + RIGHT_X;
+		int up    = _y - camera_y + UP_Y;
+		int down  = _y - camera_y + DOWN_Y;
+		unsigned int color = GetColor( 255, 0, 0 );
+		DrawBox( left, up, right, down, color, FALSE );
 	}
 }
 
@@ -108,26 +135,30 @@ void Player::drawDeathAnimation( int camera_y ) {
 		anim = 3;
 	}
 	//酸欠
-	double x1 = _x;
-	double x2 = _x + DRAW_WIDTH;
-	double y1 = _y - camera_y;
-	double y2 =  y1 + DRAW_HEIGHT;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * anim;
+	int ty = 0;
 
 	if ( _air == CHECK_AIR ) {
 		if ( _direct == DIR_LEFT ) {
-			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 1, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			ty = SPRITE_SIZE * 1;
 		} else {
-			DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 0, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+			ty = SPRITE_SIZE * 0;
 		}
 	} else {
 		//つぶれる
-		DrawRectExtendGraph( ( int )x1, ( int )y1, ( int )x2, ( int )y2, PLAYER_SIZE_X * anim, PLAYER_SIZE_Y * 2, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		ty = SPRITE_SIZE * 2;
 	}
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+
 	//天使を描画
 	if ( anim == 4 ) {
-		double ANGEL_X = 50 * sin( _angel_time * 0.1 );
+		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.1 ) );
 		int ANGEL_Y = -_angel_time * 3;
-		DrawRectExtendGraph( ( int ) x1 + ( int )ANGEL_X, ( int ) y1 + ANGEL_Y, x2 + ( int )ANGEL_X, ( int ) y2 + ANGEL_Y, PLAYER_SIZE_X * ( _death_anime_time / 10 % 2 + 2 ), PLAYER_SIZE_Y * 6, PLAYER_SIZE_X, PLAYER_SIZE_Y, _img_handle, TRUE );
+		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _death_anime_time / 10 % 2 + 2 ), SPRITE_SIZE * 6, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
 
 	//復活
@@ -168,47 +199,72 @@ bool Player::isStanding( ) const {
 	return _standing;
 }
 
-void Player::move( ) {
+void Player::control( ) {
+	_vec_x = 0;
+
 	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
 		_direct = DIR_UP;
 	}
 	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
 		_direct = DIR_DOWN;
 	}
-
-	//移動キーチェック
-	DIR move = DIR_NONE;
 	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
-		move = DIR_LEFT;
+		_direct = DIR_LEFT;
+		_vec_x += PLAYER_SPEED * -1;
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
-		if ( move == DIR_LEFT ) {
-			move = DIR_NONE;
-		} else {
-			move = DIR_RIGHT;
+		_direct = DIR_RIGHT;
+		_vec_x += PLAYER_SPEED;
+	}
+	dig( );//掘る
+}
+
+
+void Player::move( ) {
+	if ( _vec_y > 0 ) {
+		//下ブロックに当たる
+		int check_x = _x + CENTRAL_X;
+		int check_y = _y + DOWN_Y + _vec_y;
+
+		//落下場所にブロックが存在しているかチェック
+		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		if ( block ) {
+			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+				_standing = true;
+				double target = block->getY( ) - DOWN_Y - 1;
+
+				_vec_y = target - _y;
+			}
 		}
 	}
 
-	if ( move != DIR_NONE ) {
-		_direct = move;
+	
+	if ( _vec_x == 0 ) {
+		//移動キーを押していない
+		_move_anime_time = 0;
+		_up = 0;
+	}
+
+	if ( _vec_x != 0 ) {
 		_move_anime_time++;
-		//左:-1 右:1
-		int dir = -1;
-		if ( move == DIR_RIGHT || move == DIR_DOWN ) {
-			dir = 1;
+		
+		//チェック座標
+		bool left = true;
+		int adjust_x = LEFT_X;
+		if ( _vec_x > 0 ) {
+			left = false;
+			adjust_x = RIGHT_X;
 		}
-		//移動ベクトル
-		int vec_x = PLAYER_SPEED * dir;
-		int vec_y = 0;
+		int central_x = _x + CENTRAL_X;
+		int central_y = _y + CENTRAL_Y;
+		int check_x = _x + adjust_x + _vec_x;
+		int up_y = _y + UP_Y;
+		int down_y = _y + DOWN_Y;
+
 		//キャラクターのx:端y:中央 +vec
-		int central_x = _x + ADJUST_X;
-		int central_y = _y + ADJUST_Y;
-		int check_x = central_x + CHARACTER_WIDTH / 2 * dir + vec_x;
-		int check_y1 = central_y - CHARACTER_HEIGHT / 2 + 20;
-		int check_y2 = central_y + CHARACTER_HEIGHT / 2 - 20;
 		//ブロックが存在するかチェック
-		std::shared_ptr< Block > block1 = _board->getBlock( check_x, check_y1 );
-		std::shared_ptr< Block > block2 = _board->getBlock( check_x, check_y2 );
+		std::shared_ptr< Block > block1 = _board->getBlock( check_x, up_y );
+		std::shared_ptr< Block > block2 = _board->getBlock( check_x, down_y );
 		if ( block1 || block2 ) {//ブロックに当たった場合
 			std::shared_ptr< Block > col_block = block2;
 			if ( !col_block ) {
@@ -220,17 +276,27 @@ void Player::move( ) {
 			} else {
 				//横のブロックが通常
 				//移動しない
-				vec_x = 0;
+				int target = 0;
+				if ( left ) {
+					target = col_block->getX( ) + BLOCK_WIDTH - LEFT_X;
+				} else {
+					target = col_block->getX( ) - RIGHT_X;
+				}
+				_vec_x = target - _x;
 				//登れるかチェック
 				_up++;
 				if ( _up >= ( int )( FRAME * UP_TIME ) ) {
-					std::shared_ptr< Block > slant_block = _board->getBlock(   check_x, central_y - BLOCK_HEIGHT );
+					std::shared_ptr< Block > slant_block = _board->getBlock( check_x, central_y - BLOCK_HEIGHT );
 					std::shared_ptr< Block > up_block    = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
 					if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
 						 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
 						//登る
-						vec_x += JUMP_X * dir;
-						vec_y -= JUMP_Y;
+						_vec_y = -JUMP_Y;
+						if ( left ) {
+							_vec_x += JUMP_X * -1;
+						} else {
+							_vec_x += JUMP_X;
+						}
 					}
 				}
 			}
@@ -238,45 +304,26 @@ void Player::move( ) {
 			_up = 0;
 		}
 		//画面端
-		if ( vec_x < 0 ) {
-			if ( check_x + vec_x < 0 ) {
-				vec_x = 0 - check_x;
+		if ( _vec_x < 0 ) {
+			if ( check_x + _vec_x < 0 ) {
+				_vec_x = 0 - check_x;
 			}
 		}
-		if ( vec_x > 0 ) {
-			if ( check_x + vec_x > 900 ) {
-				vec_x = 900 - check_x;
+		if ( _vec_x > 0 ) {
+			if ( check_x + _vec_x > 900 ) {
+				_vec_x = 900 - check_x;
 			}
-		}
-		//移動
-		_x += vec_x;
-		_y += vec_y;
-
-	} else {
-		//移動キーを押していない
-		_move_anime_time = 0;
-		_up = 0;
-	}
-}
-
-
-void Player::fall( ) {
-	int vec_y = PLAYER_SPEED;
-	int check_x = _x + CHARACTER_WIDTH / 2 + 3;
-	int check_y = _y + DRAW_HEIGHT - 20 + vec_y;
-
-	//落下場所にブロックが存在しているかチェック
-	std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
-	if ( block ) {
-		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-			_standing = true;
-			vec_y = 0;
 		}
 	}
 
 	//移動
-	_y += vec_y;
+	_x += _vec_x;
+	_y += _vec_y;
+}
 
+
+void Player::fall( ) {
+	_vec_y = PLAYER_SPEED;
 }
 
 void Player::dig( ) {
@@ -290,29 +337,30 @@ void Player::dig( ) {
 		return;
 	}
 	_hitspace = false;
+
 	int check_x = 0;
 	int check_y = 0;
-	int central_x = _x + ADJUST_X;
+
 	switch ( _direct ) {
 	case DIR_UP:
 		//上の位置
-		check_x = central_x;
-		check_y = _y - DRILL_RANGE;
+		check_x = _x + CENTRAL_X;
+		check_y = _y + UP_Y - DRILL_RANGE;
 		break;
 	case DIR_DOWN:
 		//下の位置
-		check_x = central_x;
-		check_y = _y + DRAW_HEIGHT + DRILL_RANGE;
+		check_x = _x + CENTRAL_X;
+		check_y = _y + DOWN_Y + DRILL_RANGE;
 		break;
 	case DIR_LEFT:
 		//左の位置
-		check_x = central_x - CHARACTER_WIDTH / 2 - DRILL_RANGE;
-		check_y = _y + ADJUST_Y;
+		check_x = _x + LEFT_X - DRILL_RANGE;
+		check_y = _y + CENTRAL_Y;
 		break;
 	case DIR_RIGHT:
 		//右の位置
-		check_x = central_x + CHARACTER_WIDTH / 2 + DRILL_RANGE;
-		check_y = _y + ADJUST_Y;
+		check_x = _x + RIGHT_X + DRILL_RANGE;
+		check_y = _y + CENTRAL_Y;
 		break;
 	}
 
@@ -326,8 +374,8 @@ void Player::dig( ) {
 }
 
 void Player::ifAirRecover( ) {
-	int check_x = _x + ADJUST_X;
-	int check_y = _y + ADJUST_Y;
+	int check_x = _x + CENTRAL_X;
+	int check_y = _y + CENTRAL_Y;
 	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
@@ -347,43 +395,37 @@ void Player::eraseUpBlock( ) {
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 10; i++ ) {
 		//3列分
-		int central_x = _x + ADJUST_X;
-		int central_y = _y + ADJUST_Y;
-		int check_x = 0;
-		int check_y = 0;
-		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
-		//中央列
-		check_x = central_x;
-		check_y = _y + CHARACTER_WIDTH / 2 - BLOCK_HEIGHT * i;
-		check_x = central_x ;
-		check_y = central_y - BLOCK_HEIGHT * i;
-		block = _board->getBlock( check_x, check_y );
-		if ( block ) {
-			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-				block->erase( );
+		int check_y = _y + CENTRAL_Y - BLOCK_HEIGHT * i;
+		int central_x = _x + CENTRAL_X;
+		{//中央列
+			int check_x = central_x;
+			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			if ( block ) {
+				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+					block->erase( );
+				}
 			}
 		}
-
-		//左列
-		check_x = central_x - BLOCK_WIDTH;
-		check_y = central_y - BLOCK_HEIGHT * i;
-		block = _board->getBlock( check_x, check_y );
-		if ( block ) {
-			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-				block->erase( );
+		
+		{//左列
+			int check_x = central_x - BLOCK_WIDTH;
+			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			if ( block ) {
+				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+					block->erase( );
+				}
 			}
 		}
-
-		//右列
-		check_x = central_x + BLOCK_WIDTH;
-		check_y = central_y - BLOCK_HEIGHT * i;
-		block = _board->getBlock( check_x, check_y );
-		if ( block ) {
-			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-				block->erase( );
+		
+		{//右列
+			int check_x = central_x + BLOCK_WIDTH;
+			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			if ( block ) {
+				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+					block->erase( );
+				}
 			}
 		}
-
 	}
 }
 
@@ -398,8 +440,8 @@ void Player::decreaseAir( ) {
 
 void Player::checkCrushed( ) {
 	//頭の位置にブロックが当たっているか確かめる
-	int check_x = _x + ADJUST_X;
-	int check_y = _y + ADJUST_Y - CHARACTER_HEIGHT + 1;
+	int check_x = _x + CENTRAL_X;
+	int check_y = _y + UP_Y;
 	std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -408,3 +450,6 @@ void Player::checkCrushed( ) {
 	}
 }
 
+void Player::checkDepth( ) {
+	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH;
+}

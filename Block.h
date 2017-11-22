@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
+#include <array>
 #include "BlockIDList.h"
+#include "define.h"
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
@@ -24,28 +26,34 @@ public:
 	virtual void erase( );
 	void checkConnect( std::shared_ptr< class Board > board );
 	double getY( ) const;
+	double getX( ) const;
 	virtual int getBlockID( ) = 0;
+	void adjustPos( std::shared_ptr< Board > board );
 protected:
 	void setFinished( bool finish );
 	virtual void changeTxByConnect( );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
-	virtual void fall( std::shared_ptr< class Board > board );//—‰ºˆ—
+	virtual void fall( );//—‰ºˆ—
 protected:
 	//setŒn
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
 private:
+	void move( std::shared_ptr< Board > board );
+	void checkErase( );
 	bool isInCamera( int camera_y ) const;
 private:
 	double _x;
 	double _y;
+	double _vec_y;
 	int _tx;
 	int _ty;
 	int _count_erase;
 	bool _erase;
 	bool _finished;
 	char _connect;
+	std::array< std::shared_ptr< class Block >, MAX_DIR > _connect_blocks;
 };
 
 

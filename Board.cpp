@@ -67,6 +67,10 @@ void Board::update( ) {
 		block->update( shared_from_this( ) );
 		ite++;
 	}
+
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		block->adjustPos( shared_from_this( ) );
+	}
 }
 
 void Board::draw( int camera_y ) const {
