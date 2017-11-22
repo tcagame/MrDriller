@@ -25,7 +25,7 @@ private:
 	std::shared_ptr< Board > _board;
 	std::shared_ptr< Camera > _camera;
 	int _img_ui;
-	int _img_back;
+	int _img_bg;
 	int _img_num;
 	int _level;
 };

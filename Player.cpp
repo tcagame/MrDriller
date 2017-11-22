@@ -62,10 +62,14 @@ Player::~Player( ) {
 
 void Player::update( ) {
 	_count++;
+	_vec_x = 0;
+	_vec_y = 0;
 
 	fall( );    //落下
 	if ( !death( ) ) {
-		control( ); //操作
+		if ( isStanding( ) ) {
+			control( ); //操作
+		}
 		move( );    //移動
 		ifAirRecover( ); //エア回復
 	} else {
@@ -113,14 +117,15 @@ void Player::draw( int camera_y ) {
 	} else {
 		drawDeathAnimation( camera_y );
 	}
-	{//debug
-		int left  = _x + LEFT_X;
-		int right = _x + RIGHT_X;
-		int up    = _y - camera_y + UP_Y;
-		int down  = _y - camera_y + DOWN_Y;
-		unsigned int color = GetColor( 255, 0, 0 );
-		DrawBox( left, up, right, down, color, FALSE );
-	}
+#if _DEBUG
+	//当たり判定デバッグ用
+	int left  = ( int )_x + LEFT_X;
+	int right = ( int )_x + RIGHT_X;
+	int up    = ( int )_y - camera_y + UP_Y;
+	int down  = ( int )_y - camera_y + DOWN_Y;
+	unsigned int color = GetColor( 255, 0, 0 );
+	DrawBox( left, up, right, down, color, FALSE );
+#endif
 }
 
 void Player::drawDeathAnimation( int camera_y ) {
@@ -192,7 +197,7 @@ int Player::getScore( ) {
 }
 
 int Player::getY( ) {
-	return _y;
+	return ( int )_y;
 }
 
 bool Player::isStanding( ) const {
@@ -221,10 +226,11 @@ void Player::control( ) {
 
 
 void Player::move( ) {
+	_standing = false;
 	if ( _vec_y > 0 ) {
 		//下ブロックに当たる
-		int check_x = _x + CENTRAL_X;
-		int check_y = _y + DOWN_Y + _vec_y;
+		int check_x = ( int )_x + CENTRAL_X;
+		int check_y = ( int )( _y + DOWN_Y + _vec_y );
 
 		//落下場所にブロックが存在しているかチェック
 		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
@@ -255,11 +261,11 @@ void Player::move( ) {
 			left = false;
 			adjust_x = RIGHT_X;
 		}
-		int central_x = _x + CENTRAL_X;
-		int central_y = _y + CENTRAL_Y;
-		int check_x = _x + adjust_x + _vec_x;
-		int up_y = _y + UP_Y;
-		int down_y = _y + DOWN_Y;
+		int central_x = ( int )_x + CENTRAL_X;
+		int central_y = ( int )_y + CENTRAL_Y;
+		int check_x = ( int )( _x + adjust_x + _vec_x );
+		int up_y = ( int )_y + UP_Y;
+		int down_y = ( int )_y + DOWN_Y;
 
 		//キャラクターのx:端y:中央 +vec
 		//ブロックが存在するかチェック
@@ -276,7 +282,7 @@ void Player::move( ) {
 			} else {
 				//横のブロックが通常
 				//移動しない
-				int target = 0;
+				double target = 0;
 				if ( left ) {
 					target = col_block->getX( ) + BLOCK_WIDTH - LEFT_X;
 				} else {
@@ -338,8 +344,8 @@ void Player::dig( ) {
 	}
 	_hitspace = false;
 
-	int check_x = 0;
-	int check_y = 0;
+	double check_x = 0;
+	double check_y = 0;
 
 	switch ( _direct ) {
 	case DIR_UP:
@@ -364,7 +370,7 @@ void Player::dig( ) {
 		break;
 	}
 
-	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
+	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	//ポインタが存在する場合true
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
@@ -374,9 +380,9 @@ void Player::dig( ) {
 }
 
 void Player::ifAirRecover( ) {
-	int check_x = _x + CENTRAL_X;
-	int check_y = _y + CENTRAL_Y;
-	std::shared_ptr < Block > block = _board->getBlock( check_x, check_y );
+	double check_x = _x + CENTRAL_X;
+	double check_y = _y + CENTRAL_Y;
+	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
 			block->erase( );
@@ -395,11 +401,11 @@ void Player::eraseUpBlock( ) {
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 10; i++ ) {
 		//3列分
-		int check_y = _y + CENTRAL_Y - BLOCK_HEIGHT * i;
-		int central_x = _x + CENTRAL_X;
+		double check_y = _y + CENTRAL_Y - BLOCK_HEIGHT * i;
+		double central_x = _x + CENTRAL_X;
 		{//中央列
-			int check_x = central_x;
-			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			double check_x = central_x;
+			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 					block->erase( );
@@ -408,8 +414,8 @@ void Player::eraseUpBlock( ) {
 		}
 		
 		{//左列
-			int check_x = central_x - BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			double check_x = central_x - BLOCK_WIDTH;
+			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 					block->erase( );
@@ -418,8 +424,8 @@ void Player::eraseUpBlock( ) {
 		}
 		
 		{//右列
-			int check_x = central_x + BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+			double check_x = central_x + BLOCK_WIDTH;
+			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 					block->erase( );
@@ -440,9 +446,9 @@ void Player::decreaseAir( ) {
 
 void Player::checkCrushed( ) {
 	//頭の位置にブロックが当たっているか確かめる
-	int check_x = _x + CENTRAL_X;
-	int check_y = _y + UP_Y;
-	std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+	double check_x = _x + CENTRAL_X;
+	double check_y = _y + UP_Y;
+	std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			_dead = true;

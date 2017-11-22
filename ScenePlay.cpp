@@ -32,7 +32,7 @@ const int GAGE_COLOR = RGB( 0, 0, 255 );
 ScenePlay::ScenePlay( ) :
 	_level( 1 ) {
 	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
-	_img_back = LoadGraph( "Resource/back.jpg" );
+	_img_bg = LoadGraph( "Resource/bg.jpg" );
 	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
@@ -110,5 +110,12 @@ void ScenePlay::drawLife( ) const {
 }
 
 void ScenePlay::drawBack( ) const {
-	DrawExtendGraph( 0, 0, UI_X, 720, _img_back, FALSE );
+	int y1 = ( ( _camera->getY( ) + 720 ) % 720 ) * -1;
+	if ( y1 > 0 || y1 < -720 ) {
+		int check = 0;
+	}
+	int y2 = y1 + 720;
+	int y3 = y2 + 720;
+	DrawExtendGraph( 0, y1, UI_X, y2, _img_bg, FALSE );
+	DrawExtendGraph( 0, y2, UI_X, y3, _img_bg, FALSE );
 }
