@@ -24,7 +24,7 @@ Block::~Block( ) {
 }
 
 void Block::update( std::shared_ptr< Board > board ) {
-	//‚±‚±‚É—‰ºˆ—‚È‚Ç‚ğ‘‚­
+	//ã“ã“ã«è½ä¸‹å‡¦ç†ãªã©ã‚’æ›¸ã
 	act( );
 	fall( board );
 	checkConnect( board );
@@ -58,7 +58,7 @@ void Block::fall( std::shared_ptr< Board > board ) {
 
 	std::shared_ptr< Block > other = board->getBlock( ( int )check_x, ( int )check_y );
 	if ( other ) {
-		//‰º‚ÉƒuƒƒbƒN‚ª‚ ‚é
+		//ä¸‹ã«ãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚‹
 		int target_y = ( int )( other->getY( ) - BLOCK_HEIGHT );
 		vec = target_y - _y;
 	}
@@ -67,19 +67,19 @@ void Block::fall( std::shared_ptr< Board > board ) {
 
 bool Block::isExistence( int x, int y ) const {
 	bool result = true;
-	//¶
+	//å·¦
 	if ( x < _x ) {
 		result = false;
 	}
-	//ã
+	//ä¸Š
 	if ( y < _y ) {
 		result = false;
 	}
-	//‰E
+	//å³
 	if ( x > _x + BLOCK_WIDTH ) {
 		result = false;
 	}
-	//‰º
+	//ä¸‹
 	if ( y >  _y + BLOCK_HEIGHT ) {
 		result = false;
 	}
@@ -103,7 +103,7 @@ double Block::getY( ) const {
 }
 
 void Block::checkConnect( std::shared_ptr< Board > board ) {
-	//ü‚è‚É“¯í—Ş‚ÌƒuƒƒbƒN‚ª‚È‚¢‚©ƒ`ƒFƒbƒN‚·‚é
+	//å‘¨ã‚Šã«åŒç¨®é¡ã®ãƒ–ãƒ­ãƒƒã‚¯ãŒãªã„ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 	double centra_x = _x + BLOCK_WIDTH / 2;
 	double centra_y = _y + BLOCK_HEIGHT / 2;
 	if ( !( _connect & CONNECT_UP ) ) {
