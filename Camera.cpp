@@ -2,8 +2,7 @@
 
 const int CAMERA_MOVE_SPEED = 8;
 
-Camera::Camera( std::shared_ptr< Player > player ) :
-_player( player ),
+Camera::Camera( ) :
 _y( 0 ) {
 }
 
@@ -11,9 +10,9 @@ _y( 0 ) {
 Camera::~Camera( ) {
 }
 
-void Camera::update( ) {
+void Camera::update( int player_y ) {
 	//キャラクターの座標にあわせてy軸を変更
-	int target_y = _player->getY( ) - 720 / 2;
+	int target_y = player_y - 720 / 2;
 	if ( _y != target_y ) {
 		int vec = target_y - _y;
 		if ( abs( vec ) > CAMERA_MOVE_SPEED ) {

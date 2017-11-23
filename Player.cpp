@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "DxLib.h"
+#include "Block.h"
 #include <math.h>
 
 //-----------定数宣言------------//
@@ -229,15 +230,21 @@ void Player::move( ) {
 	_standing = false;
 	if ( _vec_y > 0 ) {
 		//下ブロックに当たる
-		int check_x = ( int )_x + CENTRAL_X;
+		int check_left = ( int )_x + LEFT_X + 1;
+		int check_right = ( int )_x + RIGHT_X - 1;
 		int check_y = ( int )( _y + DOWN_Y + _vec_y );
 
 		//落下場所にブロックが存在しているかチェック
-		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
-		if ( block ) {
-			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+		std::shared_ptr< Block > block_left = _board->getBlock( check_left, check_y );
+		std::shared_ptr< Block > block_right = _board->getBlock( check_right, check_y );
+		if ( block_left || block_right ) {
+			std::shared_ptr< Block > col_block = block_left;
+			if ( !col_block ) {
+				col_block = block_right;
+			}
+			if ( col_block->getBlockID( ) != BLOCK_ID_AIR ) {
 				_standing = true;
-				double target = block->getY( ) - DOWN_Y - 1;
+				double target = col_block->getY( ) - DOWN_Y - 1;
 
 				_vec_y = target - _y;
 			}

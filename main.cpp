@@ -13,8 +13,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmdLine, int n
 	//解像度を指定
 	SetGraphMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32 );
 
-	//アクティブではないときは処理しない
-	SetAlwaysRunFlag( FALSE );
+	//アクティブではないときは処理するかどうか
+	SetAlwaysRunFlag( TRUE );
 
 	//タイトルを設定
 	SetWindowText( TITLE_NAME );

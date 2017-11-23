@@ -4,10 +4,10 @@
 
 class Camera {
 public:
-	Camera( std::shared_ptr< Player > player );
+	Camera( );
 	virtual ~Camera( );
 public:
-	void update( );
+	void update( int player_y );
 public:
 	int getY( );
 private:

@@ -36,17 +36,17 @@ ScenePlay::ScenePlay( ) :
 	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
+	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 300, 0, _board ) );
-	_camera = std::shared_ptr< Camera >( new Camera( _player ) );
 }
 
 ScenePlay::~ScenePlay( ) {
 }
 
 Scene::SCENE ScenePlay::update( ) {
-	_board->update( );
 	_player->update( );
-	_camera->update( );
+	_board->update( _camera->getY( ) );
+	_camera->update( _player->getY( ) );
 	return SCENE_PLAY;
 }
 

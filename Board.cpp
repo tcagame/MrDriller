@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "DxLib.h"
+#include "Block.h"
 #include "BlockBlue.h"
 #include "BlockGreen.h"
 #include "BlockRed.h"
@@ -7,25 +8,58 @@
 #include "BlockAir.h"
 #include "BlockLevel.h"
 #include "BlockSolid.h"
+#include "Camera.h"
 #include "map.h"
 #include <list>
 
-
+const int MAX_BLOCK = 200;
 const int BLOCK_WIDTH_NUM = 9;
-const int BLOCK_WIDTH_SIZE = 100;
-const int BLOCK_HEIGHT_SIZE = 60;
-
 
 Board::Board( ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
-	for( int i = 0; i < MAP_WIDTH_NUM * MAP_HEIGHT_NUM; i++ ) {
+	_load_idx = 0;
+	load( );
+}
+
+Board::~Board( ) {
+	DeleteGraph( _img_handle );
+}
+
+void Board::update( int camera_y ) {
+	load( );
+
+	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
+	while ( ite != _blocks.end( ) ) {
+		std::shared_ptr< Block > block = *ite;
+		if ( block->isFinished( ) ) {
+			ite = _blocks.erase( ite );
+			continue;
+		}
+
+		block->update( shared_from_this( ), camera_y );
+		ite++;
+	}
+
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		block->adjustPos( shared_from_this( ) );
+	}
+}
+
+void Board::draw( int camera_y ) const {
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		block->draw( camera_y, _img_handle );
+	}
+}
+
+void Board::load( ) {
+	for( ; _load_idx < MAP_WIDTH_NUM * MAP_HEIGHT_NUM; _load_idx++ ) {
 		//ˆ—‚ªd‚¢‚½‚ß•Û—¯
-		if ( i > 100 ) {
+		if ( _blocks.size( ) > MAX_BLOCK ) {
 			break;
 		}
-		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH_SIZE;
-		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT_SIZE;
-		switch ( MAP1[ i ] ) {
+		int x = ( _load_idx % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH;
+		int y = ( _load_idx / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT;
+		switch ( MAP1[ _load_idx ] ) {
 		case 'R':
 			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
 			break;
@@ -51,35 +85,11 @@ Board::Board( ) {
 	}
 }
 
-Board::~Board( ) {
-	DeleteGraph( _img_handle );
-}
-
-void Board::update( ) {
-	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
-	while ( ite != _blocks.end( ) ) {
-		std::shared_ptr< Block > block = *ite;
-		if ( block->isFinished( ) ) {
-			ite = _blocks.erase( ite );
-			continue;
-		}
-
-		block->update( shared_from_this( ) );
-		ite++;
-	}
-
-	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->adjustPos( shared_from_this( ) );
-	}
-}
-
-void Board::draw( int camera_y ) const {
-	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->draw( camera_y, _img_handle );
-	}
-}
 
 std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
+	if ( x < 0 || x > BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
+		return std::shared_ptr< Block >( );
+	}
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		if ( block->isExistence( x, y ) ) {
 			return block;
