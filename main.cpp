@@ -33,6 +33,5 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmdLine, int n
 
 	//DxLibI—¹ˆ—
 	DxLib_End( );
-	exit( 0 );
 	return 0;
 }
