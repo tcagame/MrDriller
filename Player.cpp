@@ -15,6 +15,7 @@ const int JUMP_X = 50;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
+const  int SOLID_AIR = 20;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -386,6 +387,12 @@ void Player::dig( ) {
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			block->erase( );
+		}
+		if ( block->isErase( ) ) {
+			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
+				//AIR‚ªŒ¸‚é
+				_air -= SOLID_AIR;
+			}
 		}
 	}
 }
