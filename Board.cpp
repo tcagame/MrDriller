@@ -12,7 +12,7 @@
 #include "map.h"
 #include <list>
 
-const int MAX_BLOCK = 150;
+const int MAX_BLOCK = MAP_WIDTH_NUM * 18;
 const int BLOCK_WIDTH_NUM = 9;
 
 Board::Board( ) {
