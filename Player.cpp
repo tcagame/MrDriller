@@ -15,6 +15,7 @@ const int JUMP_X = 50;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
+const int BLOCK_POINT = 10;
 
 //その他
 const int AIR_MAX = 100;
@@ -73,6 +74,7 @@ void Player::update( ) {
 		}
 		move( );    //移動
 		ifAirRecover( ); //エア回復
+		scoreBlock( ); //ブロックポイント
 	} else {
 		_erase_block = false;
 	}
@@ -465,4 +467,16 @@ void Player::checkCrushed( ) {
 
 void Player::checkDepth( ) {
 	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH;
+}
+
+void Player::scoreBlock( ) {
+	double check_x = _x + CENTRAL_X;
+	double check_y = _y + CENTRAL_Y;
+	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
+	if ( block ) {
+		if ( block->getBlockID( )) {
+			block->erase( );
+			_score += BLOCK_POINT;
+		}
+	}
 }
