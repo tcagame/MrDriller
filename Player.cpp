@@ -16,7 +16,8 @@ const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
 const int BLOCK_POINT = 10;
-const  int SOLID_AIR = 20;
+const int SOLID_BLOCK_POINT = -20;
+const int SOLID_AIR = 20;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -32,7 +33,7 @@ const int DRAW_HEIGHT = 90;
 //À•WŒn
 const int CENTRAL_X = DRAW_WIDTH / 2 + 5;
 const int CENTRAL_Y = DRAW_HEIGHT / 2;
-const int UP_Y = 13 * DRAW_HEIGHT / SPRITE_SIZE;
+const int UP_Y = 14 * DRAW_HEIGHT / SPRITE_SIZE;
 const int DOWN_Y = 55 * DRAW_HEIGHT / SPRITE_SIZE;
 const int LEFT_X = 13 * DRAW_WIDTH / SPRITE_SIZE;
 const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
@@ -426,7 +427,7 @@ void Player::dig( ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				//AIR‚ªŒ¸‚é
 				_air -= SOLID_AIR;
-				_score -= 20;
+				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
