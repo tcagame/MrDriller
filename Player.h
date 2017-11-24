@@ -32,6 +32,7 @@ private:
 	void checkCrushed( );
 	void checkDepth( );
 	void control( );
+	void scoreBlock( );
 private:
 	int _air;
 	int _depth;
