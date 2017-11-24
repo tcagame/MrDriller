@@ -21,6 +21,7 @@ public://getån
 	int getDepth( );
 	int getLife( );
 	int getScore( );
+	int getLevel( );
 	int getY( );
 private:
 	void move( );
@@ -40,6 +41,7 @@ private:
 	int _score;
 	int _img_handle;
 	int _count;
+	int _level;
 	double _x;
 	double _y;
 	double _vec_x;
