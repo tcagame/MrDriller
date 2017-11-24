@@ -46,6 +46,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_depth( 0 ),
 	_life( 2 ),
 	_score( 0 ),
+	_level( 1 ),
 	_x( x ),
 	_y( y ),
 	_up( 0 ),
@@ -222,6 +223,10 @@ int Player::getLife( ) {
 
 int Player::getScore( ) {
 	return _score;
+}
+
+int Player::getLevel( ) {
+	return _level;
 }
 
 int Player::getY( ) {
@@ -420,6 +425,9 @@ void Player::dig( ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				//AIR‚ªŒ¸‚é
 				_air -= SOLID_AIR;
+			}
+			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
+				_level++;
 			}
 		}
 	}
