@@ -44,9 +44,8 @@ protected:
 	void setTy( int ty );//‰æ‘œ“àÀ•W
 	virtual void checkConnect( std::shared_ptr< class Board > board );
 private:
-	void move( std::shared_ptr< class Board > board );
+	void move( std::shared_ptr< class Board > board, int camera_y );
 	void checkErase( int camera_y );
-	bool isUpdateRange( int camera_y ) const;
 	bool isInCamera( int camera_y ) const;
 private:
 	double _x;
