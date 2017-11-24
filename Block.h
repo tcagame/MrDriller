@@ -32,7 +32,6 @@ public:
 	virtual void erase( );
 	void adjustPos( std::shared_ptr< class Board > board );
 	void connectBlock( std::shared_ptr< class Block >, int connect );
-	void setFall( bool value );
 protected:
 	void setFinished( bool finish );
 	virtual void changeTxByConnect( );

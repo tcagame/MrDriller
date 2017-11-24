@@ -19,22 +19,22 @@ const  int SOLID_AIR = 20;
 
 //ÇªÇÃëº
 const int AIR_MAX = 100;
-const int MOVE_PATTERN = 4;
+const int MOVE_PATTERN = 8;
 const int BLOCK_DEPTH = 5;
 const int FRAME = 60;
 
 //ï`âÊån
-const double TIME_ANIMATION = 0.5;
-const int SPRITE_SIZE = 27;
+const double TIME_ANIMATION = 2.0;
+const int SPRITE_SIZE = 64;
 const int DRAW_WIDTH = 100;
 const int DRAW_HEIGHT = 90;
 //ç¿ïWån
 const int CENTRAL_X = DRAW_WIDTH / 2 + 5;
 const int CENTRAL_Y = DRAW_HEIGHT / 2;
-const int UP_Y = 5 * DRAW_HEIGHT / SPRITE_SIZE;
-const int DOWN_Y = 22 * DRAW_HEIGHT / SPRITE_SIZE;
-const int LEFT_X = 5 * DRAW_WIDTH / SPRITE_SIZE;
-const int RIGHT_X = 21 * DRAW_WIDTH / SPRITE_SIZE;
+const int UP_Y = 13 * DRAW_HEIGHT / SPRITE_SIZE;
+const int DOWN_Y = 55 * DRAW_HEIGHT / SPRITE_SIZE;
+const int LEFT_X = 13 * DRAW_WIDTH / SPRITE_SIZE;
+const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
 
 //-----------ä÷êîíËã`------------//
 
@@ -54,7 +54,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_dead( false ),
 	_standing( true ),
 	_hitspace( false ) {
-	_img_handle = LoadGraph( "Resource/Character.png", TRUE );
+	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 }
 
 Player::~Player( ) {
@@ -93,26 +93,26 @@ void Player::draw( int camera_y ) {
 	if ( !death( ) ) {
 		int x1 = ( int )_x;
 		int x2 = ( int )( _x + DRAW_WIDTH );
-		int y1 = ( int )( _y - camera_y );
+		int y1 = ( int )( _y - camera_y);
 		int y2 = ( int )( y1 + DRAW_HEIGHT );
 		int tx = 0;
 		int ty = 0;
 		switch ( _direct ) {
 		case DIR_UP:
 			tx = SPRITE_SIZE * 0;
-			ty = SPRITE_SIZE * 3;
+			ty = SPRITE_SIZE * 9;
 			break;
 		case DIR_DOWN:
 			tx = SPRITE_SIZE * 0;
-			ty = SPRITE_SIZE * 0;
+			ty = SPRITE_SIZE * 6;
 			break;
 		case DIR_LEFT:
 			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
-			ty = SPRITE_SIZE * 5;
+			ty = SPRITE_SIZE * 19;
 			break;
 		case DIR_RIGHT:
 			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
-			ty = SPRITE_SIZE * 4;
+			ty = SPRITE_SIZE * 20;
 			break;
 		}
 		DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
@@ -135,37 +135,61 @@ void Player::drawDeathAnimation( int camera_y ) {
 	int _angel_time = ( int )( _death_anime_time - FRAME * TIME_ANIMATION );
 	int anim = 0;
 	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
-		anim = 4;
+		anim = 7;
 		eraseUpBlock( );
 		_erase_block = false;
-	} else {
-		anim = 3;
 	}
+
 	//é_åá
 	int x1 = ( int )_x;
 	int y1 = ( int )_y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
-	int tx = SPRITE_SIZE * anim;
+	int tx = 0;
 	int ty = 0;
 
 	if ( _air == CHECK_AIR ) {
 		if ( _direct == DIR_LEFT ) {
-			ty = SPRITE_SIZE * 1;
+			if (_death_anime_time <= 70){
+				tx = SPRITE_SIZE * ( _death_anime_time / 10 % MOVE_PATTERN );
+			}else{
+			tx = SPRITE_SIZE * 7;
+			}
+			ty = SPRITE_SIZE * 4;
 		} else {
-			ty = SPRITE_SIZE * 0;
+			if (_death_anime_time <= 70){
+				tx = SPRITE_SIZE * ( _death_anime_time / 10 % MOVE_PATTERN );
+			}else{
+				tx = SPRITE_SIZE * 7;
+			}
+			ty = SPRITE_SIZE * 5;
 		}
 	} else {
 		//Ç¬Ç‘ÇÍÇÈ
-		ty = SPRITE_SIZE * 2;
+		if ( _direct == DIR_LEFT ) {
+			if (_death_anime_time <= 20){
+				tx = SPRITE_SIZE * ( _death_anime_time / 10 % 3 );
+			}else{
+				tx = SPRITE_SIZE * 2;
+			}
+			ty = SPRITE_SIZE * 11;
+		} else {
+			if (_death_anime_time <= 20){
+				tx = SPRITE_SIZE * ( _death_anime_time / 10 % 3 );
+			}else{
+				tx = SPRITE_SIZE * 2;
+			}
+			ty = SPRITE_SIZE * 12;
+		}
+
 	}
 	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 
 	//ìVégÇï`âÊ
-	if ( anim == 4 ) {
+	if ( anim == 7 ) {
 		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.1 ) );
 		int ANGEL_Y = -_angel_time * 3;
-		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _death_anime_time / 10 % 2 + 2 ), SPRITE_SIZE * 6, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _death_anime_time / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
 
 	//ïúäà
@@ -359,7 +383,7 @@ void Player::dig( ) {
 	double check_x = 0;
 	double check_y = 0;
 
-	switch ( _direct ) {
+ 	switch ( _direct ) {
 	case DIR_UP:
 		//è„ÇÃà íu
 		check_x = _x + CENTRAL_X;
@@ -384,7 +408,7 @@ void Player::dig( ) {
 
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	//É|ÉCÉìÉ^Ç™ë∂ç›Ç∑ÇÈèÍçátrue
-	if ( block ) {
+	if ( block && !block->isErase( ) ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			block->erase( );
 		}
@@ -440,7 +464,7 @@ void Player::eraseUpBlock( ) {
 				}
 			}
 		}
-		
+	
 		{//âEóÒ
 			double check_x = central_x + BLOCK_WIDTH;
 			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
@@ -453,7 +477,7 @@ void Player::eraseUpBlock( ) {
 	}
 }
 
-void Player::decreaseAir( ) {	
+void Player::decreaseAir( ) {
 	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
 		_air--;
 		if ( _air <= 0 ) {
@@ -475,5 +499,5 @@ void Player::checkCrushed( ) {
 }
 
 void Player::checkDepth( ) {
-	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH;
+	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH;
 }
