@@ -66,37 +66,45 @@ void ScenePlay::draw( ) const {
 
 void ScenePlay::drawDepth( ) const {
 	char buf[ 7 ];
-	sprintf_s( buf, "%6d", _player->getDepth( ) );
-	DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
-	for ( int i = 0; i < 6; i++ ) {
-		DrawRectExtendGraph( DRAW_Depth_X + i * DRAW_NUM_SIZE_X, DRAW_Depth_Y, DRAW_Depth_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Depth_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+	if ( _player->getDepth( ) >= 0 ) {
+		sprintf_s( buf, "%6d", _player->getDepth( ) );
+		DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+		for ( int i = 0; i < 6; i++ ) {
+			DrawRectExtendGraph( DRAW_Depth_X + i * DRAW_NUM_SIZE_X, DRAW_Depth_Y, DRAW_Depth_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Depth_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+		}
 	}
 }
 
 void ScenePlay::drawAir( ) const {
 	char buf[ 4 ];
-	sprintf_s( buf, "%3d", _player->getAir( ) );
-	for ( int i = 0; i < 3; i++ ) {
-		DrawRectExtendGraph( DRAW_AIR_NUM_X + i * DRAW_NUM_SIZE_X, DRAW_AIR_NUM_Y, DRAW_AIR_NUM_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_AIR_NUM_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+	if ( _player->getDepth( ) >= 0 ) {
+		sprintf_s( buf, "%3d", _player->getAir( ) );
+		for ( int i = 0; i < 3; i++ ) {
+			DrawRectExtendGraph( DRAW_AIR_NUM_X + i * DRAW_NUM_SIZE_X, DRAW_AIR_NUM_Y, DRAW_AIR_NUM_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_AIR_NUM_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+		}
+		DrawBox( DRAW_AIR_GAGE_X, DRAW_AIR_GAGE_Y, DRAW_AIR_GAGE_X + ( int )( GAGE_WIDTH * _player->getAir( ) / 100 ), DRAW_AIR_GAGE_Y + GAGE_HEIGHT, GAGE_COLOR, TRUE );
 	}
-	DrawBox( DRAW_AIR_GAGE_X, DRAW_AIR_GAGE_Y, DRAW_AIR_GAGE_X + ( int )( GAGE_WIDTH * _player->getAir( ) / 100 ), DRAW_AIR_GAGE_Y + GAGE_HEIGHT, GAGE_COLOR, TRUE );
 }
 
 void ScenePlay::drawLevel( ) const {
 	char buf[ 4 ];
-	sprintf_s( buf, "%3d", _level );
-	DrawBox( 1260 - ( ( int )log10( _level ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
-	for ( int i = 0; i < 3; i++ ) {
-		DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+	if ( _player->getDepth( ) >= 0 ) {
+		sprintf_s( buf, "%3d", _level );
+		DrawBox( 1260 - ( ( int )log10( _level ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
+		for ( int i = 0; i < 3; i++ ) {
+			DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+		}
 	}
 }
 
 void ScenePlay::drawScore( ) const {
 	char buf[ 7 ];
-	sprintf_s( buf, "%6d", _player->getScore( ) );
-	DrawBox( 1220 - ( ( int )log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
-	for ( int i = 0; i < 6; i++ ) {
-		DrawRectExtendGraph( DRAW_Score_X + i * DRAW_NUM_SIZE_X, DRAW_Score_Y, DRAW_Score_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Score_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+	if ( _player->getDepth( ) >= 0 ) {
+		sprintf_s( buf, "%6d", _player->getScore( ) );
+		DrawBox( 1220 - ( ( int )log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+		for ( int i = 0; i < 6; i++ ) {
+			DrawRectExtendGraph( DRAW_Score_X + i * DRAW_NUM_SIZE_X, DRAW_Score_Y, DRAW_Score_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Score_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
+		}
 	}
 }
 
@@ -106,12 +114,14 @@ void ScenePlay::drawUIBack( ) const {
 
 void ScenePlay::drawLife( ) const {
 	char buf[ 20 ];
-	sprintf_s( buf, "Lives:%d", _player->getLife( ) );
-	for ( int i = 0; i < _player->getLife( ); i++ ) {
-		DrawBox( 1180, 670, 1260, 720, RGB( 0, 0, 0 ), TRUE );
-	}
-	for ( int i = 0; i < _player->getLife( ); i++ ) {
-		DrawRectExtendGraph( 1222 - i * 37, 670, 1259 - i * 37, 707, 0, 0, 64, 64, _img_life, TRUE );
+	if ( _player->getDepth( ) >= 0 ) {
+		sprintf_s( buf, "Lives:%d", _player->getLife( ) );
+		for ( int i = 0; i < _player->getLife( ); i++ ) {
+			DrawBox( 1180, 670, 1260, 720, RGB( 0, 0, 0 ), TRUE );
+		}
+		for ( int i = 0; i < _player->getLife( ); i++ ) {
+			DrawRectExtendGraph( 1222 - i * 37, 670, 1259 - i * 37, 707, 0, 0, 64, 64, _img_life, TRUE );
+		}
 	}
 }
 
