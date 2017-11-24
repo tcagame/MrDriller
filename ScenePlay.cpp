@@ -34,6 +34,7 @@ ScenePlay::ScenePlay( ) :
 	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
 	_img_bg = LoadGraph( "Resource/bg.jpg" );
 	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
+	_img_life = LoadGraph( "Resource/NewCharacter.png" );
 
 	_board = std::shared_ptr< Board >( new Board( ) );
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
@@ -106,7 +107,12 @@ void ScenePlay::drawUIBack( ) const {
 void ScenePlay::drawLife( ) const {
 	char buf[ 20 ];
 	sprintf_s( buf, "Lives:%d", _player->getLife( ) );
-	DrawString( DRAW_Life_X, DRAW_Life_Y, buf, DRAW_STRING_COLOR );
+	for ( int i = 0; i < _player->getLife( ); i++ ) {
+		DrawBox( 1180, 670, 1260, 720, RGB( 0, 0, 0 ), TRUE );
+	}
+	for ( int i = 0; i < _player->getLife( ); i++ ) {
+		DrawRectExtendGraph( 1222 - i * 37, 670, 1259 - i * 37, 707, 0, 0, 64, 64, _img_life, TRUE );
+	}
 }
 
 void ScenePlay::drawBack( ) const {

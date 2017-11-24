@@ -27,5 +27,6 @@ private:
 	int _img_ui;
 	int _img_bg;
 	int _img_num;
+	int _img_life;
 	int _level;
 };
