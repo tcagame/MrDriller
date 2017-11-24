@@ -15,6 +15,7 @@ const int JUMP_X = 50;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
+const  int SOLID_AIR = 20;
 
 //その他
 const int AIR_MAX = 100;
@@ -241,6 +242,10 @@ void Player::move( ) {
 			std::shared_ptr< Block > col_block = block_left;
 			if ( !col_block ) {
 				col_block = block_right;
+			} else {
+				if ( col_block->getBlockID( ) == BLOCK_ID_AIR && block_right ) {
+					col_block = block_right;
+				}
 			}
 			if ( col_block->getBlockID( ) != BLOCK_ID_AIR ) {
 				_standing = true;
@@ -379,12 +384,15 @@ void Player::dig( ) {
 
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	//ポインタが存在する場合true
-	if ( block ) {
+	if ( block && !block->isErase( ) ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			block->erase( );
 		}
-		if ( block && block->getBlockID( ) == BLOCK_ID_SOLID && block->isErase( ) ) {
-			_air -= 20;
+		if ( block->isErase( ) ) {
+			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
+				//AIRが減る
+				_air -= SOLID_AIR;
+			}
 		}
 	}
 }
@@ -432,7 +440,7 @@ void Player::eraseUpBlock( ) {
 				}
 			}
 		}
-		
+	
 		{//右列
 			double check_x = central_x + BLOCK_WIDTH;
 			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
