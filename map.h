@@ -2,9 +2,14 @@
 #include <array>
 
 const int MAP_WIDTH_NUM = 9;
-const int MAP_HEIGHT_NUM = 100;
+const int MAP_HEIGHT_NUM = 105;
 
 std::array< char, MAP_WIDTH_NUM * MAP_HEIGHT_NUM + 1 > MAP1 {
+	"         "
+	"         "
+	"         "
+	"         "
+	"         "
 	"    G    "
 	"***GGG***"
 	"YYYRRRYYY"

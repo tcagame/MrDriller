@@ -37,7 +37,7 @@ ScenePlay::ScenePlay( ) :
 
 	_board = std::shared_ptr< Board >( new Board( ) );
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
-	_player = std::shared_ptr< Player >( new Player( 300, 0, _board ) );
+	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
 }
 
 ScenePlay::~ScenePlay( ) {
