@@ -418,13 +418,16 @@ void Player::dig( ) {
 	if ( block && !block->isErase( ) ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			block->erase( );
-			//if(block==)
-			_score+=BLOCK_POINT;
+		}
+		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
+			_score += BLOCK_POINT;
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				//AIR‚ªŒ¸‚é
 				_air -= SOLID_AIR;
+				_score -= 20;
+				if ( _score < 0 ) _score = 0;
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
 				_level++;
