@@ -68,7 +68,11 @@ void ScenePlay::drawDepth( ) const {
 	char buf[ 7 ];
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "%6d", _player->getDepth( ) );
-		DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+		if ( _player->getDepth( ) < 1 ) {
+			DrawBox( 1220 - DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+		} else {
+			DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) + 1 ) ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+		}
 		for ( int i = 0; i < 6; i++ ) {
 			DrawRectExtendGraph( DRAW_Depth_X + i * DRAW_NUM_SIZE_X, DRAW_Depth_Y, DRAW_Depth_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Depth_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 		}
@@ -101,7 +105,11 @@ void ScenePlay::drawScore( ) const {
 	char buf[ 7 ];
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "%6d", _player->getScore( ) );
-		DrawBox( 1220 - ( ( int )log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+		if ( _player->getScore( ) < 1 ) {
+			DrawBox( 1220 - DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+		} else {
+			DrawBox( 1220 - ( ( int )log10( _player->getScore( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+		}
 		for ( int i = 0; i < 6; i++ ) {
 			DrawRectExtendGraph( DRAW_Score_X + i * DRAW_NUM_SIZE_X, DRAW_Score_Y, DRAW_Score_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Score_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 		}
