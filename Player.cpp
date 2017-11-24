@@ -241,6 +241,10 @@ void Player::move( ) {
 			std::shared_ptr< Block > col_block = block_left;
 			if ( !col_block ) {
 				col_block = block_right;
+			} else {
+				if ( col_block->getBlockID( ) == BLOCK_ID_AIR && block_right ) {
+					col_block = block_right;
+				}
 			}
 			if ( col_block->getBlockID( ) != BLOCK_ID_AIR ) {
 				_standing = true;
