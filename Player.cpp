@@ -354,7 +354,7 @@ void Player::dig( ) {
 	double check_x = 0;
 	double check_y = 0;
 
-	switch ( _direct ) {
+ 	switch ( _direct ) {
 	case DIR_UP:
 		//ã‚ÌˆÊ’u
 		check_x = _x + CENTRAL_X;
@@ -382,6 +382,9 @@ void Player::dig( ) {
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			block->erase( );
+		}
+		if ( block && block->getBlockID( ) == BLOCK_ID_SOLID && block->isErase( ) ) {
+			_air -= 20;
 		}
 	}
 }
@@ -442,7 +445,7 @@ void Player::eraseUpBlock( ) {
 	}
 }
 
-void Player::decreaseAir( ) {	
+void Player::decreaseAir( ) {
 	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
 		_air--;
 		if ( _air <= 0 ) {
