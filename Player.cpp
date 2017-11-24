@@ -475,5 +475,5 @@ void Player::checkCrushed( ) {
 }
 
 void Player::checkDepth( ) {
-	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH;
+	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH;
 }
