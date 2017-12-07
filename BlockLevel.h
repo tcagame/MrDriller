@@ -9,5 +9,4 @@ public:
 	void setFall( bool fall ) { };
 protected:
 	void act( );
-	void changeTxByConnect( ) { };
 };
