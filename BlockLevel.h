@@ -3,10 +3,11 @@
 class BlockLevel : public Block {
 public:
 	BlockLevel( int x, int y );
-	virtual ~BlockLevel();
+	virtual ~BlockLevel( );
+public:
+	int getBlockID( ) { return BLOCK_ID_LEVEL; };
+	void setFall( bool fall ) { };
 protected:
 	void act( );
-	void fall( std::shared_ptr< class Board > ) { };
-	int getBlockID( );
 	void changeTxByConnect( ) { };
 };

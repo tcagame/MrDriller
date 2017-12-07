@@ -1,10 +1,10 @@
 #pragma once
 #include <array>
 
-const int MAP_WIDTH_NUM = 9;
-const int MAP_HEIGHT_NUM = 105;
+static const int BLOCK_WIDTH_NUM = 9;
+static const int BLOCK_HEIGHT_NUM = 105;
 
-std::array< char, MAP_WIDTH_NUM * MAP_HEIGHT_NUM + 1 > MAP1 {
+static std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > MAP1 {
 	"         "
 	"         "
 	"         "
@@ -90,7 +90,7 @@ std::array< char, MAP_WIDTH_NUM * MAP_HEIGHT_NUM + 1 > MAP1 {
 	"GGYYGGABB"
 	"BBBYYARRR"
 	"RYYRRBA**"
-	"YBGGGTARR"
+	"YBGGGBARR"
 	"RABBRRGGG"
 	"GGYAABBRR"
 	"YYARB*YBA"

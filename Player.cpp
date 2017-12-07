@@ -418,7 +418,7 @@ void Player::dig( ) {
 	//ƒ|ƒCƒ“ƒ^‚ª‘¶Ý‚·‚éê‡true
 	if ( block && !block->isErase( ) ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-			block->erase( );
+			_board->eraseBlock( block );
 		}
 		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
 			_score += BLOCK_POINT;
@@ -523,8 +523,8 @@ void Player::scoreBlock( ) {
 	double check_y = _y + CENTRAL_Y;
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
-		if ( block->getBlockID( )) {
-			block->erase( );
+		if ( block->getBlockID( ) ) {
+			_board->eraseBlock( block );
 			_score += BLOCK_POINT;
 		}
 	}

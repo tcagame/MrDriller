@@ -25,13 +25,17 @@ public:
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	bool isFall( ) const;
+	int getGroup( ) const;
 	double getX( ) const;
 	double getY( ) const;
 	virtual int getBlockID( ) = 0;
+	void setFallGroup( bool fall );
 public:
 	virtual void erase( );
-	void adjustPos( std::shared_ptr< class Board > board );
+	virtual void checkConnect( std::shared_ptr< class Board > board );
 	void connectBlock( std::shared_ptr< class Block >, int connect );
+	void setGroup( int group );
+	virtual void setFall( bool fall );
 protected:
 	void setFinished( bool finish );
 	virtual void changeTxByConnect( );
@@ -42,10 +46,8 @@ protected:
 	//setŒn
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
-	virtual void checkConnect( std::shared_ptr< class Board > board );
 private:
 	void move( std::shared_ptr< class Board > board, int camera_y );
-	void checkErase( int camera_y );
 	bool isInCamera( int camera_y ) const;
 private:
 	double _x;
@@ -58,6 +60,7 @@ private:
 	bool _erase;
 	bool _finished;
 	bool _fall;
+	int _group;
 	std::array< std::shared_ptr< class Block >, MAX_DIR > _connect_blocks;
 };
 
