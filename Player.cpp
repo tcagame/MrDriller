@@ -141,6 +141,10 @@ void Player::actOnStand( ) {
 	}
 
 	//--------------キー操作------------//
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		setAct( ACT_DRILL );
+		return;
+	}
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
 		_direct = DIR_UP;
 	}
@@ -156,10 +160,6 @@ void Player::actOnStand( ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
-		setAct( ACT_DRILL );
-		return;
-	}
 	//-----------------------------------//
 
 	scoreBlock( ); //ブロックポイント
@@ -209,23 +209,32 @@ void Player::actOnDrill( ) {
 	}
 	
 	if ( _act_count > MAX_DLILL_COUNT ) {
-		int check_x = ( int )_x + CENTRAL_X;
-		int check_y = ( int )_y + CENTRAL_Y;
-		switch ( _direct ) {
+		double check_x = 0;
+		double check_y = 0;
+
+ 		switch ( _direct ) {
 		case DIR_UP:
-			check_y -= BLOCK_HEIGHT;
+			//上の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + UP_Y - DRILL_RANGE;
 			break;
 		case DIR_DOWN:
-			check_y += BLOCK_HEIGHT;
+			//下の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + DOWN_Y + DRILL_RANGE;
 			break;
 		case DIR_LEFT:
-			check_x -= BLOCK_WIDTH;
+			//左の位置
+			check_x = _x + LEFT_X - DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
 			break;
 		case DIR_RIGHT:
-			check_x += BLOCK_WIDTH;
+			//右の位置
+			check_x = _x + RIGHT_X + DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
 			break;
 		}
-		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 		if ( !block ||
 			  block->getBlockID( ) == BLOCK_ID_SOLID ||
 			  block->getBlockID( ) == BLOCK_ID_AIR ) {
@@ -796,6 +805,7 @@ void Player::scoreBlock( ) {
 
 void Player::setAct( ACT act ) {
 	_dig = false;
+	_vec_x = 0;
 	_act_count = 0;
 	_act = act;
 }
