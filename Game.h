@@ -15,6 +15,3 @@ private:
 	std::shared_ptr< Scene > _scene;
 	Scene::SCENE _now_scene;
 };
-
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;

@@ -8,4 +8,6 @@ public:
 public:
 	SCENE update( );
 	void draw( ) const;
+private:
+	int _img_handle;
 };

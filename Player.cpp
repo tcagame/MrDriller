@@ -20,6 +20,7 @@ const int MAX_UP_COUNT = 20;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
+const int MAX_DLILL_COUNT = 30;
 
 //その他
 const int AIR_MAX = 100;
@@ -142,6 +143,10 @@ void Player::actOnStand( ) {
 	}
 
 	//--------------キー操作------------//
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		setAct( ACT_DRILL );
+		return;
+	}
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
 		_direct = DIR_UP;
 	}
@@ -157,10 +162,6 @@ void Player::actOnStand( ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
-		setAct( ACT_DRILL );
-		return;
-	}
 	//-----------------------------------//
 
 	ifAirRecover( ); //エア回復
@@ -201,10 +202,44 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//数フレームかけて掘る
-	dig( );//掘る
+	_vec_x = 0;
+	_vec_y = 0;
+	if ( _act_count > MAX_DLILL_COUNT / 4 ) {
+		dig( );//掘る
+	}
 	
-	if ( _act_count > 10 ) {
-		setAct( ACT_STAND );
+	if ( _act_count > MAX_DLILL_COUNT ) {
+		double check_x = 0;
+		double check_y = 0;
+
+ 		switch ( _direct ) {
+		case DIR_UP:
+			//上の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + UP_Y - DRILL_RANGE;
+			break;
+		case DIR_DOWN:
+			//下の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + DOWN_Y + DRILL_RANGE;
+			break;
+		case DIR_LEFT:
+			//左の位置
+			check_x = _x + LEFT_X - DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
+			break;
+		case DIR_RIGHT:
+			//右の位置
+			check_x = _x + RIGHT_X + DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
+			break;
+		}
+		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
+		if ( !block ||
+			  block->getBlockID( ) == BLOCK_ID_SOLID ||
+			  block->getBlockID( ) == BLOCK_ID_AIR ) {
+			setAct( ACT_STAND );
+		}
 	}
 }
 
@@ -374,11 +409,16 @@ void Player::drawJump( int camera_y ) const {
 }
 
 void Player::drawDrill( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	int pattern = _act_count / ( MAX_DLILL_COUNT / ANIM_PATTERN );
+	if ( pattern >= ANIM_PATTERN ) {
+		pattern = ANIM_PATTERN - 1;
+	}
 	int x1 = ( int )_x;
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * ( ( _act_count / 2 ) % 8 );
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	switch ( _direct ) {
 	case DIR_UP:
@@ -780,6 +820,7 @@ void Player::checkDepth( ) {
 
 void Player::setAct( ACT act ) {
 	_dig = false;
+	_vec_x = 0;
 	_act_count = 0;
 	_act = act;
 }
