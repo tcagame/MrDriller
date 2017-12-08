@@ -14,10 +14,12 @@
 #include "Map1.h"
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
+const int MAX_LEVEL = 4;
 
 Board::Board( ) :
 _level( 0 ),
-_level_erase( false ) {
+_level_erase( false ),
+_finished( false ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 	loadBlock( );
 }
@@ -59,6 +61,10 @@ void Board::updateBlocks( int camera_y ) {
 
 
 void Board::loadBlock( ) {
+	if ( MAX_LEVEL <= _level ) {
+		_finished = true;
+		return;
+	}
 	std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > map = { };
 
 	srand( MAX_PATTERN );
@@ -232,3 +238,6 @@ void Board::eraseColumnBlockUp( int x, int y ) {
 	}
 }
 
+bool Board::isFinished( ) const {
+	return _finished;
+}

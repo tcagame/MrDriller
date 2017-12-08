@@ -56,7 +56,8 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
-	_standing( true ) {
+	_standing( true ),
+	_finished( false ) {
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 }
@@ -300,6 +301,8 @@ void Player::actOnDeadAir( ) {
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
+		} else {
+			_finished = true;
 		}
 	}
 }
@@ -311,6 +314,8 @@ void Player::actOnDeadCrash( ) {
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
+		} else {
+			_finished = true;
 		}
 	}
 }
@@ -653,6 +658,11 @@ int Player::getY( ) {
 bool Player::isStanding( ) const {
 	return _standing;
 }
+
+bool Player::isFinished( ) const {
+	return _finished;
+}
+
 
 void Player::move( ) {
 	if ( _act == ACT_JUMP ) {
