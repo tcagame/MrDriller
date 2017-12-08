@@ -15,7 +15,7 @@
 /*------------------ŠÖ”’è‹`-------------------*/
 
 Game::Game( ) :
-_now_scene( Scene::SCENE_PLAY ) {
+_now_scene( Scene::SCENE_TITLE ) {
 	//ƒV[ƒ“‰Šú‰»
 	changeScene( _now_scene );
 }
