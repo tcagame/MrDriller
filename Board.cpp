@@ -114,11 +114,12 @@ void Board::checkConnect( ) {
 	}
 }
 
-
-
+int Board::getLevel( ) const {
+	return _level + 1;
+}
 
 std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
-	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_WIDTH;
+	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_HEIGHT;
 	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
 		return std::shared_ptr< Block >( );
 	}

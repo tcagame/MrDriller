@@ -16,7 +16,7 @@ const int JUMP_SPEED_Y = 6;
 const int JUMP_X = 60;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
-const double UP_TIME = 0.3;
+const int MAX_UP_COUNT = 20;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
@@ -48,7 +48,6 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_depth( 0 ),
 	_life( 2 ),
 	_score( 0 ),
-	_level( 1 ),
 	_x( x ),
 	_y( y ),
 	_up_count( 0 ),
@@ -119,8 +118,7 @@ void Player::actOnStand( ) {
 		setAct( ACT_FALL );
 		return;
 	}
-	if ( _up_count > UP_TIME &&
-		 isEnableJump( ) ) {
+	if ( _up_count > MAX_UP_COUNT ) {
 		_up_count = 0;
 		_target_x = _x;
 		_target_y = _y - JUMP_Y;
@@ -495,10 +493,6 @@ int Player::getScore( ) {
 	return _score;
 }
 
-int Player::getLevel( ) {
-	return _level;
-}
-
 int Player::getY( ) {
 	return ( int )_y;
 }
@@ -586,7 +580,11 @@ void Player::move( ) {
 					target = col_block->getX( ) - RIGHT_X;
 				}
 				_vec_x = target - _x;
-				_up_count++;
+				if ( isEnableJump( ) ) {
+					_up_count++;
+				} else {
+					_up_count = 0;
+				}
 			}
 		} else {
 			_up_count = 0;
@@ -665,9 +663,6 @@ void Player::dig( ) {
 				_air -= SOLID_AIR;
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
-			}
-			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
-				_level++;
 			}
 		}
 	}

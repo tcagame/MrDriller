@@ -34,7 +34,6 @@ public://getån
 	int getDepth( );
 	int getLife( );
 	int getScore( );
-	int getLevel( );
 	int getY( );
 private:
 	void act( );
@@ -79,7 +78,6 @@ private:
 	int _act_count;
 	int _up_count;
 	int _move_anim_count;
-	int _level;
 	double _x;
 	double _y;
 	double _vec_x;

@@ -15,6 +15,7 @@ public:
 	std::shared_ptr< class Block > getBlock( int x, int y ) const;
 	std::shared_ptr< class Block > getBlockM( int x, int y ) const;
 	void eraseBlock( std::shared_ptr< Block > block );
+	int getLevel( ) const;
 private:
 	void loadBlock( );
 	void updateBlocks( int camera_y );
