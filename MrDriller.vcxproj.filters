@@ -55,6 +55,9 @@
     <ClCompile Include="Map1.cpp">
       <Filter>Play\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Map2.cpp">
+      <Filter>Play\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -110,6 +113,9 @@
       <Filter>Play\Map</Filter>
     </ClInclude>
     <ClInclude Include="Map1.h">
+      <Filter>Play\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map2.h">
       <Filter>Play\Map</Filter>
     </ClInclude>
   </ItemGroup>

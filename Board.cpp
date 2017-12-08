@@ -12,6 +12,7 @@
 #include <list>
 #include "Map0.h"
 #include "Map1.h"
+#include "Map2.h"
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
 
@@ -70,6 +71,9 @@ void Board::loadBlock( ) {
 		break;
 	case 1:
 		map = std::shared_ptr< Map >( new Map1 )->getMap( pattern );
+		break;
+	case 2:
+		map = std::shared_ptr< Map >( new Map2 )->getMap( pattern );
 		break;
 	default:
 		map = std::shared_ptr< Map >( new Map0 )->getMap( pattern );

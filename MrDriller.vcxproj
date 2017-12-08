@@ -177,6 +177,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Map0.cpp" />
     <ClCompile Include="Map1.cpp" />
+    <ClCompile Include="Map2.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ScenePlay.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Map0.h" />
     <ClInclude Include="Map1.h" />
+    <ClInclude Include="Map2.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ScenePlay.h" />

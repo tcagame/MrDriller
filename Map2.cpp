@@ -1,15 +1,15 @@
-#include "Map0.h"
+#include "Map2.h"
 
 
 
-Map0::Map0( ) {
+Map2::Map2(){
 	_map[ 0 ] = {
 		"         "
 		"         "
 		"         "
 		"         "
-		"         "
-		"    G    "
+		" YYYYYYY "
+		"    A    "
 		"***GGG***"
 		"YYYRRRYYY"
 		"RABRARBBB"
@@ -113,10 +113,9 @@ Map0::Map0( ) {
 }
 
 
-Map0::~Map0( ) {
+Map2::~Map2(){
 }
-
-std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > Map0::getMap( int pattern ) {
+std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > Map2::getMap( int pattern ) {
 	if ( pattern < 0 ) {
 		pattern = 0;
 	}
