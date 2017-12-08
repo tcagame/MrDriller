@@ -16,10 +16,11 @@ const int JUMP_SPEED_Y = 6;
 const int JUMP_X = 60;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
-const double UP_TIME = 0.3;
+const int MAX_UP_COUNT = 20;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
+const int MAX_DLILL_COUNT = 30;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -118,8 +119,7 @@ void Player::actOnStand( ) {
 		setAct( ACT_FALL );
 		return;
 	}
-	if ( _up_count > UP_TIME &&
-		 isEnableJump( ) ) {
+	if ( _up_count > MAX_UP_COUNT ) {
 		_up_count = 0;
 		_target_x = _x;
 		_target_y = _y - JUMP_Y;
@@ -202,10 +202,32 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//”ƒtƒŒ[ƒ€‚©‚¯‚ÄŒ@‚é
-	dig( );//Œ@‚é
+	if ( _act_count > MAX_DLILL_COUNT / 2 ) {
+		dig( );//Œ@‚é
+	}
 	
-	if ( _act_count > 10 ) {
-		setAct( ACT_STAND );
+	if ( _act_count > MAX_DLILL_COUNT ) {
+		int check_x = _x + CENTRAL_X;
+		int check_y = _y + CENTRAL_Y;
+		switch ( _direct ) {
+		case DIR_UP:
+			check_y -= BLOCK_HEIGHT;
+			break;
+		case DIR_DOWN:
+			check_y += BLOCK_HEIGHT;
+			break;
+		case DIR_LEFT:
+			check_x -= BLOCK_WIDTH;
+			break;
+		case DIR_RIGHT:
+			check_x += BLOCK_WIDTH;
+			break;
+		}
+		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		if ( !block ||
+			  block->getBlockID( ) == BLOCK_ID_SOLID ) {
+			setAct( ACT_STAND );
+		}
 	}
 }
 
@@ -359,11 +381,16 @@ void Player::drawJump( int camera_y ) const {
 }
 
 void Player::drawDrill( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	int pattern = _act_count / ( MAX_DLILL_COUNT / ANIM_PATTERN );
+	if ( pattern >= ANIM_PATTERN ) {
+		pattern = ANIM_PATTERN - 1;
+	}
 	int x1 = ( int )_x;
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * ( ( _act_count / 2 ) % 8 );
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	switch ( _direct ) {
 	case DIR_UP:
@@ -574,7 +601,11 @@ void Player::move( ) {
 					target = col_block->getX( ) - RIGHT_X;
 				}
 				_vec_x = target - _x;
-				_up_count++;
+				if ( isEnableJump( ) ) {
+					_up_count++;
+				} else {
+					_up_count = 0;
+				}
 			}
 		} else {
 			_up_count = 0;
