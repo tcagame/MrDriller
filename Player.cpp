@@ -91,6 +91,71 @@ void Player::update( ) {
 
 }
 
+void Player::act( ) {
+	switch ( _act ) {
+	case ACT_STAND:       //とまっているor歩く
+		actOnStand( );
+		break;
+	case ACT_FALL:        //落ちる
+		actOnFall( );
+		break;
+	case ACT_JUMP:        //のぼる
+		actOnJump( );
+		break;
+	case ACT_DRILL:       //掘る
+		actOnDrill( );
+		break;
+	case ACT_DEAD_AIR:    //AIR不足で死亡
+		actOnDeadAir( );
+		break;
+	case ACT_DEAD_CRUSH:  //つぶれて死亡
+		actOnDeadCrash( );
+		break;
+	case ACT_RESURRECTION://復活
+		actOnResurrection( );
+		break;
+	case ACT_DODGE_BACK:  //つぶれる回避(後ろにブロック)
+		actOnDodgeBack( );
+		break;
+	case ACT_DODGE_FRONT:  //つぶれる回避(前にブロック)
+		actOnDodgeFront( );
+		break;
+	case ACT_GOAL:
+		actOnGoal( );
+		break;
+	}
+}
+
+void Player::actOnStand( ) {
+}
+
+void Player::actOnFall( ) {
+}
+
+void Player::actOnJump( ) {
+}
+
+void Player::actOnDrill( ) {
+}
+
+void Player::actOnDeadAir( ) {
+}
+
+void Player::actOnDeadCrash( ) {
+}
+
+void Player::actOnResurrection( ) {
+}
+
+void Player::actOnDodgeBack( ) {
+}
+
+void Player::actOnGoal( ) {
+}
+
+void Player::actOnDodgeFront( ) {
+}
+
 void Player::draw( int camera_y ) {
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ

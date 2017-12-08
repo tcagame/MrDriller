@@ -11,6 +11,19 @@ public:
 	Player( int x, int y, std::shared_ptr< Board > board );
 	virtual ~Player( );
 public:
+	enum ACT {
+		ACT_STAND,       //とまっているor歩く
+		ACT_FALL,        //落ちる
+		ACT_JUMP,        //のぼる
+		ACT_DRILL,       //掘る
+		ACT_DEAD_AIR,    //AIR不足で死亡
+		ACT_DEAD_CRUSH,  //つぶれて死亡
+		ACT_RESURRECTION,//復活
+		ACT_DODGE_BACK,  //つぶれる回避(後ろにブロック)
+		ACT_DODGE_FRONT,  //つぶれる回避(前にブロック)
+		ACT_GOAL
+	};
+public:
 	void update( );
 	void draw( int camera_y );
 	void drawDeathAnimation( int camera_y );
@@ -24,6 +37,17 @@ public://get系
 	int getLevel( );
 	int getY( );
 private:
+	void act( );
+	void actOnStand( );
+	void actOnFall( );
+	void actOnJump( );
+	void actOnDrill( );
+	void actOnDeadAir( );
+	void actOnDeadCrash( );
+	void actOnResurrection( );
+	void actOnDodgeBack( );
+	void actOnDodgeFront( );
+	void actOnGoal( );
 	void move( );
 	void fall( );
 	void dig( );
@@ -55,4 +79,5 @@ private:
 	bool _erase_block;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
+	ACT _act;
 };
