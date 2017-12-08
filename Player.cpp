@@ -724,6 +724,10 @@ void Player::eraseUpBlock( ) {
 }
 
 void Player::decreaseAir( ) {
+	if ( isDead( ) ) {
+		return;
+	}
+
 	_air -= AIR_DECREASE_SPEED;
 	if ( _air <= 0 ) {
 		_air = 0;
