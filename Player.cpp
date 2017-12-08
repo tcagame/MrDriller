@@ -42,21 +42,17 @@ const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
-	_air( 100 ),
-	_count( 0 ),
+	_air( AIR_MAX ),
 	_depth( 0 ),
 	_life( 2 ),
 	_score( 0 ),
 	_level( 1 ),
 	_x( x ),
 	_y( y ),
-	_up( 0 ),
-	_death_anime_time( 0 ),
-	_move_anime_time( 0 ),
+	_up_count( 0 ),
+	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
-	_dead( false ),
-	_standing( true ),
-	_hitspace( false ) {
+	_standing( true ) {
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 }
@@ -67,7 +63,6 @@ Player::~Player( ) {
 
 
 void Player::update( ) {
-	_count++;
 	_vec_x = 0;
 	_vec_y = 0;
 
@@ -77,10 +72,6 @@ void Player::update( ) {
 	//深さ
 	checkDepth( );
 	decreaseAir( );
-	if ( isCrushed( ) ||
-		 isRunOutAir( ) ) {
-		_dead = true;
-	}
 	_act_count++;
 }
 
@@ -126,8 +117,8 @@ void Player::actOnStand( ) {
 		setAct( ACT_FALL );
 		return;
 	}
-	if ( _up > UP_TIME ) {
-		_up = 0;
+	if ( _up_count > UP_TIME ) {
+		_up_count = 0;
 		setAct( ACT_JUMP );
 		return;
 	}
@@ -214,8 +205,7 @@ void Player::actOnDeadCrash( ) {
 }
 
 void Player::actOnResurrection( ) {
-	_air = 100;
-	_dead = false;
+	_air = AIR_MAX;
 	setAct( ACT_STAND );
 }
 
@@ -292,11 +282,11 @@ void Player::drawStand( int camera_y ) const {
 		ty = SPRITE_SIZE * 6;
 		break;
 	case DIR_LEFT:
-		tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+		tx = SPRITE_SIZE * ( _move_anim_count / MOVE_WAIT % MOVE_PATTERN );
 		ty = SPRITE_SIZE * 19;
 		break;
 	case DIR_RIGHT:
-		tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+		tx = SPRITE_SIZE * ( _move_anim_count / MOVE_WAIT % MOVE_PATTERN );
 		ty = SPRITE_SIZE * 20;
 		break;
 	}
@@ -506,12 +496,12 @@ void Player::move( ) {
 	
 	if ( _vec_x == 0 ) {
 		//移動キーを押していない
-		_move_anime_time = 0;
-		_up = 0;
+		_move_anim_count = 0;
+		_up_count = 0;
 	}
 
 	if ( _vec_x != 0 ) {
-		_move_anime_time++;
+		_move_anim_count++;
 		
 		//チェック座標
 		bool left = true;
@@ -537,7 +527,7 @@ void Player::move( ) {
 			}
 			if ( col_block->getBlockID( ) == BLOCK_ID_AIR ) {
 				//横のブロックがエアー
-				_up = 0;
+				_up_count = 0;
 			} else {
 				//横のブロックが通常
 				//移動しない
@@ -548,25 +538,10 @@ void Player::move( ) {
 					target = col_block->getX( ) - RIGHT_X;
 				}
 				_vec_x = target - _x;
-				//登れるかチェック
-				_up++;
-				if ( _up >= ( int )( FRAME * UP_TIME ) ) {
-					std::shared_ptr< Block > slant_block = _board->getBlock( check_x, central_y - BLOCK_HEIGHT );
-					std::shared_ptr< Block > up_block    = _board->getBlock( central_x, central_y - BLOCK_HEIGHT );
-					if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
-						 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
-						//登る
-						_vec_y = -JUMP_Y;
-						if ( left ) {
-							_vec_x += JUMP_X * -1;
-						} else {
-							_vec_x += JUMP_X;
-						}
-					}
-				}
+				_up_count++;
 			}
 		} else {
-			_up = 0;
+			_up_count = 0;
 		}
 		//画面端
 		if ( _vec_x < 0 ) {
@@ -752,4 +727,25 @@ void Player::setAct( ACT act ) {
 	_dig = false;
 	_act_count = 0;
 	_act = act;
+}
+
+bool Player::isEnableJump( ) const {
+	//登れるかチェック
+	bool result = false;
+	int adjust_x = 0;
+	if ( _direct == DIR_RIGHT ) {
+		adjust_x += BLOCK_WIDTH;
+	} else {
+		adjust_x -= BLOCK_WIDTH;
+	}
+	int central_x = ( int )_x + CENTRAL_X;
+	int central_y = ( int )_y + CENTRAL_Y;
+
+	std::shared_ptr< Block > slant_block = _board->getBlock( central_x + BLOCK_WIDTH, central_y - BLOCK_HEIGHT );
+	std::shared_ptr< Block > up_block    = _board->getBlock( central_x              , central_y - BLOCK_HEIGHT );
+	if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
+		 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
+		result = true;
+	}
+	return result;
 }

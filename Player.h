@@ -66,6 +66,7 @@ private:
 	void decreaseAir( );
 	bool isCrushed( ) const;
 	bool isRunOutAir( ) const;
+	bool isEnableJump( ) const;
 	void checkDepth( );
 	void scoreBlock( );
 	void setAct( ACT act );
@@ -75,8 +76,9 @@ private:
 	int _life;
 	int _score;
 	int _img_handle;
-	int _count;
 	int _act_count;
+	int _up_count;
+	int _move_anim_count;
 	int _level;
 	double _x;
 	double _y;
@@ -84,12 +86,7 @@ private:
 	double _vec_y;
 	double _target_x;
 	double _target_y;
-	int _up;
-	int _death_anime_time;
-	int _move_anime_time;
-	bool _dead;
 	bool _standing;
-	bool _hitspace;
 	bool _dig;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
