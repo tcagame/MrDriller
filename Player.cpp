@@ -682,6 +682,10 @@ void Player::ifAirRecover( ) {
 }
 
 void Player::eraseUpBlock( ) {
+	if ( _dig ) {
+		return;
+	}
+	_dig = true;
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 10; i++ ) {
 		//3列分
@@ -692,7 +696,7 @@ void Player::eraseUpBlock( ) {
 			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( );
+					block->erase( true );
 				}
 			}
 		}
@@ -702,7 +706,7 @@ void Player::eraseUpBlock( ) {
 			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( );
+					block->erase( true );
 				}
 			}
 		}
@@ -712,7 +716,7 @@ void Player::eraseUpBlock( ) {
 			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 			if ( block ) {
 				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( );
+					block->erase( true );
 				}
 			}
 		}
