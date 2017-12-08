@@ -153,10 +153,6 @@ void Player::actOnStand( ) {
 	}
 
 	//--------------キー操作------------//
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
-		setAct( ACT_DRILL );
-		return;
-	}
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
 		_direct = DIR_UP;
 	}
@@ -165,10 +161,18 @@ void Player::actOnStand( ) {
 	}
 	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
 		_direct = DIR_LEFT;
-		_vec_x += PLAYER_SPEED * -1;
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
 		_direct = DIR_RIGHT;
+	}
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		setAct( ACT_DRILL );
+		return;
+	}
+	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+		_vec_x += PLAYER_SPEED * -1;
+	}
+	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
@@ -392,6 +396,8 @@ void Player::draw( int camera_y ) {
 	DrawCircle( right, up, 5, GetColor( 0, 255, 0 ), TRUE );
 	DrawCircle( left, up, 5, GetColor(0,0,255), TRUE );	
 	DrawBox( left, up, right, down, color, FALSE );
+	int central = ( int )_x + CENTRAL_X;
+	DrawLine( central, up, central, down, color );
 #endif
 }
 
@@ -824,42 +830,17 @@ void Player::eraseUpBlock( ) {
 	if ( _dig ) {
 		return;
 	}
+	//3列分削除
 	_dig = true;
-	//キャラクターの上のブロックを消す
-	for ( int i = 0; i < 10; i++ ) {
-		//3列分
-		double check_y = _y + CENTRAL_Y - BLOCK_HEIGHT * i;
-		double central_x = _x + CENTRAL_X;
-		{//中央列
-			double check_x = central_x;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-		
-		{//左列
-			double check_x = central_x - BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-	
-		{//右列
-			double check_x = central_x + BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-	}
+	double central_x = _x + CENTRAL_X;
+	double central_y = _y + CENTRAL_Y;
+
+	//中央列
+	_board->eraseColumnBlockUp( central_x              , central_y );
+	//左列
+	_board->eraseColumnBlockUp( central_x - BLOCK_WIDTH, central_y );
+	//右列
+	_board->eraseColumnBlockUp( central_x + BLOCK_WIDTH, central_y );
 }
 
 void Player::decreaseAir( ) {

@@ -194,3 +194,22 @@ void Board::eraseBlock( std::shared_ptr< Block > block ) {
 
 }
 
+
+void Board::eraseColumnBlockUp( int x, int y ) {
+	if ( x < 0 || x > BLOCK_WIDTH * BLOCK_WIDTH_NUM ) {
+		return;
+	}
+	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_HEIGHT;
+	int mx = x / BLOCK_WIDTH;
+	int my = y / BLOCK_HEIGHT;
+	for ( int i = 0; i <= my; i++ ) {
+		int idx = i * BLOCK_WIDTH_NUM + mx;
+		if ( !_virtual_blocks[ idx ] ) {
+			continue;
+		}
+		if ( _virtual_blocks[ idx ]->getBlockID( ) != BLOCK_ID_AIR ) {
+			_virtual_blocks[ idx ]->erase( true );
+		}
+	}
+}
+
