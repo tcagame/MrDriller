@@ -328,20 +328,33 @@ void Player::actOnDodgeBack( ) {
 	if ( isDodgeBack( ) ) {
 		if ( _direct == DIR_RIGHT  ) {
 			_x += ( RIGHT_X - LEFT_X ) / 2;
+			if ( _act_count > 30 ) {
+				setAct( ACT_STAND );
+			}
 		}
 		if ( _direct == DIR_LEFT ) {
 			_x -= ( RIGHT_X - LEFT_X ) / 2;
+			if ( _act_count > 30 ) {
+				setAct( ACT_STAND );
+			}
 		}
 	}
 }
 
 void Player::actOnDodgeFront( ) {
 	if ( isDodgeFront( ) ) {
+		_act_count = 0;
 		if ( _direct == DIR_LEFT ) {
 			_x += ( RIGHT_X - LEFT_X ) / 2;
+			if ( _act_count > 30 ) {
+				setAct( ACT_STAND );
+			}
 		}
 		if ( _direct == DIR_RIGHT ) {
 			_x -= ( RIGHT_X - LEFT_X ) / 2;
+			if ( _act_count > 30 ) {
+				setAct( ACT_STAND );
+			}
 		}
 	}
 }
