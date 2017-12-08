@@ -20,6 +20,7 @@ const int MAX_UP_COUNT = 20;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
+const int MAX_DLILL_COUNT = 30;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -203,7 +204,7 @@ void Player::actOnDrill( ) {
 	//”ƒtƒŒ[ƒ€‚©‚¯‚ÄŒ@‚é
 	dig( );//Œ@‚é
 	
-	if ( _act_count > 10 ) {
+	if ( _act_count > MAX_DLILL_COUNT ) {
 		setAct( ACT_STAND );
 	}
 }
@@ -358,11 +359,13 @@ void Player::drawJump( int camera_y ) const {
 }
 
 void Player::drawDrill( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	int wait_anim_time = MAX_DLILL_COUNT / ANIM_PATTERN;
 	int x1 = ( int )_x;
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * ( ( _act_count / 2 ) % 8 );
+	int tx = SPRITE_SIZE * ( ( _act_count / wait_anim_time ) % ANIM_PATTERN );
 	int ty = 0;
 	switch ( _direct ) {
 	case DIR_UP:
