@@ -29,6 +29,7 @@ public:
 public:
 	bool isDead( ) const;
 	bool isStanding( ) const;
+	bool isFinished( ) const;
 public://getån
 	int getAir( );
 	int getDepth( );
@@ -87,6 +88,7 @@ private:
 	double _target_y;
 	bool _standing;
 	bool _dig;
+	bool _finished;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;

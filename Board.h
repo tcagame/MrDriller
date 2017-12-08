@@ -17,6 +17,7 @@ public:
 	void eraseBlock( std::shared_ptr< class Block > block );
 	void eraseColumnBlockUp( int x, int y );
 	int getLevel( ) const;
+	bool isFinished( ) const;
 private:
 	void loadBlock( );
 	void updateBlocks( int camera_y );
@@ -24,6 +25,7 @@ private:
 	void checkConnect( );
 	void checkFall( );
 private:
+	bool _finished;
 	bool _level_erase;
 	int _level;
 	int _img_handle;

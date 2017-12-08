@@ -47,7 +47,13 @@ Scene::SCENE ScenePlay::update( ) {
 	_player->update( );
 	_board->update( _camera->getY( ) );
 	_camera->update( _player->getY( ) );
-	return SCENE_PLAY;
+
+	SCENE next = SCENE_PLAY;
+	if ( _player->isFinished( ) ||
+		 _board->isFinished( ) ) {
+		next = SCENE_TITLE;
+	}
+	return next;
 }
 
 void ScenePlay::draw( ) const {
