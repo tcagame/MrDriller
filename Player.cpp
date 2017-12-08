@@ -11,7 +11,9 @@ const int MOVE_WAIT = 5;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 300;
 const int CHECK_AIR = 0;
-const int JUMP_X = 50;
+const int JUMP_SPEED_X = 4;
+const int JUMP_SPEED_Y = 6;
+const int JUMP_X = 110;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
@@ -117,8 +119,16 @@ void Player::actOnStand( ) {
 		setAct( ACT_FALL );
 		return;
 	}
-	if ( _up_count > UP_TIME ) {
+	if ( _up_count > UP_TIME &&
+		 isEnableJump( ) ) {
 		_up_count = 0;
+		_target_x = _x + CENTRAL_X;
+		_target_y = _y - JUMP_Y;
+		if ( _direct == DIR_LEFT ) {
+			_target_x -= JUMP_X;
+		} else {
+			_target_x += JUMP_X;
+		}
 		setAct( ACT_JUMP );
 		return;
 	}
@@ -168,7 +178,25 @@ void Player::actOnFall( ) {
 
 void Player::actOnJump( ) {
 	//数フレームかけて登る
-	if ( _act_count > 10 ) {
+	_vec_x = _target_x - _x;
+	_vec_y = _target_y - _y;
+
+	if ( _vec_x > JUMP_SPEED_X ) {
+		_vec_x = JUMP_SPEED_X;
+	}
+	if ( _vec_x < -JUMP_SPEED_X ) {
+		_vec_x = -JUMP_SPEED_X;
+	}
+	if ( _vec_y > JUMP_SPEED_Y ) {
+		_vec_y = JUMP_SPEED_Y;
+	}
+	if ( _vec_y < -JUMP_SPEED_Y ) {
+		_vec_y = -JUMP_SPEED_Y;
+	}
+
+
+	if ( _vec_x == 0 &&
+		 _vec_y == 0 ) {
 		setAct( ACT_STAND );
 	}
 }
@@ -305,11 +333,19 @@ void Player::drawFall( int camera_y ) const {
 }
 
 void Player::drawJump( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) / ( JUMP_Y / ANIM_PATTERN );
+	if ( pattern < 0 ) {
+		pattern = 0;
+	}
+	if ( pattern > ANIM_PATTERN - 1 ) {
+		pattern = ANIM_PATTERN - 1;
+	}
 	int x1 = ( int )_x;
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * 0;
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	switch ( _direct ) {
 	case DIR_LEFT:
@@ -465,6 +501,11 @@ bool Player::isStanding( ) const {
 }
 
 void Player::move( ) {
+	if ( _act == ACT_JUMP ) {
+		_x += _vec_x;
+		_y += _vec_y;
+		return;
+	}
 	_standing = false;
 	if ( _vec_y > 0 ) {
 		//下ブロックに当たる
