@@ -202,10 +202,32 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//”ƒtƒŒ[ƒ€‚©‚¯‚ÄŒ@‚é
-	dig( );//Œ@‚é
+	if ( _act_count > MAX_DLILL_COUNT / 2 ) {
+		dig( );//Œ@‚é
+	}
 	
 	if ( _act_count > MAX_DLILL_COUNT ) {
-		setAct( ACT_STAND );
+		int check_x = _x + CENTRAL_X;
+		int check_y = _y + CENTRAL_Y;
+		switch ( _direct ) {
+		case DIR_UP:
+			check_y -= BLOCK_HEIGHT;
+			break;
+		case DIR_DOWN:
+			check_y += BLOCK_HEIGHT;
+			break;
+		case DIR_LEFT:
+			check_x -= BLOCK_WIDTH;
+			break;
+		case DIR_RIGHT:
+			check_x += BLOCK_WIDTH;
+			break;
+		}
+		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		if ( !block ||
+			  block->getBlockID( ) == BLOCK_ID_SOLID ) {
+			setAct( ACT_STAND );
+		}
 	}
 }
 
@@ -360,12 +382,15 @@ void Player::drawJump( int camera_y ) const {
 
 void Player::drawDrill( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int wait_anim_time = MAX_DLILL_COUNT / ANIM_PATTERN;
+	int pattern = _act_count / ( MAX_DLILL_COUNT / ANIM_PATTERN );
+	if ( pattern >= ANIM_PATTERN ) {
+		pattern = ANIM_PATTERN - 1;
+	}
 	int x1 = ( int )_x;
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * ( ( _act_count / wait_anim_time ) % ANIM_PATTERN );
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	switch ( _direct ) {
 	case DIR_UP:
