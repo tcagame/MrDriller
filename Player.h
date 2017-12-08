@@ -54,10 +54,12 @@ private:
 	void ifAirRecover( );
 	void eraseUpBlock( );
 	void decreaseAir( );
-	void checkCrushed( );
+	bool isCrushed( ) const;
+	bool isRunOutAir( ) const;
 	void checkDepth( );
 	void control( );
 	void scoreBlock( );
+	void setAct( ACT act );
 private:
 	int _air;
 	int _depth;
@@ -65,11 +67,14 @@ private:
 	int _score;
 	int _img_handle;
 	int _count;
+	int _act_count;
 	int _level;
 	double _x;
 	double _y;
 	double _vec_x;
 	double _vec_y;
+	double _target_x;
+	double _target_y;
 	int _up;
 	int _death_anime_time;
 	int _move_anime_time;

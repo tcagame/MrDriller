@@ -87,7 +87,10 @@ void Player::update( ) {
 	//深さ
 	checkDepth( );
 	decreaseAir( );
-	checkCrushed( );
+	if ( isCrushed( ) ||
+		 isRunOutAir( ) ) {
+		_dead = true;
+	}
 
 }
 
@@ -127,15 +130,69 @@ void Player::act( ) {
 }
 
 void Player::actOnStand( ) {
+	_vec_x = 0;
+
+	if ( !isStanding( ) ) {
+		setAct( ACT_FALL );
+		return;
+	}
+	if ( _up > UP_TIME ) {
+		_up = 0;
+		setAct( ACT_JUMP );
+		return;
+	}
+	if ( isRunOutAir( ) ) {
+		setAct( ACT_DEAD_AIR );
+		return;
+	}
+	if ( isCrushed( ) ) {
+		setAct( ACT_DEAD_CRUSH );
+		return;
+	}
+
+
+
+	//--------------キー操作------------//
+	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
+		_direct = DIR_UP;
+	}
+	if ( CheckHitKey( KEY_INPUT_DOWN  ) == TRUE ) {
+		_direct = DIR_DOWN;
+	}
+	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+		_direct = DIR_LEFT;
+		_vec_x += PLAYER_SPEED * -1;
+	}
+	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+		_direct = DIR_RIGHT;
+		_vec_x += PLAYER_SPEED;
+	}
+
+	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+		dig( );//掘る
+	}
+	//-----------------------------------//
 }
 
 void Player::actOnFall( ) {
+	//落下中操作できない
+	if ( _standing ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnJump( ) {
+	//数フレームかけて登る
+	if ( _act_count > 10 ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnDrill( ) {
+	//数フレームかけて掘る
+	if ( _act_count > 10 ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnDeadAir( ) {
@@ -559,24 +616,25 @@ void Player::eraseUpBlock( ) {
 }
 
 void Player::decreaseAir( ) {
-	if ( _count % ( FRAME * TIME_AIR_DECREASE ) == 0 && _air > CHECK_AIR ) {
-		_air--;
-		if ( _air <= 0 ) {
-			_dead = true;
-		}
-	}
+	_air--;
 }
 
-void Player::checkCrushed( ) {
+bool Player::isCrushed( ) const {
 	//頭の位置にブロックが当たっているか確かめる
+	bool result = false;
 	double check_x = _x + CENTRAL_X;
 	double check_y = _y + UP_Y;
 	std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-			_dead = true;
+			result = true;
 		}
 	}
+	return result;
+}
+
+bool Player::isRunOutAir( ) const {
+	return _air <= 0;
 }
 
 void Player::checkDepth( ) {
@@ -593,4 +651,9 @@ void Player::scoreBlock( ) {
 			_score += BLOCK_POINT;
 		}
 	}
+}
+
+void Player::setAct( ACT act ) {
+	_act_count = 0;
+	_act = act;
 }
