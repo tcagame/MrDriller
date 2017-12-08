@@ -202,13 +202,15 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//”ƒtƒŒ[ƒ€‚©‚¯‚ÄŒ@‚é
-	if ( _act_count > MAX_DLILL_COUNT / 2 ) {
+	_vec_x = 0;
+	_vec_y = 0;
+	if ( _act_count > MAX_DLILL_COUNT / 4 ) {
 		dig( );//Œ@‚é
 	}
 	
 	if ( _act_count > MAX_DLILL_COUNT ) {
-		int check_x = _x + CENTRAL_X;
-		int check_y = _y + CENTRAL_Y;
+		int check_x = ( int )_x + CENTRAL_X;
+		int check_y = ( int )_y + CENTRAL_Y;
 		switch ( _direct ) {
 		case DIR_UP:
 			check_y -= BLOCK_HEIGHT;
@@ -225,7 +227,8 @@ void Player::actOnDrill( ) {
 		}
 		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
 		if ( !block ||
-			  block->getBlockID( ) == BLOCK_ID_SOLID ) {
+			  block->getBlockID( ) == BLOCK_ID_SOLID ||
+			  block->getBlockID( ) == BLOCK_ID_AIR ) {
 			setAct( ACT_STAND );
 		}
 	}
