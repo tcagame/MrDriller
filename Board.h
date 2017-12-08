@@ -2,7 +2,7 @@
 #include <memory>
 #include <list>
 #include <array>
-#include "map.h"
+#include "Map.h"
 
 class Board : public std::enable_shared_from_this< Board > {
 public:
