@@ -149,17 +149,21 @@ void Player::actOnStand( ) {
 	}
 	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
 		_direct = DIR_LEFT;
-		_vec_x += PLAYER_SPEED * -1;
 	}
 	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
 		_direct = DIR_RIGHT;
-		_vec_x += PLAYER_SPEED;
 	}
-
 	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
 		setAct( ACT_DRILL );
 		return;
 	}
+	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+		_vec_x += PLAYER_SPEED * -1;
+	}
+	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+		_vec_x += PLAYER_SPEED;
+	}
+
 	//-----------------------------------//
 
 	scoreBlock( ); //ブロックポイント
@@ -202,30 +206,42 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//数フレームかけて掘る
-	if ( _act_count > MAX_DLILL_COUNT / 2 ) {
+	_vec_x = 0;
+	_vec_y = 0;
+	if ( _act_count > MAX_DLILL_COUNT / 4 ) {
 		dig( );//掘る
 	}
 	
 	if ( _act_count > MAX_DLILL_COUNT ) {
-		int check_x = _x + CENTRAL_X;
-		int check_y = _y + CENTRAL_Y;
-		switch ( _direct ) {
+		double check_x = 0;
+		double check_y = 0;
+
+ 		switch ( _direct ) {
 		case DIR_UP:
-			check_y -= BLOCK_HEIGHT;
+			//上の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + UP_Y - DRILL_RANGE;
 			break;
 		case DIR_DOWN:
-			check_y += BLOCK_HEIGHT;
+			//下の位置
+			check_x = _x + CENTRAL_X;
+			check_y = _y + DOWN_Y + DRILL_RANGE;
 			break;
 		case DIR_LEFT:
-			check_x -= BLOCK_WIDTH;
+			//左の位置
+			check_x = _x + LEFT_X - DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
 			break;
 		case DIR_RIGHT:
-			check_x += BLOCK_WIDTH;
+			//右の位置
+			check_x = _x + RIGHT_X + DRILL_RANGE;
+			check_y = _y + CENTRAL_Y;
 			break;
 		}
-		std::shared_ptr< Block > block = _board->getBlock( check_x, check_y );
+		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 		if ( !block ||
-			  block->getBlockID( ) == BLOCK_ID_SOLID ) {
+			  block->getBlockID( ) == BLOCK_ID_SOLID ||
+			  block->getBlockID( ) == BLOCK_ID_AIR ) {
 			setAct( ACT_STAND );
 		}
 	}
@@ -310,6 +326,8 @@ void Player::draw( int camera_y ) {
 	int down  = ( int )_y - camera_y + DOWN_Y;
 	unsigned int color = GetColor( 255, 0, 0 );
 	DrawBox( left, up, right, down, color, FALSE );
+	int central = ( int )_x + CENTRAL_X;
+	DrawLine( central, up, central, down, color );
 #endif
 }
 
@@ -708,42 +726,17 @@ void Player::eraseUpBlock( ) {
 	if ( _dig ) {
 		return;
 	}
+	//3列分削除
 	_dig = true;
-	//キャラクターの上のブロックを消す
-	for ( int i = 0; i < 10; i++ ) {
-		//3列分
-		double check_y = _y + CENTRAL_Y - BLOCK_HEIGHT * i;
-		double central_x = _x + CENTRAL_X;
-		{//中央列
-			double check_x = central_x;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-		
-		{//左列
-			double check_x = central_x - BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-	
-		{//右列
-			double check_x = central_x + BLOCK_WIDTH;
-			std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-			if ( block ) {
-				if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-					block->erase( true );
-				}
-			}
-		}
-	}
+	double central_x = _x + CENTRAL_X;
+	double central_y = _y + CENTRAL_Y;
+
+	//中央列
+	_board->eraseColumnBlockUp( central_x              , central_y );
+	//左列
+	_board->eraseColumnBlockUp( central_x - BLOCK_WIDTH, central_y );
+	//右列
+	_board->eraseColumnBlockUp( central_x + BLOCK_WIDTH, central_y );
 }
 
 void Player::decreaseAir( ) {
@@ -793,6 +786,7 @@ void Player::scoreBlock( ) {
 
 void Player::setAct( ACT act ) {
 	_dig = false;
+	_vec_x = 0;
 	_act_count = 0;
 	_act = act;
 }
