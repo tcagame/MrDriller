@@ -67,7 +67,6 @@ private:
 	bool isRunOutAir( ) const;
 	bool isEnableJump( ) const;
 	void checkDepth( );
-	void scoreBlock( );
 	void setAct( ACT act );
 private:
 	double _air;

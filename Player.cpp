@@ -40,6 +40,8 @@ const int DOWN_Y = 55 * DRAW_HEIGHT / SPRITE_SIZE;
 const int LEFT_X = 13 * DRAW_WIDTH / SPRITE_SIZE;
 const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
 
+
+
 //-----------関数定義------------//
 
 Player::Player( int x, int y, std::shared_ptr< Board > board ):
@@ -161,7 +163,6 @@ void Player::actOnStand( ) {
 	}
 	//-----------------------------------//
 
-	scoreBlock( ); //ブロックポイント
 	ifAirRecover( ); //エア回復
 }
 
@@ -170,7 +171,6 @@ void Player::actOnFall( ) {
 	if ( isStanding( ) ) {
 		setAct( ACT_STAND );
 	}
-	scoreBlock( ); //ブロックポイント
 	ifAirRecover( ); //エア回復
 }
 
@@ -232,16 +232,30 @@ void Player::actOnDeadCrash( ) {
 
 void Player::actOnResurrection( ) {
 	_air = AIR_MAX;
-	setAct( ACT_STAND );
+	if ( _act_count > 30 ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnDodgeBack( ) {
-}
-
-void Player::actOnGoal( ) {
+	int central_x = ( int )_x + CENTRAL_X;
+	int check_y = ( int )_y + CENTRAL_Y;
+	int check_left = ( int )_x;
+//	int check_right = (int  )_x + 
+//	std::shared_ptr< Block > block_left = _board->getBlock( check_left, check_y );
+//	if ( _direct == DIR_LEFT ) {
+//
+//	} else {
+//		check_x = central_x + BLOCK_WIDTH / 2;
+//	
+//	}
 }
 
 void Player::actOnDodgeFront( ) {
+
+}
+
+void Player::actOnGoal( ) {
 }
 
 void Player::draw( int camera_y ) {
@@ -286,6 +300,8 @@ void Player::draw( int camera_y ) {
 	int up    = ( int )_y - camera_y + UP_Y;
 	int down  = ( int )_y - camera_y + DOWN_Y;
 	unsigned int color = GetColor( 255, 0, 0 );
+	DrawCircle( _x + ( RIGHT_X + LEFT_X ) / 2, _y + ( UP_Y + DOWN_Y ) / 2, 5, color, TRUE );
+	DrawCircle( _x+LEFT_X, _y+UP_Y, 5, GetColor(0,0,255), TRUE );	
 	DrawBox( left, up, right, down, color, FALSE );
 #endif
 }
@@ -396,7 +412,7 @@ void Player::drawDeadAir( int camera_y ) const {
 	int tx = 0;
 	int ty = 0;
 
-	if ( _act_count <= 70){
+	if ( _act_count <= 70 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % MOVE_PATTERN );
 	}else{
 		tx = SPRITE_SIZE * 7;
@@ -433,7 +449,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 	int tx = 0;
 	int ty = 0;
 
-	if ( _act_count <= 20){
+	if ( _act_count <= 20 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
 	}else{
 		tx = SPRITE_SIZE * 2;
@@ -465,6 +481,7 @@ void Player::drawResurrection( int camera_y ) const {
 }
 
 void Player::drawDodgeBack( int camera_y ) const {
+
 }
 
 void Player::drawDodgeFront( int camera_y ) const {
@@ -674,10 +691,13 @@ void Player::ifAirRecover( ) {
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
-			block->erase( );
-			_air += AIR_RECOVERY_POINT;
-			if ( _air > AIR_MAX ) {
-				_air = AIR_MAX;
+			if ( !block->isErase( ) ) {
+				block->erase( );
+				_air += AIR_RECOVERY_POINT;
+				_score += BLOCK_POINT;
+				if ( _air > AIR_MAX ) {
+					_air = AIR_MAX;
+				}
 			}
 		}
 	}
@@ -756,18 +776,6 @@ bool Player::isRunOutAir( ) const {
 
 void Player::checkDepth( ) {
 	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH - 20;
-}
-
-void Player::scoreBlock( ) {
-	double check_x = _x + CENTRAL_X;
-	double check_y = _y + CENTRAL_Y;
-	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-	if ( block ) {
-		if ( block->getBlockID( ) ) {
-			_board->eraseBlock( block );
-			_score += BLOCK_POINT;
-		}
-	}
 }
 
 void Player::setAct( ACT act ) {
