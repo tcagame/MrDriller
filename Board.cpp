@@ -10,6 +10,8 @@
 #include "BlockSolid.h"
 #include "Camera.h"
 #include <list>
+#include "Map0.h"
+#include "Map1.h"
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
 
@@ -57,11 +59,28 @@ void Board::updateBlocks( int camera_y ) {
 
 
 void Board::loadBlock( ) {
+	std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > map = { };
+
+	srand( MAX_PATTERN );
+	int pattern = rand( ) % MAX_PATTERN;
+	
+	switch ( _level ) {
+	case 0:
+		map = std::shared_ptr< Map >( new Map0 )->getMap( pattern );
+		break;
+	case 1:
+		map = std::shared_ptr< Map >( new Map1 )->getMap( pattern );
+		break;
+	default:
+		map = std::shared_ptr< Map >( new Map0 )->getMap( pattern );
+		break;
+	};
+	
 	for( int i = 0; i < BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM; i++ ) {
 		//ˆ—‚ªd‚¢‚½‚ß•Û—¯
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH;
 		int y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT;
-		switch ( MAP1[ i ] ) {
+		switch ( map[ i ] ) {
 		case 'R':
 			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
 			break;
