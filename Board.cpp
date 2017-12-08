@@ -164,13 +164,21 @@ void Board::checkFall( ) {
 
 void Board::eraseBlock( std::shared_ptr< Block > block ) {
 	block->erase( );
-	if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
+	if ( block->getBlockID( ) != BLOCK_ID_SOLID &&
+		 block->getBlockID( ) != BLOCK_ID_LEVEL ) {
 		int group = block->getGroup( );
 		for ( std::shared_ptr< Block > block2 : _blocks ) {
 			if ( block2->getGroup( ) == group ) {
 				block2->erase( );
 			}
 		}
+		return;
 	}
+	if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
+		for ( std::shared_ptr< Block > block2 : _blocks ) {
+			block2->erase( true );
+		}
+	}
+
 }
 

@@ -13,7 +13,7 @@ const int REVIVE_TIME = 300;
 const int CHECK_AIR = 0;
 const int JUMP_SPEED_X = 4;
 const int JUMP_SPEED_Y = 6;
-const int JUMP_X = 110;
+const int JUMP_X = 60;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
 const double UP_TIME = 0.3;
@@ -122,7 +122,7 @@ void Player::actOnStand( ) {
 	if ( _up_count > UP_TIME &&
 		 isEnableJump( ) ) {
 		_up_count = 0;
-		_target_x = _x + CENTRAL_X;
+		_target_x = _x;
 		_target_y = _y - JUMP_Y;
 		if ( _direct == DIR_LEFT ) {
 			_target_x -= JUMP_X;
@@ -778,8 +778,8 @@ bool Player::isEnableJump( ) const {
 	int central_x = ( int )_x + CENTRAL_X;
 	int central_y = ( int )_y + CENTRAL_Y;
 
-	std::shared_ptr< Block > slant_block = _board->getBlock( central_x + BLOCK_WIDTH, central_y - BLOCK_HEIGHT );
-	std::shared_ptr< Block > up_block    = _board->getBlock( central_x              , central_y - BLOCK_HEIGHT );
+	std::shared_ptr< Block > slant_block = _board->getBlock( central_x + adjust_x, central_y - BLOCK_HEIGHT );
+	std::shared_ptr< Block > up_block    = _board->getBlock( central_x           , central_y - BLOCK_HEIGHT );
 	if ( ( !up_block    ||    up_block->getBlockID( ) == BLOCK_ID_AIR ) &&
 		 ( !slant_block || slant_block->getBlockID( ) == BLOCK_ID_AIR ) ) {
 		result = true;

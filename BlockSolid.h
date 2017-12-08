@@ -7,7 +7,7 @@ public:
 	void act( );
 	int getBlockID( );
 	void changeTxByConnect( ) { };
-	void erase( );
+	void erase( bool destroy = false );
 private:
 	int _hp;
 };
