@@ -13,7 +13,9 @@
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
 
-Board::Board( ) {
+Board::Board( ) :
+_level( 0 ),
+_level_erase( false ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 	loadBlock( );
 }
@@ -23,6 +25,11 @@ Board::~Board( ) {
 }
 
 void Board::update( int camera_y ) {
+	if ( _level_erase ) {
+		if ( ( int )_blocks.size( ) == 0 ) {
+			loadBlock( );
+		}
+	}
 	checkBlockPos( );
 	updateBlocks( camera_y );
 }
@@ -53,7 +60,7 @@ void Board::loadBlock( ) {
 	for( int i = 0; i < BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM; i++ ) {
 		//ˆ—‚ªd‚¢‚½‚ß•Û—¯
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH;
-		int y = ( i / BLOCK_WIDTH_NUM ) * BLOCK_HEIGHT;
+		int y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT;
 		switch ( MAP1[ i ] ) {
 		case 'R':
 			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
@@ -85,7 +92,7 @@ void Board::checkBlockPos( ) {
 	
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		int mx = ( int )( block->getX( ) + BLOCK_WIDTH / 2 ) / BLOCK_WIDTH;
-		int my = ( int )( block->getY( ) + 0.1 ) / BLOCK_HEIGHT;
+		int my = ( int )( block->getY( ) + 0.1 ) / BLOCK_HEIGHT - _level * BLOCK_HEIGHT_NUM;
 		int idx = my * BLOCK_WIDTH_NUM + mx;
 		if ( idx < 0 || idx >= BLOCK_NUM ) {
 			continue;
@@ -111,6 +118,7 @@ void Board::checkConnect( ) {
 
 
 std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
+	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_WIDTH;
 	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
 		return std::shared_ptr< Block >( );
 	}
@@ -124,6 +132,7 @@ std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
 }
 
 std::shared_ptr< Block > Board::getBlockM( int mx, int my ) const {
+	my -= _level * BLOCK_HEIGHT_NUM;
 	if ( mx < 0 || mx >= BLOCK_WIDTH_NUM ||
 		 my < 0 || my >= BLOCK_HEIGHT_NUM ) {
 		return std::shared_ptr< Block >( );
@@ -164,13 +173,23 @@ void Board::checkFall( ) {
 
 void Board::eraseBlock( std::shared_ptr< Block > block ) {
 	block->erase( );
-	if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
+	if ( block->getBlockID( ) != BLOCK_ID_SOLID &&
+		 block->getBlockID( ) != BLOCK_ID_LEVEL ) {
 		int group = block->getGroup( );
 		for ( std::shared_ptr< Block > block2 : _blocks ) {
 			if ( block2->getGroup( ) == group ) {
 				block2->erase( );
 			}
 		}
+		return;
 	}
+	if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
+		for ( std::shared_ptr< Block > block2 : _blocks ) {
+			block2->erase( true );
+		}
+		_level_erase = true;
+		_level++;
+	}
+
 }
 

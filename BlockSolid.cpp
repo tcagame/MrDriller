@@ -20,9 +20,9 @@ int BlockSolid::getBlockID( ){
 	return BLOCK_ID_SOLID;
 }
 
-void BlockSolid::erase( ) {
+void BlockSolid::erase( bool destroy ) {
 	_hp--;
-	if ( _hp <= 0 ) {
+	if ( _hp <= 0 || destroy ) {
 		Block::erase( );
 	}
 }

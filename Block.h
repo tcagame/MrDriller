@@ -31,7 +31,7 @@ public:
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
 public:
-	virtual void erase( );
+	virtual void erase( bool destroy = false );
 	virtual void checkConnect( std::shared_ptr< class Board > board );
 	void connectBlock( std::shared_ptr< class Block >, int connect );
 	void setGroup( int group );

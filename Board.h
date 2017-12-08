@@ -22,6 +22,8 @@ private:
 	void checkConnect( );
 	void checkFall( );
 private:
+	bool _level_erase;
+	int _level;
 	int _img_handle;
 	std::list< std::shared_ptr< class Block > > _blocks;
 	std::array< std::shared_ptr< class Block >, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM > _virtual_blocks;
