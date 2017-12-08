@@ -431,6 +431,13 @@ void Player::drawDeadCrash( int camera_y ) const {
 }
 
 void Player::drawResurrection( int camera_y ) const {
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
+	int ty = SPRITE_SIZE * 10;
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDodgeBack( int camera_y ) const {
