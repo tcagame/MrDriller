@@ -641,10 +641,6 @@ void Player::ifAirRecover( ) {
 }
 
 void Player::eraseUpBlock( ) {
-	if ( _dig ) {
-		return;
-	}
-	_dig = true;
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 10; i++ ) {
 		//3列分
