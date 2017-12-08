@@ -66,6 +66,8 @@ private:
 	bool isCrushed( ) const;
 	bool isRunOutAir( ) const;
 	bool isEnableJump( ) const;
+	bool isDodgeBack( ) const;
+	bool isDodgeFront( ) const;
 	void checkDepth( );
 	void setAct( ACT act );
 private:
