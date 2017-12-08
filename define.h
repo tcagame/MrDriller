@@ -9,3 +9,6 @@ enum DIR {
 	MAX_DIR,
 	DIR_NONE,
 };
+
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;

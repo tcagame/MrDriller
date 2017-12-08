@@ -2,6 +2,7 @@
 #include <memory>
 #include "Game.h"
 #include "DxLib.h"
+#include "define.h"
 
 const char* TITLE_NAME = "Mr.Driller";
 
