@@ -11,6 +11,8 @@ const int MOVE_WAIT = 5;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 300;
 const int CHECK_AIR = 0;
+const int DODGE_X = 32;
+const int DODGE_SPEED = 1;
 const int JUMP_SPEED_X = 4;
 const int JUMP_SPEED_Y = 6;
 const int JUMP_X = 60;
@@ -144,11 +146,21 @@ void Player::actOnStand( ) {
 	}
 
 	if ( isDodgeBack( ) ) {
+		if ( _direct == DIR_LEFT ) {
+			_target_x = _x - DODGE_X;
+		} else {
+			_target_x = _x + DODGE_X;
+		}
 		setAct( ACT_DODGE_BACK );
 		return;
 	}
 
 	if ( isDodgeFront( ) ) {
+		if ( _direct == DIR_LEFT ) {
+			_target_x = _x + DODGE_X;
+		} else {
+			_target_x = _x - DODGE_X;
+		}
 		setAct( ACT_DODGE_FRONT );
 		return;
 	}
@@ -330,37 +342,29 @@ void Player::actOnResurrection( ) {
 void Player::actOnDodgeBack( ) {
 	//回避アニメーション待機
 	//後ろに少し移動
-	if ( isDodgeBack( ) ) {
-		if ( _direct == DIR_RIGHT  ) {
-			_x += ( RIGHT_X - LEFT_X ) / 2;
-			if ( _act_count > 30 ) {
-				setAct( ACT_STAND );
-			}
-		}
-		if ( _direct == DIR_LEFT ) {
-			_x -= ( RIGHT_X - LEFT_X ) / 2;
-			if ( _act_count > 30 ) {
-				setAct( ACT_STAND );
-			}
-		}
+	_vec_x = _target_x - _x;
+	if ( _vec_x > DODGE_SPEED ) {
+		_vec_x = DODGE_SPEED;
+	}
+	if ( _vec_x < -DODGE_SPEED ) {
+		_vec_x = -DODGE_SPEED;
+	}
+	if ( _vec_x == 0 ) {
+		setAct( ACT_STAND );
 	}
 }
 
 void Player::actOnDodgeFront( ) {
-	if ( isDodgeFront( ) ) {
-		_act_count = 0;
-		if ( _direct == DIR_LEFT ) {
-			_x += ( RIGHT_X - LEFT_X ) / 2;
-			if ( _act_count > 30 ) {
-				setAct( ACT_STAND );
-			}
-		}
-		if ( _direct == DIR_RIGHT ) {
-			_x -= ( RIGHT_X - LEFT_X ) / 2;
-			if ( _act_count > 30 ) {
-				setAct( ACT_STAND );
-			}
-		}
+	_vec_x = _target_x - _x;
+	if ( _vec_x > DODGE_SPEED ) {
+		_vec_x = DODGE_SPEED;
+	}
+	if ( _vec_x < -DODGE_SPEED ) {
+		_vec_x = -DODGE_SPEED;
+	}
+
+	if ( _vec_x == 0 ) {
+		setAct( ACT_STAND );
 	}
 }
 
@@ -410,9 +414,9 @@ void Player::draw( int camera_y ) {
 	int up    = ( int )_y - camera_y + UP_Y;
 	int down  = ( int )_y - camera_y + DOWN_Y;
 	unsigned int color = GetColor( 255, 0, 0 );
-	DrawCircle( ( int )_x + CENTRAL_X, ( int )_y + CENTRAL_Y - camera_y, 5, color, TRUE );
-	DrawCircle( right, up, 5, GetColor( 0, 255, 0 ), TRUE );
-	DrawCircle( left, up, 5, GetColor(0,0,255), TRUE );	
+	//DrawCircle( ( int )_x + CENTRAL_X, ( int )_y + CENTRAL_Y - camera_y, 5, color, TRUE );
+	//DrawCircle( right, up, 5, GetColor( 0, 255, 0 ), TRUE );
+	//DrawCircle( left, up, 5, GetColor(0,0,255), TRUE );	
 	DrawBox( left, up, right, down, color, FALSE );
 	int central = ( int )_x + CENTRAL_X;
 	DrawLine( central, up, central, down, color );
@@ -589,21 +593,25 @@ void Player::drawDeadCrash( int camera_y ) const {
 }
 
 void Player::drawResurrection( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	const int WAIT = 10;
 	int x1 = ( int )_x;
 	int y1 = ( int )_y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
-	int tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
+	int tx = SPRITE_SIZE * ( _act_count / WAIT % ANIM_PATTERN );
 	int ty = SPRITE_SIZE * 10;
 	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDodgeBack( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = ( int )_x;
 	int y1 = ( int )_y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
-	int tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	if ( _direct == DIR_LEFT ) {
 		ty = SPRITE_SIZE * 13;
@@ -614,11 +622,13 @@ void Player::drawDodgeBack( int camera_y ) const {
 }
 
 void Player::drawDodgeFront( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = ( int )_x;
 	int y1 = ( int )_y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
-	int tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
+	int tx = SPRITE_SIZE * pattern;
 	int ty = 0;
 	if ( _direct == DIR_LEFT ) {
 		ty = SPRITE_SIZE * 15;
@@ -859,11 +869,11 @@ void Player::eraseUpBlock( ) {
 	double central_y = _y + CENTRAL_Y;
 
 	//中央列
-	_board->eraseColumnBlockUp( central_x              , central_y );
+	_board->eraseColumnBlockUp( ( int )central_x              , ( int )central_y );
 	//左列
-	_board->eraseColumnBlockUp( central_x - BLOCK_WIDTH, central_y );
+	_board->eraseColumnBlockUp( ( int )central_x - BLOCK_WIDTH, ( int )central_y );
 	//右列
-	_board->eraseColumnBlockUp( central_x + BLOCK_WIDTH, central_y );
+	_board->eraseColumnBlockUp( ( int )central_x + BLOCK_WIDTH, ( int )central_y );
 }
 
 void Player::decreaseAir( ) {
