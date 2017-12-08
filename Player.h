@@ -48,6 +48,16 @@ private:
 	void actOnDodgeBack( );
 	void actOnDodgeFront( );
 	void actOnGoal( );
+	void drawStand( int camera_y ) const;
+	void drawFall( int camera_y ) const;
+	void drawJump( int camera_y ) const;
+	void drawDrill( int camera_y ) const;
+	void drawDeadAir( int camera_y ) const;
+	void drawDeadCrash( int camera_y ) const;
+	void drawResurrection( int camera_y ) const;
+	void drawDodgeBack( int camera_y ) const;
+	void drawDodgeFront( int camera_y ) const;
+	void drawGoal( int camera_y ) const;
 	void move( );
 	void fall( );
 	void dig( );

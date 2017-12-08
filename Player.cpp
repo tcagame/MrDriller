@@ -196,12 +196,23 @@ void Player::actOnDrill( ) {
 }
 
 void Player::actOnDeadAir( ) {
+	if ( _act_count > 10 ) {
+		//復活
+		setAct( ACT_RESURRECTION );
+	}
 }
 
 void Player::actOnDeadCrash( ) {
+	if ( _act_count > 10 ) {
+		//復活
+		setAct( ACT_RESURRECTION );
+	}
 }
 
 void Player::actOnResurrection( ) {
+	_air = 100;
+	_dead = false;
+	setAct( ACT_STAND );
 }
 
 void Player::actOnDodgeBack( ) {
@@ -214,6 +225,39 @@ void Player::actOnDodgeFront( ) {
 }
 
 void Player::draw( int camera_y ) {
+	
+	switch ( _act ) {
+	case ACT_STAND:       //とまっているor歩く
+		drawStand( camera_y );
+		break;
+	case ACT_FALL:        //落ちる
+		drawFall( camera_y );
+		break;
+	case ACT_JUMP:        //のぼる
+		drawJump( camera_y );
+		break;
+	case ACT_DRILL:       //掘る
+		drawDrill( camera_y );
+		break;
+	case ACT_DEAD_AIR:    //AIR不足で死亡
+		drawDeadAir( camera_y );
+		break;
+	case ACT_DEAD_CRUSH:  //つぶれて死亡
+		drawDeadCrash( camera_y );
+		break;
+	case ACT_RESURRECTION://復活
+		drawResurrection( camera_y );
+		break;
+	case ACT_DODGE_BACK:  //つぶれる回避(後ろにブロック)
+		drawDodgeBack( camera_y );
+		break;
+	case ACT_DODGE_FRONT:  //つぶれる回避(前にブロック)
+		drawDodgeFront( camera_y );
+		break;
+	case ACT_GOAL:
+		drawGoal( camera_y );
+		break;
+	}
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
 	if ( !death( ) ) {
@@ -255,6 +299,38 @@ void Player::draw( int camera_y ) {
 	DrawBox( left, up, right, down, color, FALSE );
 #endif
 }
+
+
+void Player::drawStand( int camera_y ) const {
+}
+
+void Player::drawFall( int camera_y ) const {
+}
+
+void Player::drawJump( int camera_y ) const {
+}
+
+void Player::drawDrill( int camera_y ) const {
+}
+
+void Player::drawDeadAir( int camera_y ) const {
+}
+
+void Player::drawDeadCrash( int camera_y ) const {
+}
+
+void Player::drawResurrection( int camera_y ) const {
+}
+
+void Player::drawDodgeBack( int camera_y ) const {
+}
+
+void Player::drawDodgeFront( int camera_y ) const {
+}
+
+void Player::drawGoal( int camera_y ) const {
+}
+
 
 void Player::drawDeathAnimation( int camera_y ) {
 	_death_anime_time++;
