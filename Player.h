@@ -29,6 +29,7 @@ public:
 public:
 	bool isDead( ) const;
 	bool isStanding( ) const;
+	bool isFinished( ) const;
 public://getån
 	int getAir( );
 	int getDepth( );
@@ -66,8 +67,9 @@ private:
 	bool isCrushed( ) const;
 	bool isRunOutAir( ) const;
 	bool isEnableJump( ) const;
+	bool isDodgeBack( ) const;
+	bool isDodgeFront( ) const;
 	void checkDepth( );
-	void scoreBlock( );
 	void setAct( ACT act );
 private:
 	double _air;
@@ -86,6 +88,7 @@ private:
 	double _target_y;
 	bool _standing;
 	bool _dig;
+	bool _finished;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;

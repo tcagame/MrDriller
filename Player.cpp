@@ -11,6 +11,8 @@ const int MOVE_WAIT = 5;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 300;
 const int CHECK_AIR = 0;
+const int DODGE_X = 32;
+const int DODGE_SPEED = 1;
 const int JUMP_SPEED_X = 4;
 const int JUMP_SPEED_Y = 6;
 const int JUMP_X = 60;
@@ -34,12 +36,14 @@ const int SPRITE_SIZE = 64;
 const int DRAW_WIDTH = 100;
 const int DRAW_HEIGHT = 90;
 //座標系
-const int CENTRAL_X = DRAW_WIDTH / 2 + 5;
-const int CENTRAL_Y = DRAW_HEIGHT / 2;
 const int UP_Y = 14 * DRAW_HEIGHT / SPRITE_SIZE;
 const int DOWN_Y = 55 * DRAW_HEIGHT / SPRITE_SIZE;
 const int LEFT_X = 13 * DRAW_WIDTH / SPRITE_SIZE;
 const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
+const int CENTRAL_X = LEFT_X + ( RIGHT_X - LEFT_X ) / 2;
+const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
+
+
 
 //-----------関数定義------------//
 
@@ -54,7 +58,8 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
-	_standing( true ) {
+	_standing( true ),
+	_finished( false ) {
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 }
@@ -140,6 +145,26 @@ void Player::actOnStand( ) {
 		return;
 	}
 
+	if ( isDodgeBack( ) ) {
+		if ( _direct == DIR_LEFT ) {
+			_target_x = _x - DODGE_X;
+		} else {
+			_target_x = _x + DODGE_X;
+		}
+		setAct( ACT_DODGE_BACK );
+		return;
+	}
+
+	if ( isDodgeFront( ) ) {
+		if ( _direct == DIR_LEFT ) {
+			_target_x = _x + DODGE_X;
+		} else {
+			_target_x = _x - DODGE_X;
+		}
+		setAct( ACT_DODGE_FRONT );
+		return;
+	}
+
 	//--------------キー操作------------//
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
 		_direct = DIR_UP;
@@ -166,16 +191,50 @@ void Player::actOnStand( ) {
 
 	//-----------------------------------//
 
-	scoreBlock( ); //ブロックポイント
 	ifAirRecover( ); //エア回復
 }
+
+bool Player::isDodgeBack( ) const {
+	double central_x = _x + CENTRAL_X;
+	double check_y = _y + CENTRAL_Y;
+	double check_left = _x + LEFT_X + 1;
+	double check_right = _x + RIGHT_X - 1;
+	bool result = false;
+	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
+	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	if ( !block_central ) {
+		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( ) != BLOCK_ID_AIR ) ||
+			 ( block_right && _direct == DIR_LEFT  && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
+			result = true;
+		}
+	}
+	return result;
+}
+bool Player::isDodgeFront( ) const {
+	double central_x = _x + CENTRAL_X;
+	double check_y = _y + CENTRAL_Y;
+	double check_left = _x + LEFT_X + 1;
+	double check_right = _x + RIGHT_X - 1;
+	bool result = false;
+	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
+	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	if ( !block_central ) {
+		if ( ( block_left && _direct == DIR_LEFT  && block_left->getBlockID( )  != BLOCK_ID_AIR ) ||
+			( block_right && _direct == DIR_RIGHT && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
+			result = true;
+		}
+	}
+	return result;
+}
+
 
 void Player::actOnFall( ) {
 	//落下中操作できない
 	if ( isStanding( ) ) {
 		setAct( ACT_STAND );
 	}
-	scoreBlock( ); //ブロックポイント
 	ifAirRecover( ); //エア回復
 }
 
@@ -254,6 +313,8 @@ void Player::actOnDeadAir( ) {
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
+		} else {
+			_finished = true;
 		}
 	}
 }
@@ -265,22 +326,50 @@ void Player::actOnDeadCrash( ) {
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
+		} else {
+			_finished = true;
 		}
 	}
 }
 
 void Player::actOnResurrection( ) {
 	_air = AIR_MAX;
-	setAct( ACT_STAND );
+	if ( _act_count > 30 ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnDodgeBack( ) {
-}
-
-void Player::actOnGoal( ) {
+	//回避アニメーション待機
+	//後ろに少し移動
+	_vec_x = _target_x - _x;
+	if ( _vec_x > DODGE_SPEED ) {
+		_vec_x = DODGE_SPEED;
+	}
+	if ( _vec_x < -DODGE_SPEED ) {
+		_vec_x = -DODGE_SPEED;
+	}
+	if ( _vec_x == 0 ) {
+		setAct( ACT_STAND );
+	}
 }
 
 void Player::actOnDodgeFront( ) {
+	_vec_x = _target_x - _x;
+	if ( _vec_x > DODGE_SPEED ) {
+		_vec_x = DODGE_SPEED;
+	}
+	if ( _vec_x < -DODGE_SPEED ) {
+		_vec_x = -DODGE_SPEED;
+	}
+
+	if ( _vec_x == 0 ) {
+		setAct( ACT_STAND );
+	}
+}
+
+
+void Player::actOnGoal( ) {
 }
 
 void Player::draw( int camera_y ) {
@@ -325,6 +414,9 @@ void Player::draw( int camera_y ) {
 	int up    = ( int )_y - camera_y + UP_Y;
 	int down  = ( int )_y - camera_y + DOWN_Y;
 	unsigned int color = GetColor( 255, 0, 0 );
+	//DrawCircle( ( int )_x + CENTRAL_X, ( int )_y + CENTRAL_Y - camera_y, 5, color, TRUE );
+	//DrawCircle( right, up, 5, GetColor( 0, 255, 0 ), TRUE );
+	//DrawCircle( left, up, 5, GetColor(0,0,255), TRUE );	
 	DrawBox( left, up, right, down, color, FALSE );
 	int central = ( int )_x + CENTRAL_X;
 	DrawLine( central, up, central, down, color );
@@ -442,7 +534,7 @@ void Player::drawDeadAir( int camera_y ) const {
 	int tx = 0;
 	int ty = 0;
 
-	if ( _act_count <= 70){
+	if ( _act_count <= 70 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % MOVE_PATTERN );
 	}else{
 		tx = SPRITE_SIZE * 7;
@@ -479,7 +571,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 	int tx = 0;
 	int ty = 0;
 
-	if ( _act_count <= 20){
+	if ( _act_count <= 20 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
 	}else{
 		tx = SPRITE_SIZE * 2;
@@ -501,12 +593,49 @@ void Player::drawDeadCrash( int camera_y ) const {
 }
 
 void Player::drawResurrection( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	const int WAIT = 10;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * ( _act_count / WAIT % ANIM_PATTERN );
+	int ty = SPRITE_SIZE * 10;
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDodgeBack( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * pattern;
+	int ty = 0;
+	if ( _direct == DIR_LEFT ) {
+		ty = SPRITE_SIZE * 13;
+	} else {
+		ty = SPRITE_SIZE * 14;
+	}
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDodgeFront( int camera_y ) const {
+	const int ANIM_PATTERN = 3;
+	int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * pattern;
+	int ty = 0;
+	if ( _direct == DIR_LEFT ) {
+		ty = SPRITE_SIZE * 15;
+	} else {
+		ty = SPRITE_SIZE * 16;
+	}
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawGoal( int camera_y ) const {
@@ -539,6 +668,11 @@ int Player::getY( ) {
 bool Player::isStanding( ) const {
 	return _standing;
 }
+
+bool Player::isFinished( ) const {
+	return _finished;
+}
+
 
 void Player::move( ) {
 	if ( _act == ACT_JUMP ) {
@@ -713,10 +847,13 @@ void Player::ifAirRecover( ) {
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
-			block->erase( );
-			_air += AIR_RECOVERY_POINT;
-			if ( _air > AIR_MAX ) {
-				_air = AIR_MAX;
+			if ( !block->isErase( ) ) {
+				block->erase( );
+				_air += AIR_RECOVERY_POINT;
+				_score += BLOCK_POINT;
+				if ( _air > AIR_MAX ) {
+					_air = AIR_MAX;
+				}
 			}
 		}
 	}
@@ -732,11 +869,11 @@ void Player::eraseUpBlock( ) {
 	double central_y = _y + CENTRAL_Y;
 
 	//中央列
-	_board->eraseColumnBlockUp( central_x              , central_y );
+	_board->eraseColumnBlockUp( ( int )central_x              , ( int )central_y );
 	//左列
-	_board->eraseColumnBlockUp( central_x - BLOCK_WIDTH, central_y );
+	_board->eraseColumnBlockUp( ( int )central_x - BLOCK_WIDTH, ( int )central_y );
 	//右列
-	_board->eraseColumnBlockUp( central_x + BLOCK_WIDTH, central_y );
+	_board->eraseColumnBlockUp( ( int )central_x + BLOCK_WIDTH, ( int )central_y );
 }
 
 void Player::decreaseAir( ) {
@@ -752,13 +889,19 @@ void Player::decreaseAir( ) {
 
 bool Player::isCrushed( ) const {
 	//頭の位置にブロックが当たっているか確かめる
+	double central_x = _x + CENTRAL_X;
+	double check_y = _y + CENTRAL_Y;
+	double check_left = _x + LEFT_X + 1;
+	double check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	double check_x = _x + CENTRAL_X;
-	double check_y = _y + UP_Y;
-	std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-	if ( block ) {
-		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-			result = true;
+	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
+	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	if ( block_central ) {
+		if ( block_left || block_right ) {
+			if ( block_central->getBlockID( ) != BLOCK_ID_AIR ) {
+				result = true;
+			}
 		}
 	}
 	return result;
@@ -770,18 +913,6 @@ bool Player::isRunOutAir( ) const {
 
 void Player::checkDepth( ) {
 	_depth = ( int )_y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH - 20;
-}
-
-void Player::scoreBlock( ) {
-	double check_x = _x + CENTRAL_X;
-	double check_y = _y + CENTRAL_Y;
-	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
-	if ( block ) {
-		if ( block->getBlockID( ) ) {
-			_board->eraseBlock( block );
-			_score += BLOCK_POINT;
-		}
-	}
 }
 
 void Player::setAct( ACT act ) {

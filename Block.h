@@ -61,6 +61,7 @@ private:
 	bool _finished;
 	bool _fall;
 	int _group;
+	int _fall_count;
 	std::array< std::shared_ptr< class Block >, MAX_DIR > _connect_blocks;
 };
 
