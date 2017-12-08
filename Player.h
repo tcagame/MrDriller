@@ -26,8 +26,8 @@ public:
 public:
 	void update( );
 	void draw( int camera_y );
-	void drawDeathAnimation( int camera_y );
-	bool death( );
+public:
+	bool isDead( ) const;
 	bool isStanding( ) const;
 public://getån
 	int getAir( );
@@ -67,11 +67,10 @@ private:
 	bool isCrushed( ) const;
 	bool isRunOutAir( ) const;
 	void checkDepth( );
-	void control( );
 	void scoreBlock( );
 	void setAct( ACT act );
 private:
-	int _air;
+	double _air;
 	int _depth;
 	int _life;
 	int _score;
@@ -91,7 +90,7 @@ private:
 	bool _dead;
 	bool _standing;
 	bool _hitspace;
-	bool _erase_block;
+	bool _dig;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;

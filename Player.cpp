@@ -6,10 +6,10 @@
 //-----------定数宣言------------//
 //レベルデザイン系
 const int PLAYER_SPEED = 4;
-const int TIME_AIR_DECREASE = 1;//AIRの減る速度
+const double AIR_DECREASE_SPEED = 0.03;//AIRの減る速度
 const int MOVE_WAIT = 5;
 const int DRILL_RANGE = 7;
-const int REVIVE_TIME = 3;
+const int REVIVE_TIME = 300;
 const int CHECK_AIR = 0;
 const int JUMP_X = 50;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
@@ -57,6 +57,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_dead( false ),
 	_standing( true ),
 	_hitspace( false ) {
+	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 }
 
@@ -71,19 +72,8 @@ void Player::update( ) {
 	_vec_y = 0;
 
 	fall( );    //落下
-	if ( !death( ) ) {
-		if ( isStanding( ) ) {
-			control( ); //操作
-		}
-		move( );    //移動
-		ifAirRecover( ); //エア回復
-		scoreBlock( ); //ブロックポイント
-	} else {
-		_erase_block = false;
-	}
-
-	//ブロックに乗っていない場合
-
+	act( );
+	move( );    //移動
 	//深さ
 	checkDepth( );
 	decreaseAir( );
@@ -91,7 +81,7 @@ void Player::update( ) {
 		 isRunOutAir( ) ) {
 		_dead = true;
 	}
-
+	_act_count++;
 }
 
 void Player::act( ) {
@@ -150,8 +140,6 @@ void Player::actOnStand( ) {
 		return;
 	}
 
-
-
 	//--------------キー操作------------//
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
 		_direct = DIR_UP;
@@ -169,16 +157,22 @@ void Player::actOnStand( ) {
 	}
 
 	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
-		dig( );//掘る
+		setAct( ACT_DRILL );
+		return;
 	}
 	//-----------------------------------//
+
+	scoreBlock( ); //ブロックポイント
+	ifAirRecover( ); //エア回復
 }
 
 void Player::actOnFall( ) {
 	//落下中操作できない
-	if ( _standing ) {
+	if ( isStanding( ) ) {
 		setAct( ACT_STAND );
 	}
+	scoreBlock( ); //ブロックポイント
+	ifAirRecover( ); //エア回復
 }
 
 void Player::actOnJump( ) {
@@ -190,22 +184,32 @@ void Player::actOnJump( ) {
 
 void Player::actOnDrill( ) {
 	//数フレームかけて掘る
+	dig( );//掘る
+	
 	if ( _act_count > 10 ) {
 		setAct( ACT_STAND );
 	}
 }
 
 void Player::actOnDeadAir( ) {
-	if ( _act_count > 10 ) {
+	eraseUpBlock( );
+	if ( _act_count > REVIVE_TIME ) {
 		//復活
-		setAct( ACT_RESURRECTION );
+		_life--;
+		if ( _life >= 0 ) {
+			setAct( ACT_RESURRECTION );
+		}
 	}
 }
 
 void Player::actOnDeadCrash( ) {
-	if ( _act_count > 10 ) {
+	eraseUpBlock( );
+	if ( _act_count > REVIVE_TIME ) {
 		//復活
-		setAct( ACT_RESURRECTION );
+		_life--;
+		if ( _life >= 0 ) {
+			setAct( ACT_RESURRECTION );
+		}
 	}
 }
 
@@ -225,7 +229,6 @@ void Player::actOnDodgeFront( ) {
 }
 
 void Player::draw( int camera_y ) {
-	
 	switch ( _act ) {
 	case ACT_STAND:       //とまっているor歩く
 		drawStand( camera_y );
@@ -260,35 +263,6 @@ void Player::draw( int camera_y ) {
 	}
 	//x0、y0, x1, y1, tx, ty, tw, th, handle, trans(透過)
 	//tx,tyは画像内の位置。tw,thは表示したい画像内のサイズ
-	if ( !death( ) ) {
-		int x1 = ( int )_x;
-		int x2 = ( int )( _x + DRAW_WIDTH );
-		int y1 = ( int )( _y - camera_y);
-		int y2 = ( int )( y1 + DRAW_HEIGHT );
-		int tx = 0;
-		int ty = 0;
-		switch ( _direct ) {
-		case DIR_UP:
-			tx = SPRITE_SIZE * 0;
-			ty = SPRITE_SIZE * 9;
-			break;
-		case DIR_DOWN:
-			tx = SPRITE_SIZE * 0;
-			ty = SPRITE_SIZE * 6;
-			break;
-		case DIR_LEFT:
-			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
-			ty = SPRITE_SIZE * 19;
-			break;
-		case DIR_RIGHT:
-			tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
-			ty = SPRITE_SIZE * 20;
-			break;
-		}
-		DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
-	} else {
-		drawDeathAnimation( camera_y );
-	}
 #if _DEBUG
 	//当たり判定デバッグ用
 	int left  = ( int )_x + LEFT_X;
@@ -302,21 +276,158 @@ void Player::draw( int camera_y ) {
 
 
 void Player::drawStand( int camera_y ) const {
+	int x1 = ( int )_x;
+	int x2 = ( int )( _x + DRAW_WIDTH );
+	int y1 = ( int )( _y - camera_y);
+	int y2 = ( int )( y1 + DRAW_HEIGHT );
+	int tx = 0;
+	int ty = 0;
+	switch ( _direct ) {
+	case DIR_UP:
+		tx = SPRITE_SIZE * 0;
+		ty = SPRITE_SIZE * 9;
+		break;
+	case DIR_DOWN:
+		tx = SPRITE_SIZE * 0;
+		ty = SPRITE_SIZE * 6;
+		break;
+	case DIR_LEFT:
+		tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+		ty = SPRITE_SIZE * 19;
+		break;
+	case DIR_RIGHT:
+		tx = SPRITE_SIZE * ( _move_anime_time / MOVE_WAIT % MOVE_PATTERN );
+		ty = SPRITE_SIZE * 20;
+		break;
+	}
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawFall( int camera_y ) const {
+	int x1 = ( int )_x;
+	int x2 = ( int )( _x + DRAW_WIDTH );
+	int y1 = ( int )( _y - camera_y);
+	int y2 = ( int )( y1 + DRAW_HEIGHT );
+	int tx = SPRITE_SIZE * 0;
+	int ty = SPRITE_SIZE * 1;
+
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawJump( int camera_y ) const {
+	int x1 = ( int )_x;
+	int x2 = ( int )( _x + DRAW_WIDTH );
+	int y1 = ( int )( _y - camera_y);
+	int y2 = ( int )( y1 + DRAW_HEIGHT );
+	int tx = SPRITE_SIZE * 0;
+	int ty = 0;
+	switch ( _direct ) {
+	case DIR_LEFT:
+		ty = SPRITE_SIZE * 2;
+		break;
+	case DIR_RIGHT:
+		ty = SPRITE_SIZE * 3;
+		break;
+	}
+
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDrill( int camera_y ) const {
+	int x1 = ( int )_x;
+	int x2 = ( int )( _x + DRAW_WIDTH );
+	int y1 = ( int )( _y - camera_y);
+	int y2 = ( int )( y1 + DRAW_HEIGHT );
+	int tx = SPRITE_SIZE * ( ( _act_count / 2 ) % 8 );
+	int ty = 0;
+	switch ( _direct ) {
+	case DIR_UP:
+		ty = SPRITE_SIZE * 9;
+		break;
+	case DIR_DOWN:
+		ty = SPRITE_SIZE * 6;
+		break;
+	case DIR_LEFT:
+		ty = SPRITE_SIZE * 7;
+		break;
+	case DIR_RIGHT:
+		ty = SPRITE_SIZE * 8;
+		break;
+	}
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 void Player::drawDeadAir( int camera_y ) const {
+	int _angel_time = ( int )( _act_count - FRAME * TIME_ANIMATION );
+	int anim = 0;
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		anim = 7;
+	}
+
+	//酸欠
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = 0;
+	int ty = 0;
+
+	if ( _act_count <= 70){
+		tx = SPRITE_SIZE * ( _act_count / 10 % MOVE_PATTERN );
+	}else{
+		tx = SPRITE_SIZE * 7;
+	}
+	if ( _direct == DIR_LEFT ) {
+		ty = SPRITE_SIZE * 4;
+	} else {
+		ty = SPRITE_SIZE * 5;
+	}
+	
+	
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+
+	//天使を描画
+	if ( anim == 7 ) {
+		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.1 ) );
+		int ANGEL_Y = -_angel_time * 3;
+		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	}
+
 }
 
 void Player::drawDeadCrash( int camera_y ) const {
+	int _angel_time = ( int )( _act_count - FRAME * TIME_ANIMATION );
+	int anim = 0;
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		anim = 7;
+	}
+
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = 0;
+	int ty = 0;
+
+	if ( _act_count <= 20){
+		tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
+	}else{
+		tx = SPRITE_SIZE * 2;
+	}
+	if ( _direct == DIR_LEFT ) {
+		ty = SPRITE_SIZE * 11;
+	} else {
+		ty = SPRITE_SIZE * 12;
+	}
+	
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+
+	//天使を描画
+	if ( anim == 7 ) {
+		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.1 ) );
+		int ANGEL_Y = -_angel_time * 3;
+		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	}
 }
 
 void Player::drawResurrection( int camera_y ) const {
@@ -331,85 +442,12 @@ void Player::drawDodgeFront( int camera_y ) const {
 void Player::drawGoal( int camera_y ) const {
 }
 
-
-void Player::drawDeathAnimation( int camera_y ) {
-	_death_anime_time++;
-	int _angel_time = ( int )( _death_anime_time - FRAME * TIME_ANIMATION );
-	int anim = 0;
-	if ( _death_anime_time / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
-		anim = 7;
-		eraseUpBlock( );
-		_erase_block = false;
-	}
-
-	//酸欠
-	int x1 = ( int )_x;
-	int y1 = ( int )_y - camera_y;
-	int x2 = x1 + DRAW_WIDTH;
-	int y2 = y1 + DRAW_HEIGHT;
-	int tx = 0;
-	int ty = 0;
-
-	if ( _air == CHECK_AIR ) {
-		if ( _direct == DIR_LEFT ) {
-			if (_death_anime_time <= 70){
-				tx = SPRITE_SIZE * ( _death_anime_time / 10 % MOVE_PATTERN );
-			}else{
-			tx = SPRITE_SIZE * 7;
-			}
-			ty = SPRITE_SIZE * 4;
-		} else {
-			if (_death_anime_time <= 70){
-				tx = SPRITE_SIZE * ( _death_anime_time / 10 % MOVE_PATTERN );
-			}else{
-				tx = SPRITE_SIZE * 7;
-			}
-			ty = SPRITE_SIZE * 5;
-		}
-	} else {
-		//つぶれる
-		if ( _direct == DIR_LEFT ) {
-			if (_death_anime_time <= 20){
-				tx = SPRITE_SIZE * ( _death_anime_time / 10 % 3 );
-			}else{
-				tx = SPRITE_SIZE * 2;
-			}
-			ty = SPRITE_SIZE * 11;
-		} else {
-			if (_death_anime_time <= 20){
-				tx = SPRITE_SIZE * ( _death_anime_time / 10 % 3 );
-			}else{
-				tx = SPRITE_SIZE * 2;
-			}
-			ty = SPRITE_SIZE * 12;
-		}
-
-	}
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
-
-	//天使を描画
-	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.1 ) );
-		int ANGEL_Y = -_angel_time * 3;
-		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _death_anime_time / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
-	}
-
-	//復活
-	if ( ( double )_angel_time / FRAME == REVIVE_TIME && _life > 0 ) {
-		_life--;
-		_air = 100;
-		_dead = false;
-		_death_anime_time = 0;
-	}
-
-}
-
-bool Player::death( ) {
-	return _dead;
+bool Player::isDead( ) const {
+	return _act == ACT_DEAD_AIR || _act == ACT_DEAD_CRUSH;
 }
 
 int Player::getAir( ) {
-	return _air;
+	return ( int )_air;
 }
 
 int Player::getDepth( ) {
@@ -435,27 +473,6 @@ int Player::getY( ) {
 bool Player::isStanding( ) const {
 	return _standing;
 }
-
-void Player::control( ) {
-	_vec_x = 0;
-
-	if ( CheckHitKey( KEY_INPUT_UP ) == 1 ) {
-		_direct = DIR_UP;
-	}
-	if ( CheckHitKey( KEY_INPUT_DOWN ) == 1 ) {
-		_direct = DIR_DOWN;
-	}
-	if ( CheckHitKey( KEY_INPUT_LEFT ) == 1 ) {
-		_direct = DIR_LEFT;
-		_vec_x += PLAYER_SPEED * -1;
-	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == 1 ) {
-		_direct = DIR_RIGHT;
-		_vec_x += PLAYER_SPEED;
-	}
-	dig( );//掘る
-}
-
 
 void Player::move( ) {
 	_standing = false;
@@ -571,20 +588,18 @@ void Player::move( ) {
 
 
 void Player::fall( ) {
+	if ( _act != ACT_FALL &&
+		 _act != ACT_STAND ) {
+		return;
+	}
 	_vec_y = PLAYER_SPEED;
 }
 
 void Player::dig( ) {
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
-		if ( !_hitspace ) {
-			//連続は出来ない
-			return;
-		}
-	} else {
-		_hitspace = true;
+	if ( _dig ) {
 		return;
 	}
-	_hitspace = false;
+	_dig = true;
 
 	double check_x = 0;
 	double check_y = 0;
@@ -651,9 +666,10 @@ void Player::ifAirRecover( ) {
 }
 
 void Player::eraseUpBlock( ) {
-	if ( _erase_block ) {
+	if ( _dig ) {
 		return;
 	}
+	_dig = true;
 	//キャラクターの上のブロックを消す
 	for ( int i = 0; i < 10; i++ ) {
 		//3列分
@@ -692,7 +708,10 @@ void Player::eraseUpBlock( ) {
 }
 
 void Player::decreaseAir( ) {
-	_air--;
+	_air -= AIR_DECREASE_SPEED;
+	if ( _air <= 0 ) {
+		_air = 0;
+	}
 }
 
 bool Player::isCrushed( ) const {
@@ -730,6 +749,7 @@ void Player::scoreBlock( ) {
 }
 
 void Player::setAct( ACT act ) {
+	_dig = false;
 	_act_count = 0;
 	_act = act;
 }
