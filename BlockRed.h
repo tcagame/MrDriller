@@ -2,7 +2,7 @@
 #include "Block.h"
 class BlockRed : public Block {
 public:
-	BlockRed( int x, int y );
+	BlockRed( double x, double y );
 	virtual ~BlockRed( );
 protected:
 	void act( );//ŒÅ—Lˆ—

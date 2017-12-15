@@ -2,7 +2,7 @@
 
 
 
-BlockRed::BlockRed( int x, int y ) :
+BlockRed::BlockRed( double x, double y ) :
 Block( x, y, 0, 16 * 10 ) {
 }
 

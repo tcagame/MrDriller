@@ -48,7 +48,7 @@ const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
 
 //-----------関数定義------------//
 
-Player::Player( int x, int y, std::shared_ptr< Board > board ):
+Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_board( board ),
 	_air( AIR_MAX ),
 	_depth( 0 ),
@@ -56,6 +56,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_score( 0 ),
 	_x( x ),
 	_y( y ),
+	_air_point( 100 ),
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
@@ -840,7 +841,7 @@ void Player::dig( ) {
 			_board->eraseBlock( block );
 		}
 		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
-			_score += BLOCK_POINT;
+			_score += BLOCK_POINT; //ブロックのスコア
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
@@ -865,7 +866,8 @@ void Player::ifAirRecover( ) {
 			if ( !block->isErase( ) ) {
 				block->erase( );
 				_air += AIR_RECOVERY_POINT;
-				_score += BLOCK_POINT;
+				_score += _air_point;
+				_air_point += 100;
 				if ( _air > AIR_MAX ) {
 					_air = AIR_MAX;
 				}

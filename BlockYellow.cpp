@@ -2,7 +2,7 @@
 
 
 
-BlockYellow::BlockYellow( int x, int y ) :
+BlockYellow::BlockYellow( double x, double y ) :
 Block( x, y, 0, 16 * 15 ) {
 }
 
