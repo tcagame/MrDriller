@@ -2,12 +2,13 @@
 #include "Block.h"
 class BlockAir:	public Block {
 public:
-	BlockAir( double x, double y );
+	BlockAir( );
 	virtual ~BlockAir( );
+public:
+	int getBlockID( ) { return BLOCK_ID_AIR; };
 protected:
 	void act( );//å≈óLèàóùÅH
 	void eraseAnimation( );
-	int getBlockID();
 	void changeTxByConnect( ) { };
 	void checkConnect( std::shared_ptr< class Board > board ) { };
 private:

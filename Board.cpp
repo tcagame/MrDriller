@@ -20,10 +20,9 @@ const int MAX_LEVEL = 3;
 
 Board::Board( ) :
 _level( 0 ),
-_level_erase( false ),
+_level_erase( true ),
 _finished( false ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
-	loadBlock( );
 }
 
 Board::~Board( ) {
@@ -51,7 +50,7 @@ void Board::updateBlocks( int camera_y ) {
 	{//update
 		std::shared_ptr< Board > board = shared_from_this( );
 		for ( std::shared_ptr< Block > block : _blocks ) {
-			block->update( shared_from_this( ), camera_y );
+			block->update( camera_y );
 		}
 	}
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
@@ -95,31 +94,37 @@ void Board::loadBlock( ) {
 	
 	for( int i = 0; i < BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM; i++ ) {
 		//ˆ—‚ªd‚¢‚½‚ß•Û—¯
-		double x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH + 0.1;
-		double y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT + 0.1;
+		std::shared_ptr< Block > block = std::shared_ptr< Block >( );
 		switch ( map[ i ] ) {
 		case 'R':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockRed( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockRed );
 			break;
 		case 'B':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockBlue( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockBlue );
 			break;
 		case 'G':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockGreen( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockGreen );
 			break;
 		case 'Y':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockYellow( x, y) ) );
+			block = std::shared_ptr< Block >( new BlockYellow );
 			break;
 		case 'A':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockAir( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockAir );
 			break;
 		case 'L':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockLevel( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockLevel );
 			break;
 		case '*':
-			_blocks.push_back( std::shared_ptr< Block >( new BlockSolid( x, y ) ) );
+			block = std::shared_ptr< Block >( new BlockSolid );
 			break;
 		}
+		if ( !block ) {
+			continue;
+		}
+		double x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH + 0.1;
+		double y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT + 0.1;
+		block->init( x, y, shared_from_this( ) );
+		_blocks.push_back( block );
 	}
 }
 
@@ -150,7 +155,7 @@ void Board::checkConnect( ) {
 		block->resetConnect( );
 	}
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->checkConnect( this_ptr );
+		block->checkConnect( );
 	}
 }
 

@@ -6,8 +6,8 @@ const int WAIT_ANIM_TIME = 10;
 const int MAX_ANIM_PATTERN = 4;
 
 
-BlockAir::BlockAir( double x, double y ) :
-Block( x, y, 0, TY ),
+BlockAir::BlockAir( ) :
+Block( 0, TY ),
 _count( 0 ) {
 }
 
@@ -20,10 +20,6 @@ void BlockAir::act( ) {
 	setTx( tx );
 	setTy( TY );
 	_count++;
-}
-
-int BlockAir::getBlockID() {
-	return BLOCK_ID_AIR;
 }
 
 void BlockAir::eraseAnimation( ) {
