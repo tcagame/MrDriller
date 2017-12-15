@@ -10,7 +10,7 @@ protected:
 	void act( );//ŒÅ—Lˆ—H
 	void eraseAnimation( );
 	void changeTxByConnect( ) { };
-	void checkConnect( std::shared_ptr< class Board > board ) { };
+	void checkConnect( bool erase = false ) { };
 private:
 	int _count;
 };
