@@ -16,7 +16,7 @@
 #include <assert.h>
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
-const int MAX_LEVEL = 4;
+const int MAX_LEVEL = 3;
 
 Board::Board( ) :
 _level( 0 ),
@@ -155,7 +155,7 @@ void Board::checkConnect( ) {
 }
 
 int Board::getLevel( ) const {
-	return _level + 1;
+	return _level;
 }
 
 std::shared_ptr< Block > Board::getBlock( double x, double y ) const {
