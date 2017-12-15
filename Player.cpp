@@ -270,6 +270,15 @@ void Player::actOnJump( ) {
 }
 
 void Player::actOnDrill( ) {
+	if ( isRunOutAir( ) ) {
+		setAct( ACT_DEAD_AIR );
+		return;
+	}
+	if ( isCrushed( ) ) {
+		setAct( ACT_DEAD_CRUSH );
+		return;
+	}
+
 	//”ƒtƒŒ[ƒ€‚©‚¯‚ÄŒ@‚é
 	_vec_x = 0;
 	_vec_y = 0;
