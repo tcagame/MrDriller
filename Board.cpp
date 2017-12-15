@@ -203,10 +203,17 @@ std::shared_ptr< Block > Board::getBlockM( int mx, int my ) const {
 }
 
 void Board::checkFall( ) {
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		block->setFall( true );
+	}
+
 	for ( int i = 0; i < BLOCK_NUM; i++ ) {
 		int idx = BLOCK_NUM - i - 1;
 		if ( !_virtual_blocks[ idx ] ||
 			  _virtual_blocks[ idx ]->getBlockID( ) == BLOCK_ID_LEVEL ) {
+			continue;
+		}
+		if ( !_virtual_blocks[ idx ]->isFall( ) ) {
 			continue;
 		}
 		int mx = ( idx % BLOCK_WIDTH_NUM );
@@ -219,12 +226,9 @@ void Board::checkFall( ) {
 		}
 		if ( _virtual_blocks[ check_idx ]->isFall( ) ) {
 			_virtual_blocks[ idx ]->setFall( true );
+			continue;
 		}
-	}
-	for ( std::shared_ptr< Block > block : _blocks ) {
-		if ( !block->isFall( ) ) {
-			block->setFallGroup( false );
-		}
+		_virtual_blocks[ idx ]->setFallGroup( false );
 	}
 }
 
