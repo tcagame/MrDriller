@@ -828,7 +828,7 @@ void Player::dig( ) {
 			_board->eraseBlock( block );
 		}
 		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
-			_score += BLOCK_POINT;
+			_score += BLOCK_POINT; //ブロックのスコア
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
@@ -849,8 +849,8 @@ void Player::ifAirRecover( ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
 			if ( !block->isErase( ) ) {
 				block->erase( );
-				_air += AIR_RECOVERY_POINT;
-				_score += BLOCK_POINT;
+				_air += AIR_RECOVERY_POINT; //エアーの回復
+				_score += BLOCK_POINT; //エアーのスコア
 				if ( _air > AIR_MAX ) {
 					_air = AIR_MAX;
 				}
