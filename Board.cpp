@@ -21,7 +21,8 @@ const int MAX_LEVEL = 3;
 Board::Board( ) :
 _level( 0 ),
 _level_erase( true ),
-_finished( false ) {
+_finished( false ),
+_init_connect( true ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 }
 
@@ -155,12 +156,27 @@ void Board::checkConnect( ) {
 		block->resetConnect( );
 	}
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->checkConnect( );
+		block->checkConnect( );//!_init_connect
+	}
+	if ( _init_connect ) {
+		_init_connect = false;
 	}
 }
 
 int Board::getLevel( ) const {
 	return _level;
+}
+
+std::shared_ptr< Block > Board::getBlockNow( double x, double y ) const {
+	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
+		return std::shared_ptr< Block >( );
+	}
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		if ( block->isExistence( x, y ) ) {
+			return block;
+		}
+	}
+	return std::shared_ptr< Block >( );
 }
 
 std::shared_ptr< Block > Board::getBlock( double x, double y ) const {
@@ -195,7 +211,7 @@ void Board::checkFall( ) {
 		}
 		int mx = ( idx % BLOCK_WIDTH_NUM );
 		int my = ( idx / BLOCK_WIDTH_NUM );
-		int check_idx = mx + ( my + 1 ) * BLOCK_WIDTH_NUM;
+		int check_idx = idx + BLOCK_WIDTH_NUM;
 		//ƒuƒƒbƒN‚ª‚È‚¢ê‡
 		if ( !_virtual_blocks[ check_idx ] ) {
 			_virtual_blocks[ idx ]->setFall( true );
@@ -228,12 +244,22 @@ void Board::eraseBlock( std::shared_ptr< Block > block ) {
 		for ( std::shared_ptr< Block > block2 : _blocks ) {
 			block2->erase( true );
 		}
+		_init_connect = true;
 		_level_erase = true;
 		_level++;
 	}
 
 }
 
+int Board::getGroupBlockNum( int group ) const {
+	int num = 0;
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		if ( block->getGroup( ) == group ) {
+			num++;
+		}
+	}
+	return num;
+}
 
 void Board::eraseColumnBlockUp( double x, double y ) {
 	if ( x < 0 || x > BLOCK_WIDTH * BLOCK_WIDTH_NUM ) {
