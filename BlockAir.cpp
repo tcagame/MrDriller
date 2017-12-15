@@ -6,7 +6,7 @@ const int WAIT_ANIM_TIME = 10;
 const int MAX_ANIM_PATTERN = 4;
 
 
-BlockAir::BlockAir( int x, int y ) :
+BlockAir::BlockAir( double x, double y ) :
 Block( x, y, 0, TY ),
 _count( 0 ) {
 }

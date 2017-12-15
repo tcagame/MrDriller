@@ -15,13 +15,13 @@ const int CONNECT_RIGHT = 0b0001000;
 //ブロック親クラス
 class Block : std::enable_shared_from_this< Block > {
 public:
-	Block( int x, int y, int tx, int ty );
+	Block( double x, double y, int tx, int ty );
 	virtual ~Block( );
 public:
 	void update( std::shared_ptr< class Board > board, int camera_y );
 	void draw( int camera_y, int img_handle ) const;
 public:
-	bool isExistence( int x, int y ) const;
+	bool isExistence( double x, double y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	bool isFall( ) const;
@@ -36,6 +36,7 @@ public:
 	void connectBlock( std::shared_ptr< class Block >, int connect );
 	void setGroup( int group );
 	virtual void setFall( bool fall );
+	void resetConnect( );
 protected:
 	void setFinished( bool finish );
 	virtual void changeTxByConnect( );

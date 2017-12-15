@@ -2,7 +2,7 @@
 
 const int INIT_HP = 5;
 
-BlockSolid::BlockSolid( int x,int y ) :
+BlockSolid::BlockSolid( double x, double y ) :
 Block ( x , y , 0, 16 * 20 ),
 _hp( INIT_HP ) {
 }

@@ -2,7 +2,7 @@
 #include "Block.h"
 class BlockSolid  : public Block{
 public:
-	BlockSolid(  int x,int y );
+	BlockSolid( double x, double y );
 	virtual ~BlockSolid( );
 	void act( );
 	int getBlockID( );

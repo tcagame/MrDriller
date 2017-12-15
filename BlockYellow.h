@@ -3,7 +3,7 @@
 
 class BlockYellow : public Block {
 public:
-	BlockYellow( int x, int y );
+	BlockYellow( double x, double y );
 	virtual ~BlockYellow( );
 protected:
 	void act( );

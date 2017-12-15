@@ -2,7 +2,7 @@
 #include "Block.h"
 class BlockLevel : public Block {
 public:
-	BlockLevel( int x, int y );
+	BlockLevel( double x, double y );
 	virtual ~BlockLevel( );
 public:
 	int getBlockID( ) { return BLOCK_ID_LEVEL; };
