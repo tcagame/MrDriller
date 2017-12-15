@@ -2,10 +2,10 @@
 #include "Block.h"
 class BlockBlue : public Block {
 public:
-	BlockBlue( double x, double y );
+	BlockBlue( );
 	virtual ~BlockBlue( );
 protected:
 	void act( );//å≈óLèàóù
-	int getBlockID( );
+	int getBlockID( ) { return BLOCK_ID_BLUE; };
 };
 

@@ -2,8 +2,8 @@
 
 const int INIT_HP = 5;
 
-BlockSolid::BlockSolid( double x, double y ) :
-Block ( x , y , 0, 16 * 20 ),
+BlockSolid::BlockSolid( ) :
+Block ( 0, 16 * 20 ),
 _hp( INIT_HP ) {
 }
 
@@ -14,10 +14,6 @@ BlockSolid::~BlockSolid( )
 void BlockSolid::act( ) {
 	int tx = 16 * ( 16 - _hp );
 	setTx( tx );
-}
-
-int BlockSolid::getBlockID( ){
-	return BLOCK_ID_SOLID;
 }
 
 void BlockSolid::erase( bool destroy ) {

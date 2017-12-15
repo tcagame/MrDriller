@@ -1,11 +1,12 @@
 #pragma once
 #include "Block.h"
-class BlockSolid  : public Block{
+class BlockSolid  : public Block {
 public:
-	BlockSolid( double x, double y );
+	BlockSolid( );
 	virtual ~BlockSolid( );
+public:
+	int getBlockID( ) { return BLOCK_ID_SOLID; };
 	void act( );
-	int getBlockID( );
 	void changeTxByConnect( ) { };
 	void erase( bool destroy = false );
 private:

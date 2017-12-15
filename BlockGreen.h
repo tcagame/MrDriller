@@ -2,10 +2,11 @@
 #include "Block.h"
 class BlockGreen : public Block {
 public:
-	BlockGreen( double x, double y );
+	BlockGreen( );
 	virtual ~BlockGreen( );
+public:
+	int getBlockID( ) { return BLOCK_ID_GREEN; };
 protected:
 	void act( );//å≈óLèàóù
-	int getBlockID( );
 };
 

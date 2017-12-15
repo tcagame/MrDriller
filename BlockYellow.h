@@ -3,10 +3,10 @@
 
 class BlockYellow : public Block {
 public:
-	BlockYellow( double x, double y );
+	BlockYellow( );
 	virtual ~BlockYellow( );
 protected:
 	void act( );
-	int getBlockID( );
+	int getBlockID( ) { return BLOCK_ID_YELLOW; };
 };
 
