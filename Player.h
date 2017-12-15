@@ -79,6 +79,7 @@ private:
 	int _img_handle;
 	int _act_count;
 	int _up_count;
+	int _air_point;
 	int _move_anim_count;
 	double _x;
 	double _y;
