@@ -23,6 +23,7 @@ const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 30;
+const int GOAL_LEVEL = 1;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -370,6 +371,7 @@ void Player::actOnDodgeFront( ) {
 
 
 void Player::actOnGoal( ) {
+
 }
 
 void Player::draw( int camera_y ) {
@@ -639,6 +641,16 @@ void Player::drawDodgeFront( int camera_y ) const {
 }
 
 void Player::drawGoal( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	const int ANIM_WAIT = 10;
+	int pattern = _act_count / ANIM_WAIT % ANIM_PATTERN;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * pattern;
+	int ty = SPRITE_SIZE * 21;
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 bool Player::isDead( ) const {
@@ -836,6 +848,9 @@ void Player::dig( ) {
 				_air -= SOLID_AIR;
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
+			}
+			if ( block->getBlockID( ) == BLOCK_ID_LEVEL && _board->getLevel() == GOAL_LEVEL ) {
+				setAct( ACT_GOAL );
 			}
 		}
 	}
