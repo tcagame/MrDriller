@@ -69,6 +69,7 @@ private:
 	bool isEnableJump( ) const;
 	bool isDodgeBack( ) const;
 	bool isDodgeFront( ) const;
+	bool isGoal( ) const;
 	void checkDepth( );
 	void setAct( ACT act );
 private:
@@ -90,6 +91,7 @@ private:
 	bool _standing;
 	bool _dig;
 	bool _finished;
+	bool _goal;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;
