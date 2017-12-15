@@ -245,6 +245,15 @@ void Player::actOnFall( ) {
 }
 
 void Player::actOnJump( ) {
+	if ( isRunOutAir( ) ) {
+		setAct( ACT_DEAD_AIR );
+		return;
+	}
+	if ( isCrushed( ) ) {
+		setAct( ACT_DEAD_CRUSH );
+		return;
+	}
+
 	//数フレームかけて登る
 	_vec_x = _target_x - _x;
 	_vec_y = _target_y - _y;
@@ -355,6 +364,14 @@ void Player::actOnResurrection( ) {
 }
 
 void Player::actOnDodgeBack( ) {
+	if ( isRunOutAir( ) ) {
+		setAct( ACT_DEAD_AIR );
+		return;
+	}
+	if ( isCrushed( ) ) {
+		setAct( ACT_DEAD_CRUSH );
+		return;
+	}
 	//回避アニメーション待機
 	//後ろに少し移動
 	_vec_x = _target_x - _x;
@@ -370,6 +387,15 @@ void Player::actOnDodgeBack( ) {
 }
 
 void Player::actOnDodgeFront( ) {
+	if ( isRunOutAir( ) ) {
+		setAct( ACT_DEAD_AIR );
+		return;
+	}
+	if ( isCrushed( ) ) {
+		setAct( ACT_DEAD_CRUSH );
+		return;
+	}
+
 	_vec_x = _target_x - _x;
 	if ( _vec_x > DODGE_SPEED ) {
 		_vec_x = DODGE_SPEED;
