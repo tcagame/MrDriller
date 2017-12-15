@@ -98,8 +98,8 @@ void ScenePlay::drawAir( ) const {
 void ScenePlay::drawLevel( ) const {
 	char buf[ 4 ];
 	if ( _player->getDepth( ) >= 0 ) {
-		sprintf_s( buf, "%3d", _board->getLevel( ) );
-		DrawBox( 1260 - ( ( int )log10( _board->getLevel( ) ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
+		sprintf_s( buf, "%3d", _board->getLevel( ) + 1 );
+		DrawBox( 1260 - ( ( int )log10( _board->getLevel( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
 		for ( int i = 0; i < 3; i++ ) {
 			DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 		}

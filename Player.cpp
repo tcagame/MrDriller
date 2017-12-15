@@ -23,6 +23,7 @@ const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 30;
+const int GOAL_LEVEL = 1;
 
 //その他
 const int AIR_MAX = 100;
@@ -47,7 +48,7 @@ const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
 
 //-----------関数定義------------//
 
-Player::Player( int x, int y, std::shared_ptr< Board > board ):
+Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_board( board ),
 	_air( AIR_MAX ),
 	_depth( 0 ),
@@ -55,6 +56,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_score( 0 ),
 	_x( x ),
 	_y( y ),
+	_air_point( 100 ),
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
@@ -370,6 +372,7 @@ void Player::actOnDodgeFront( ) {
 
 
 void Player::actOnGoal( ) {
+
 }
 
 void Player::draw( int camera_y ) {
@@ -639,6 +642,16 @@ void Player::drawDodgeFront( int camera_y ) const {
 }
 
 void Player::drawGoal( int camera_y ) const {
+	const int ANIM_PATTERN = 8;
+	const int ANIM_WAIT = 10;
+	int pattern = _act_count / ANIM_WAIT % ANIM_PATTERN;
+	int x1 = ( int )_x;
+	int y1 = ( int )_y - camera_y;
+	int x2 = x1 + DRAW_WIDTH;
+	int y2 = y1 + DRAW_HEIGHT;
+	int tx = SPRITE_SIZE * pattern;
+	int ty = SPRITE_SIZE * 21;
+	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 }
 
 bool Player::isDead( ) const {
@@ -828,7 +841,7 @@ void Player::dig( ) {
 			_board->eraseBlock( block );
 		}
 		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
-			_score += BLOCK_POINT;
+			_score += BLOCK_POINT; //ブロックのスコア
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
@@ -836,6 +849,9 @@ void Player::dig( ) {
 				_air -= SOLID_AIR;
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
+			}
+			if ( block->getBlockID( ) == BLOCK_ID_LEVEL && _board->getLevel() == GOAL_LEVEL ) {
+				setAct( ACT_GOAL );
 			}
 		}
 	}
@@ -850,7 +866,8 @@ void Player::ifAirRecover( ) {
 			if ( !block->isErase( ) ) {
 				block->erase( );
 				_air += AIR_RECOVERY_POINT;
-				_score += BLOCK_POINT;
+				_score += _air_point;
+				_air_point += 100;
 				if ( _air > AIR_MAX ) {
 					_air = AIR_MAX;
 				}

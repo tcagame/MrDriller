@@ -71,7 +71,7 @@ Map1::Map1( ) {
 		"Y*YBBBYGB"
 		"YRBGYG*BY"
 		"GYYYBBRRR"
-		"YGG*YYRBR"
+		"YGGAYYRBR"
 		"BBBR*BBYY"
 		"YYRYBYRRR"
 		"RRBB*YYY*"

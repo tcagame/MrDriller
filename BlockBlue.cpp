@@ -2,7 +2,7 @@
 
 
 
-BlockBlue::BlockBlue( int x, int y ) :
+BlockBlue::BlockBlue( double x, double y ) :
 Block( x, y, 0, 0 ) {
 }
 

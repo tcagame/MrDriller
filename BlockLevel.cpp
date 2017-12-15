@@ -2,7 +2,7 @@
 
 
 
-BlockLevel::BlockLevel( int x, int y ) :
+BlockLevel::BlockLevel( double x, double y ) :
 Block( x, y, 16 * 5, 16 * 21 ) {
 }
 
