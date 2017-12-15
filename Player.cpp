@@ -122,6 +122,11 @@ void Player::act( ) {
 void Player::actOnStand( ) {
 	_vec_x = 0;
 
+	if ( isGoal( ) ) {
+		setAct( ACT_GOAL );
+		return;
+	}
+
 	if ( !isStanding( ) && !isGoal( ) ) {
 		setAct( ACT_FALL );
 		return;
@@ -167,9 +172,6 @@ void Player::actOnStand( ) {
 		return;
 	}
 
-	if ( isGoal( ) ) {
-		setAct( ACT_GOAL );
-	}
 
 	//--------------ÉLÅ[ëÄçÏ------------//
 	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
