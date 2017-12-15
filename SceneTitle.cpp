@@ -3,7 +3,7 @@
 #include "define.h"
 
 SceneTitle::SceneTitle( ) {
-	_img_handle = LoadGraph( "Resource/title.jpg", TRUE );
+	_img_handle = LoadGraph( "Resource/title.png", TRUE );
 }
 
 SceneTitle::~SceneTitle( ) {
