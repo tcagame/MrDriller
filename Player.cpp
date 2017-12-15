@@ -122,7 +122,7 @@ void Player::act( ) {
 void Player::actOnStand( ) {
 	_vec_x = 0;
 
-	if ( !isStanding( ) ) {
+	if ( !isStanding( ) && !isGoal( ) ) {
 		setAct( ACT_FALL );
 		return;
 	}
@@ -165,6 +165,10 @@ void Player::actOnStand( ) {
 		}
 		setAct( ACT_DODGE_FRONT );
 		return;
+	}
+
+	if ( isGoal( ) ) {
+		setAct( ACT_GOAL );
 	}
 
 	//--------------ÉLÅ[ëÄçÏ------------//
@@ -686,6 +690,10 @@ bool Player::isFinished( ) const {
 	return _finished;
 }
 
+bool Player::isGoal( ) const {
+	return _goal;
+}
+
 
 void Player::move( ) {
 	if ( _act == ACT_JUMP ) {
@@ -851,7 +859,7 @@ void Player::dig( ) {
 				if ( _score < 0 ) _score = 0;
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL && _board->getLevel() == GOAL_LEVEL ) {
-				setAct( ACT_GOAL );
+				_goal = true;
 			}
 		}
 	}
@@ -897,8 +905,9 @@ void Player::decreaseAir( ) {
 	if ( isDead( ) ) {
 		return;
 	}
-
-	_air -= AIR_DECREASE_SPEED;
+	if ( !isGoal( ) ) {
+		_air -= AIR_DECREASE_SPEED;
+	}
 	if ( _air <= 0 ) {
 		_air = 0;
 	}

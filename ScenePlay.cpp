@@ -15,7 +15,7 @@ const int GAGE_WIDTH = 330;
 const int GAGE_HEIGHT = 45;
 const int DRAW_Depth_X = 1002;
 const int DRAW_Depth_Y = 77;
-const int DRAW_Level_X = 1145;
+const int DRAW_Level_X = 1182;
 const int DRAW_Level_Y = 560;
 const int DRAW_Life_X = 1000;
 const int DRAW_Life_Y = 700;
@@ -96,11 +96,12 @@ void ScenePlay::drawAir( ) const {
 }
 
 void ScenePlay::drawLevel( ) const {
-	char buf[ 4 ];
+	char buf[ 3 ];
+	DrawBox( 1149, 530, 1186, 600, RGB( 0, 0, 0 ), TRUE );
 	if ( _player->getDepth( ) >= 0 ) {
-		sprintf_s( buf, "%3d", _board->getLevel( ) + 1 );
+		sprintf_s( buf, "%2d", _board->getLevel( ) + 1 );
 		DrawBox( 1260 - ( ( int )log10( _board->getLevel( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
-		for ( int i = 0; i < 3; i++ ) {
+		for ( int i = 0; i < 2; i++ ) {
 			DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 		}
 	}
