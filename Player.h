@@ -8,7 +8,7 @@
 
 class Player {
 public:
-	Player( int x, int y, std::shared_ptr< Board > board );
+	Player( double x, double y, std::shared_ptr< Board > board );
 	virtual ~Player( );
 public:
 	enum ACT {

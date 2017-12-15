@@ -48,7 +48,7 @@ const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
 
 //-----------ŠÖ”’è‹`------------//
 
-Player::Player( int x, int y, std::shared_ptr< Board > board ):
+Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_board( board ),
 	_air( AIR_MAX ),
 	_depth( 0 ),

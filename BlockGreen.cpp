@@ -2,7 +2,7 @@
 
 
 
-BlockGreen::BlockGreen( int x, int y ) :
+BlockGreen::BlockGreen( double x, double y ) :
 Block( x, y, 0, 16 * 5 ) {
 }
 

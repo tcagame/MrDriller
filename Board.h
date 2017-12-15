@@ -12,10 +12,10 @@ public:
 	void update( int camera_y );
 	void draw( int camera_y ) const;
 public:
-	std::shared_ptr< class Block > getBlock( int x, int y ) const;
-	std::shared_ptr< class Block > getBlockM( int x, int y ) const;
+	std::shared_ptr< class Block > getBlock( double x, double y ) const;
+	std::shared_ptr< class Block > getBlockM( int mx, int my ) const;
 	void eraseBlock( std::shared_ptr< class Block > block );
-	void eraseColumnBlockUp( int x, int y );
+	void eraseColumnBlockUp( double x, double y );
 	int getLevel( ) const;
 	bool isFinished( ) const;
 private:
