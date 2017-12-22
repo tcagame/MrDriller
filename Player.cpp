@@ -957,9 +957,9 @@ bool Player::isCrushed( ) const {
 	double check_left = _x + LEFT_X + 1;
 	double check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
-	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	std::shared_ptr< Block > block_left = _board->getBlockNow( ( int )check_left, ( int )check_y );
+	std::shared_ptr< Block > block_right = _board->getBlockNow( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlockNow( ( int )central_x, ( int )check_y );
 	if ( block_central ) {
 		if ( block_left || block_right ) {
 			if ( block_central->getBlockID( ) != BLOCK_ID_AIR ) {
