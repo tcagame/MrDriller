@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "DxLib.h"
 #include "define.h"
+#include "FpsController.h"
 
 const char* TITLE_NAME = "Mr.Driller";
 
@@ -12,7 +13,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmdLine, int n
 	ChangeWindowMode( TRUE );
 
 	//解像度を指定
-	SetGraphMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32 );
+	SetGraphMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32, FPS );
 
 	//アクティブではないときは処理するかどうか
 	SetAlwaysRunFlag( TRUE );
