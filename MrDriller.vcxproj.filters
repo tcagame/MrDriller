@@ -58,6 +58,7 @@
     <ClCompile Include="Map2.cpp">
       <Filter>Play\Map</Filter>
     </ClCompile>
+    <ClCompile Include="FpsController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Map2.h">
       <Filter>Play\Map</Filter>
     </ClInclude>
+    <ClInclude Include="FpsController.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

@@ -3,6 +3,7 @@
 #include "SceneTitle.h"
 #include "ScenePlay.h"
 #include "SceneResult.h"
+#include "FpsController.h"
 
 
 /*------------------定数宣言-------------------*/
@@ -18,6 +19,7 @@ Game::Game( ) :
 _now_scene( Scene::SCENE_TITLE ) {
 	//シーン初期化
 	changeScene( _now_scene );
+	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
 }
 
 Game::~Game( ) {
@@ -28,11 +30,18 @@ void Game::run( ) {
 	while ( isLoop( ) ) {
 		//更新
 		Scene::SCENE next = _scene->update( );
-		//描画
-		_scene->draw( );
-		//描画反映
-		ScreenFlip( );
-		ClearDrawScreen( );
+		//FPSチェック
+		_fps_ctrl->update( );
+		if ( !_fps_ctrl->isOverFps( ) ) {
+			//描画
+			_scene->draw( );
+			#if _DEBUG
+			DrawFormatString( 1280 - 100, 0, GetColor( 255, 255, 255 ), "FPS:%.2f", _fps_ctrl->getFps( ) );
+			#endif
+			//描画反映
+			ScreenFlip( );
+			ClearDrawScreen( );
+		}
 
 		//シーン遷移
 		if ( next != _now_scene ) {

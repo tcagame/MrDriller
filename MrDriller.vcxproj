@@ -172,6 +172,7 @@
     <ClCompile Include="BlockYellow.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="define.h" />
+    <ClInclude Include="FpsController.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Map0.h" />

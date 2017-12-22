@@ -13,5 +13,6 @@ private:
 	void changeScene( Scene::SCENE scene );
 private:
 	std::shared_ptr< Scene > _scene;
+	std::shared_ptr< class FpsController > _fps_ctrl;
 	Scene::SCENE _now_scene;
 };
