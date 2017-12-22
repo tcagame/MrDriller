@@ -131,7 +131,7 @@ void ScenePlay::drawLife( ) const {
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "Lives:%d", _player->getLife( ) );
 		for ( int i = 0; i < _player->getLife( ); i++ ) {
-			DrawBox( 1180, 670, 1260, 720, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1222 - i * 37, 670, 1259 - i * 37, 707, RGB( 0, 0, 0 ), TRUE );
 		}
 		for ( int i = 0; i < _player->getLife( ); i++ ) {
 			DrawRectExtendGraph( 1222 - i * 37, 670, 1259 - i * 37, 707, 0, 0, 64, 64, _img_life, TRUE );
