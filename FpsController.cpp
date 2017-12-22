@@ -25,7 +25,7 @@ void FpsController::update( ) {
 	int diff_time = now - _before_time;
 	if ( diff_time < FRAME_TIME ) {
 		_wait_time = FRAME_TIME - diff_time;
-		Sleep( _fps );
+		//Sleep( _fps );
 		return;
 	}
 	int frame_time = diff_time / _count;
@@ -33,7 +33,7 @@ void FpsController::update( ) {
 	_wait_time = FRAME_TIME - frame_time;
 	_fps = 1000.0 / frame_time;
 	if ( _wait_time > 0 ) {
-		Sleep( _wait_time );
+		//Sleep( _wait_time );
 	}
 
 	if ( _count >= UPDATE_INTERVAL ) {

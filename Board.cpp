@@ -30,14 +30,14 @@ Board::~Board( ) {
 	DeleteGraph( _img_handle );
 }
 
-void Board::update( int camera_y ) {
+void Board::update( ) {
 	if ( _level_erase ) {
 		if ( ( int )_blocks.size( ) == 0 ) {
 			loadBlock( );
 		}
 	}
 	checkBlockPos( );
-	updateBlocks( camera_y );
+	updateBlocks( );
 }
 
 void Board::draw( int camera_y ) const {
@@ -47,16 +47,11 @@ void Board::draw( int camera_y ) const {
 	DrawFormatString( 0, 0, GetColor( 255, 255, 255 ), "Block:%d", ( int )_blocks.size( ) );
 }
 
-void Board::updateBlocks( int camera_y ) {
-	{//update
-		std::shared_ptr< Board > board = shared_from_this( );
-		for ( std::shared_ptr< Block > block : _blocks ) {
-			block->update( camera_y );
-		}
-	}
+void Board::updateBlocks( ) {
 	std::list< std::shared_ptr< Block > >::iterator ite = _blocks.begin( );
 	while ( ite != _blocks.end( ) ) {
 		std::shared_ptr< Block > block = *ite;
+		block->update( );
 		if ( block->isFinished( ) ) {
 			ite = _blocks.erase( ite );
 			continue;
@@ -232,18 +227,9 @@ void Board::checkFall( ) {
 	}
 }
 
+
 void Board::eraseBlock( std::shared_ptr< Block > block ) {
 	block->erase( );
-	if ( block->getBlockID( ) != BLOCK_ID_SOLID &&
-		 block->getBlockID( ) != BLOCK_ID_LEVEL ) {
-		int group = block->getGroup( );
-		for ( std::shared_ptr< Block > block2 : _blocks ) {
-			if ( block2->getGroup( ) == group ) {
-				block2->erase( );
-			}
-		}
-		return;
-	}
 	if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
 		for ( std::shared_ptr< Block > block2 : _blocks ) {
 			block2->erase( true );

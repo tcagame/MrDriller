@@ -45,7 +45,7 @@ ScenePlay::~ScenePlay( ) {
 
 Scene::SCENE ScenePlay::update( ) {
 	_player->update( );
-	_board->update( _camera->getY( ) );
+	_board->update( );
 	_camera->update( _player->getY( ) );
 
 	SCENE next = SCENE_PLAY;
