@@ -25,8 +25,8 @@ const int NUM_WIDTH = 310;
 const int NUM_HEIGHT = 310;
 const int DRAW_NUM_SIZE_X = 37;
 const int DRAW_NUM_SIZE_Y = 37;
-const int DRAW_STRING_COLOR = RGB( 255, 255, 255 );
-const int GAGE_COLOR = RGB( 0, 0, 255 );
+const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
+const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
 
 ScenePlay::ScenePlay( ) {
@@ -74,9 +74,9 @@ void ScenePlay::drawDepth( ) const {
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "%6d", _player->getDepth( ) );
 		if ( _player->getDepth( ) < 1 ) {
-			DrawBox( 1220 - DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1220 - DRAW_NUM_SIZE_X, 77, 1220, 105, GetColor( 0, 0, 0 ), TRUE );
 		} else {
-			DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1220 - ( ( int )log10( _player->getDepth( ) ) + 1 ) * DRAW_NUM_SIZE_X, 77, 1220, 105, GetColor( 0, 0, 0 ), TRUE );
 		}
 		for ( int i = 0; i < 6; i++ ) {
 			DrawRectExtendGraph( DRAW_Depth_X + i * DRAW_NUM_SIZE_X, DRAW_Depth_Y, DRAW_Depth_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Depth_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
@@ -97,10 +97,10 @@ void ScenePlay::drawAir( ) const {
 
 void ScenePlay::drawLevel( ) const {
 	char buf[ 3 ];
-	DrawBox( 1149, 530, 1186, 600, RGB( 0, 0, 0 ), TRUE );
+	DrawBox( 1149, 530, 1186, 600, GetColor( 0, 0, 0 ), TRUE );
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "%2d", _board->getLevel( ) + 1 );
-		DrawBox( 1260 - ( ( int )log10( _board->getLevel( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, RGB( 0, 0, 0 ), TRUE );
+		DrawBox( 1260 - ( ( int )log10( _board->getLevel( ) + 1 ) + 1 ) * DRAW_NUM_SIZE_X, 530, 1260, 600, GetColor( 0, 0, 0 ), TRUE );
 		for ( int i = 0; i < 2; i++ ) {
 			DrawRectExtendGraph( DRAW_Level_X + i * DRAW_NUM_SIZE_X, DRAW_Level_Y, DRAW_Level_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Level_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
 		}
@@ -112,9 +112,9 @@ void ScenePlay::drawScore( ) const {
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "%6d", _player->getScore( ) );
 		if ( _player->getScore( ) < 1 ) {
-			DrawBox( 1220 - DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1220 - DRAW_NUM_SIZE_X, 180, 1220, 235, GetColor( 0, 0, 0 ), TRUE );
 		} else {
-			DrawBox( 1220 - ( ( int )log10( _player->getScore( ) ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1220 - ( ( int )log10( _player->getScore( ) ) + 1 ) * DRAW_NUM_SIZE_X, 180, 1220, 235, GetColor( 0, 0, 0 ), TRUE );
 		}
 		for ( int i = 0; i < 6; i++ ) {
 			DrawRectExtendGraph( DRAW_Score_X + i * DRAW_NUM_SIZE_X, DRAW_Score_Y, DRAW_Score_X + ( i + 1 ) * DRAW_NUM_SIZE_X, DRAW_Score_Y + DRAW_NUM_SIZE_Y, ( buf[ i ] - '0' ) % 5 * NUM_WIDTH, ( buf[ i ] - '0' ) / 5 * NUM_HEIGHT, NUM_WIDTH, NUM_HEIGHT, _img_num, TRUE );
@@ -131,7 +131,7 @@ void ScenePlay::drawLife( ) const {
 	if ( _player->getDepth( ) >= 0 ) {
 		sprintf_s( buf, "Lives:%d", _player->getLife( ) );
 		for ( int i = 0; i < _player->getLife( ); i++ ) {
-			DrawBox( 1222 - i * 37, 670, 1259 - i * 37, 707, RGB( 0, 0, 0 ), TRUE );
+			DrawBox( 1222 - i * 37, 670, 1259 - i * 37, 707, GetColor( 0, 0, 0 ), TRUE );
 		}
 		for ( int i = 0; i < _player->getLife( ); i++ ) {
 			DrawRectExtendGraph( 1222 - i * 37, 670, 1259 - i * 37, 707, 0, 0, 64, 64, _img_life, TRUE );
