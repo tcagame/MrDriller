@@ -18,7 +18,9 @@ Scene::SCENE SceneTitle::update( ) {
 }
 
 void SceneTitle::draw( ) const {
+	char *str = "Please Push Space";
+	int str_width = GetDrawStringWidth( str, strlen( str ) );
 	DrawExtendGraph( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, _img_handle, FALSE );
-	DrawString( 550, 600, "Please Push Space", GetColor( 255, 50, 100 ) );
-	DrawString(0, 700, "製作　山田チーム", GetColor(255, 0, 13));
+	DrawString( ( SCREEN_WIDTH - str_width ) / 2, 600, str, GetColor( 255, 50, 100 ) );
+	DrawString( 10, 700, "製作　山田チーム", GetColor( 255, 0, 13 ) );
 }
