@@ -30,6 +30,7 @@ public:
 	bool isDead( ) const;
 	bool isStanding( ) const;
 	bool isFinished( ) const;
+	bool isResultScene( ) const;
 public://getån
 	int getAir( );
 	int getDepth( );
@@ -92,6 +93,7 @@ private:
 	bool _dig;
 	bool _finished;
 	bool _goal;
+	bool _to_result_scene;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;

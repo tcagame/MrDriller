@@ -24,6 +24,7 @@ const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 30;
 const int GOAL_LEVEL = 1;
+const int To_Result_Scene_Time = 10;
 
 //‚»‚Ì‘¼
 const int AIR_MAX = 100;
@@ -60,6 +61,7 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
+	_to_result_scene( false ),
 	_standing( true ),
 	_finished( false ) {
 	setAct( ACT_FALL );
@@ -413,7 +415,10 @@ void Player::actOnDodgeFront( ) {
 
 
 void Player::actOnGoal( ) {
-
+	_act_count++;
+	if( _act_count >= To_Result_Scene_Time * FRAME ) {
+		_to_result_scene = true;
+	}
 }
 
 void Player::draw( int camera_y ) {
@@ -731,6 +736,9 @@ bool Player::isGoal( ) const {
 	return _goal;
 }
 
+bool Player::isResultScene( ) const {
+	return _to_result_scene;
+}
 
 void Player::move( ) {
 	if ( _act == ACT_JUMP ) {
