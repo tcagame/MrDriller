@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Block.h"
+#include "Keyboard.h"
 #include <math.h>
 
 //-----------íËêîêÈåæ------------//
@@ -176,26 +177,27 @@ void Player::actOnStand( ) {
 
 
 	//--------------ÉLÅ[ëÄçÏ------------//
-	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
+	std::shared_ptr< Keyboard > key = Keyboard::getInstance( );
+	if ( key->isHoldKey( KEY_INPUT_UP ) ) {
 		_direct = DIR_UP;
 	}
-	if ( CheckHitKey( KEY_INPUT_DOWN  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_DOWN ) ) {
 		_direct = DIR_DOWN;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_direct = DIR_LEFT;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_direct = DIR_RIGHT;
 	}
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_SPACE ) ) {
 		setAct( ACT_DRILL );
 		return;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_vec_x += PLAYER_SPEED * -1;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
@@ -327,8 +329,7 @@ void Player::actOnDrill( ) {
 		}
 		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 		if ( !block ||
-			  block->getBlockID( ) == BLOCK_ID_SOLID ||
-			  block->getBlockID( ) == BLOCK_ID_AIR ) {
+			 !block->isErase( ) ) {
 			setAct( ACT_STAND );
 		}
 	}

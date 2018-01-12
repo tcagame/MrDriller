@@ -4,6 +4,12 @@
 
 class Game {
 public:
+	enum MODE {
+		MODE_NORMAL,
+		MODE_BLIND,
+		MAX_MODE,
+	};
+public:
 	Game( );
 	virtual ~Game( );
 public:
@@ -15,4 +21,5 @@ private:
 	std::shared_ptr< Scene > _scene;
 	std::shared_ptr< class FpsController > _fps_ctrl;
 	Scene::SCENE _now_scene;
+	MODE _mode;
 };

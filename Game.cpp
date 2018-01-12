@@ -18,12 +18,13 @@
 /*------------------関数定義-------------------*/
 
 Game::Game( ) :
-_now_scene( Scene::SCENE_TITLE ) {
+_now_scene( Scene::SCENE_TITLE ),
+_mode( MODE_NORMAL ) {
 	//シーン初期化
 	changeScene( _now_scene );
 	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
 	Keyboard::init( );
-	
+	SetCreateSoundDataType( DX_SOUNDDATATYPE_MEMNOPRESS );
 }
 
 Game::~Game( ) {
@@ -33,6 +34,7 @@ void Game::run( ) {
 	//ループ
 	while ( isLoop( ) ) {
 		//更新
+		Keyboard::getInstance( )->update( );
 		Scene::SCENE next = _scene->update( );
 		//FPSチェック
 		_fps_ctrl->update( );
@@ -64,7 +66,7 @@ bool Game::isLoop( ) const {
 	}
 
 	//Escで終了
-	if ( CheckHitKey( KEY_INPUT_ESCAPE ) != 0 ) {
+	if ( Keyboard::getInstance( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
 		result = false;
 	}
 
@@ -79,10 +81,10 @@ void Game::changeScene( Scene::SCENE scene ) {
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
 		break;
 	case Scene::SCENE_MODE_SELECT:
-		_scene = std::shared_ptr< Scene >( new SceneModeSelect );
+		_scene = std::shared_ptr< Scene >( new SceneModeSelect( &_mode ) );
 		break;
 	case Scene::SCENE_PLAY:
-		_scene = std::shared_ptr< Scene >( new ScenePlay );
+		_scene = std::shared_ptr< Scene >( new ScenePlay( _mode ) );
 		break;	
 	case Scene::SCENE_RESULT:
 		_scene = std::shared_ptr< Scene >( new SceneResult );

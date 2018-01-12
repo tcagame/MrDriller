@@ -1,6 +1,7 @@
 #include "SceneTitle.h"
 #include "DxLib.h"
 #include "define.h"
+#include "Keyboard.h"
 
 SceneTitle::SceneTitle( ) {
 	_img_handle = LoadGraph( "Resource/title.png", TRUE );
@@ -11,7 +12,7 @@ SceneTitle::~SceneTitle( ) {
 
 Scene::SCENE SceneTitle::update( ) {
 	SCENE next = SCENE_TITLE;
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_SPACE ) == TRUE ) {
 		next = SCENE_MODE_SELECT;
 	}
 	return next;
