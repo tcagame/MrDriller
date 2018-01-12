@@ -267,6 +267,7 @@ void Board::eraseColumnBlockUp( double x, double y ) {
 			_virtual_blocks[ idx ]->erase( true );
 		}
 	}
+	checkConnect( );
 }
 
 bool Board::isFinished( ) const {
