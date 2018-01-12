@@ -4,10 +4,11 @@
 #include "Player.h"
 #include "Board.h"
 #include "Camera.h"
+#include "Game.h"
 
 class ScenePlay : public Scene {
 public:
-	ScenePlay( );
+	ScenePlay( Game::MODE mode );
 	virtual ~ScenePlay( );
 public:
 	SCENE update( );
@@ -28,5 +29,9 @@ private:
 	int _img_bg;
 	int _img_num;
 	int _img_life;
+<<<<<<< HEAD
 	int _bgm;
+=======
+	Game::MODE _mode;
+>>>>>>> e1b102d036f96ab7e50d2e3d782a721d0ef1c5e4
 };
