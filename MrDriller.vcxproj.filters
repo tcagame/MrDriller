@@ -59,6 +59,10 @@
       <Filter>Play\Map</Filter>
     </ClCompile>
     <ClCompile Include="FpsController.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="SceneModeSelect.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -120,6 +124,10 @@
       <Filter>Play\Map</Filter>
     </ClInclude>
     <ClInclude Include="FpsController.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="SceneModeSelect.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

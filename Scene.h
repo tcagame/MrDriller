@@ -3,6 +3,7 @@ class Scene {
 public:
 	enum SCENE {
 		SCENE_TITLE,
+		SCENE_MODE_SELECT,
 		SCENE_PLAY,
 		SCENE_RESULT
 	};

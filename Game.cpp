@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "Game.h"
+#include "Keyboard.h"
 #include "SceneTitle.h"
+#include "SceneModeSelect.h"
 #include "ScenePlay.h"
 #include "SceneResult.h"
 #include "FpsController.h"
@@ -20,6 +22,8 @@ _now_scene( Scene::SCENE_TITLE ) {
 	//シーン初期化
 	changeScene( _now_scene );
 	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
+	Keyboard::init( );
+	
 }
 
 Game::~Game( ) {
@@ -29,6 +33,7 @@ void Game::run( ) {
 	//ループ
 	while ( isLoop( ) ) {
 		//更新
+		Keyboard::getInstance( )->update( );
 		Scene::SCENE next = _scene->update( );
 		//FPSチェック
 		_fps_ctrl->update( );
@@ -60,7 +65,7 @@ bool Game::isLoop( ) const {
 	}
 
 	//Escで終了
-	if ( CheckHitKey( KEY_INPUT_ESCAPE ) != 0 ) {
+	if ( Keyboard::getInstance( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
 		result = false;
 	}
 
@@ -73,7 +78,10 @@ void Game::changeScene( Scene::SCENE scene ) {
 	switch ( scene ) {
 	case Scene::SCENE_TITLE:
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
-		break;	
+		break;
+	case Scene::SCENE_MODE_SELECT:
+		_scene = std::shared_ptr< Scene >( new SceneModeSelect );
+		break;
 	case Scene::SCENE_PLAY:
 		_scene = std::shared_ptr< Scene >( new ScenePlay );
 		break;	
