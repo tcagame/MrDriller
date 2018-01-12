@@ -2,7 +2,7 @@
 #include <memory>
 #include "Player.h"
 
-const int CAMERA_PLAYER_Y = 360;
+const int CAMERA_PLAYER_Y = 360 - 45;
 
 class Camera {
 public:
