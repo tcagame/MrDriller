@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Game.h"
 #include "SceneTitle.h"
+#include "SceneModeSelect.h"
 #include "ScenePlay.h"
 #include "SceneResult.h"
 #include "FpsController.h"
@@ -73,7 +74,10 @@ void Game::changeScene( Scene::SCENE scene ) {
 	switch ( scene ) {
 	case Scene::SCENE_TITLE:
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
-		break;	
+		break;
+	case Scene::SCENE_MODE_SELECT:
+		_scene = std::shared_ptr< Scene >( new SceneModeSelect );
+		break;
 	case Scene::SCENE_PLAY:
 		_scene = std::shared_ptr< Scene >( new ScenePlay );
 		break;	
