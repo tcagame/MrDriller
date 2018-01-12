@@ -39,6 +39,7 @@ const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
 const int MAX_BRIGHTNESS = 100;
 
+const int SPRITE_SIZE = 64;
 
 ScenePlay::ScenePlay( Game::MODE mode ) :
 _mode( mode ),
@@ -53,6 +54,7 @@ _brightness( MAX_BRIGHTNESS ) {
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
 
+	SetCreateSoundDataType( DX_SOUNDDATATYPE_FILE );
 	_bgm = LoadSoundMem( "Resource/Sound/bgm/Airman.mp3" );
 	ChangeVolumeSoundMem( 255 * 50 / 100, _bgm );
 	PlaySoundMem( _bgm, DX_PLAYTYPE_LOOP );
@@ -189,7 +191,7 @@ void ScenePlay::drawBlind( ) const {
 	int width  = ( int )( UI_X          * _brightness * 0.02 );
 	int height = ( int )( SCREEN_HEIGHT * _brightness * 0.02 );
 
-	int base_x = UI_X / 2;
+	int base_x = _player->getX( ) + SPRITE_SIZE / 2;
 	int base_y = _player->getY( ) - _camera->getY( );//SCREEN_HEIGHT / 2;
 
 	int x1 = base_x - width  / 2;

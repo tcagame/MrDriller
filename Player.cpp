@@ -721,6 +721,10 @@ int Player::getScore( ) {
 	return _score;
 }
 
+int Player::getX( ) {
+	return ( int )_x;
+}
+
 int Player::getY( ) {
 	return ( int )_y;
 }

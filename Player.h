@@ -37,6 +37,7 @@ public://getŒn
 	int getDepth( );
 	int getLife( );
 	int getScore( );
+	int getX( );
 	int getY( );
 private:
 	void act( );
