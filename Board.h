@@ -9,7 +9,7 @@ public:
 	Board( );
 	virtual ~Board( );
 public:
-	void update( int camera_y );
+	void update( );
 	void draw( int camera_y ) const;
 public:
 	std::shared_ptr< class Block > getBlockNow( double x, double y ) const;
@@ -22,7 +22,7 @@ public:
 	bool isFinished( ) const;
 private:
 	void loadBlock( );
-	void updateBlocks( int camera_y );
+	void updateBlocks( );
 	void checkBlockPos( );
 	void checkConnect( );
 	void checkFall( );

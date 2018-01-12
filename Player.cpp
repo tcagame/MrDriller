@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Block.h"
+#include "Keyboard.h"
 #include <math.h>
 
 //-----------定数宣言------------//
@@ -24,6 +25,7 @@ const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 30;
 const int GOAL_LEVEL = 1;
+const int To_Result_Scene_Time = 10;
 
 //その他
 const int AIR_MAX = 100;
@@ -60,10 +62,30 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
+	_to_result_scene( false ),
 	_standing( true ),
 	_finished( false ) {
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
+
+	_se[  0 ] = LoadSoundMem( "Resource/Sound/effect/effect01.mp3" ); //ブロック破壊
+	_se[  1 ] = LoadSoundMem( "Resource/Sound/effect/effect02.mp3" ); //ブロック落ちて破壊
+	_se[  2 ] = LoadSoundMem( "Resource/Sound/effect/effect03.mp3" ); //エア
+	_se[  3 ] = LoadSoundMem( "Resource/Sound/effect/effect04.mp3" ); //お邪魔ブロックの削り
+	_se[  4 ] = LoadSoundMem( "Resource/Sound/effect/effect05.mp3" ); //お邪魔ブロックの破壊
+	_se[  5 ] = LoadSoundMem( "Resource/Sound/effect/effect06.mp3" );
+	_se[  6 ] = LoadSoundMem( "Resource/Sound/effect/effect07.mp3" );
+	_se[  7 ] = LoadSoundMem( "Resource/Sound/effect/effect08.mp3" );
+	_se[  8 ] = LoadSoundMem( "Resource/Sound/effect/effect09.mp3" );
+	_se[  9 ] = LoadSoundMem( "Resource/Sound/effect/effect10.mp3" ); //つぶれて死亡
+	_se[ 10 ] = LoadSoundMem( "Resource/Sound/effect/effect11.mp3" ); //天使
+	_se[ 11 ] = LoadSoundMem( "Resource/Sound/effect/effect12.mp3" ); //復活
+	_se[ 12 ] = LoadSoundMem( "Resource/Sound/effect/effect13.mp3" );
+	_se[ 13 ] = LoadSoundMem( "Resource/Sound/effect/effect14.mp3" ); //メニュー選択
+	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //メニュー決定
+	_se[ 15 ] = LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); 
+	_se[ 16 ] = LoadSoundMem( "Resource/Sound/effect/effect17.mp3" );
+	_se[ 17 ] = LoadSoundMem( "Resource/Sound/effect/effect18.mp3" );
 }
 
 Player::~Player( ) {
@@ -75,8 +97,8 @@ void Player::update( ) {
 	_vec_x = 0;
 	_vec_y = 0;
 
-	fall( );    //落下
 	act( );
+	fall( );    //落下
 	move( );    //移動
 	//深さ
 	checkDepth( );
@@ -121,6 +143,11 @@ void Player::act( ) {
 
 void Player::actOnStand( ) {
 	_vec_x = 0;
+
+	if ( isGoal( ) ) {
+		setAct( ACT_GOAL );
+		return;
+	}
 
 	if ( !isStanding( ) && !isGoal( ) ) {
 		setAct( ACT_FALL );
@@ -167,31 +194,29 @@ void Player::actOnStand( ) {
 		return;
 	}
 
-	if ( isGoal( ) ) {
-		setAct( ACT_GOAL );
-	}
 
 	//--------------キー操作------------//
-	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
+	std::shared_ptr< Keyboard > key = Keyboard::getInstance( );
+	if ( key->isHoldKey( KEY_INPUT_UP ) ) {
 		_direct = DIR_UP;
 	}
-	if ( CheckHitKey( KEY_INPUT_DOWN  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_DOWN ) ) {
 		_direct = DIR_DOWN;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_direct = DIR_LEFT;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_direct = DIR_RIGHT;
 	}
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_SPACE ) ) {
 		setAct( ACT_DRILL );
 		return;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_vec_x += PLAYER_SPEED * -1;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
@@ -206,11 +231,11 @@ bool Player::isDodgeBack( ) const {
 	double check_left = _x + LEFT_X + 1;
 	double check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
-	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	std::shared_ptr< Block > block_left    = _board->getBlock( ( int )check_left , ( int )check_y );
+	std::shared_ptr< Block > block_right   = _board->getBlock( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x  , ( int )check_y );
 	if ( !block_central ) {
-		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( ) != BLOCK_ID_AIR ) ||
+		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( )  != BLOCK_ID_AIR ) ||
 			 ( block_right && _direct == DIR_LEFT  && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
 			result = true;
 		}
@@ -323,15 +348,16 @@ void Player::actOnDrill( ) {
 		}
 		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 		if ( !block ||
-			  block->getBlockID( ) == BLOCK_ID_SOLID ||
-			  block->getBlockID( ) == BLOCK_ID_AIR ) {
+			 !block->isErase( ) ) {
 			setAct( ACT_STAND );
 		}
 	}
 }
 
 void Player::actOnDeadAir( ) {
-	eraseUpBlock( );
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		eraseUpBlock( );
+	}
 	if ( _act_count > REVIVE_TIME ) {
 		//復活
 		_life--;
@@ -344,7 +370,11 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
-	eraseUpBlock( );
+	PlaySoundMem( _se[  4 ], DX_PLAYTYPE_BACK );
+
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		eraseUpBlock( );
+	}
 	if ( _act_count > REVIVE_TIME ) {
 		//復活
 		_life--;
@@ -411,7 +441,10 @@ void Player::actOnDodgeFront( ) {
 
 
 void Player::actOnGoal( ) {
-
+	_act_count++;
+	if( _act_count >= To_Result_Scene_Time * FRAME ) {
+		_to_result_scene = true;
+	}
 }
 
 void Player::draw( int camera_y ) {
@@ -507,7 +540,7 @@ void Player::drawFall( int camera_y ) const {
 
 void Player::drawJump( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) / ( JUMP_Y / ANIM_PATTERN );
+	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) * ANIM_PATTERN / JUMP_Y;
 	if ( pattern < 0 ) {
 		pattern = 0;
 	}
@@ -534,7 +567,7 @@ void Player::drawJump( int camera_y ) const {
 
 void Player::drawDrill( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int pattern = _act_count / ( MAX_DLILL_COUNT / ANIM_PATTERN );
+	int pattern = _act_count * ANIM_PATTERN / MAX_DLILL_COUNT;
 	if ( pattern >= ANIM_PATTERN ) {
 		pattern = ANIM_PATTERN - 1;
 	}
@@ -596,7 +629,7 @@ void Player::drawDeadAir( int camera_y ) const {
 		int ANGEL_Y = -_angel_time * 3;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
-
+	
 }
 
 void Player::drawDeadCrash( int camera_y ) const {
@@ -612,6 +645,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 	int y2 = y1 + DRAW_HEIGHT;
 	int tx = 0;
 	int ty = 0;
+
 
 	if ( _act_count <= 20 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % 3 );
@@ -713,6 +747,10 @@ int Player::getScore( ) {
 	return _score;
 }
 
+int Player::getX( ) {
+	return ( int )_x;
+}
+
 int Player::getY( ) {
 	return ( int )_y;
 }
@@ -729,6 +767,9 @@ bool Player::isGoal( ) const {
 	return _goal;
 }
 
+bool Player::isResultScene( ) const {
+	return _to_result_scene;
+}
 
 void Player::move( ) {
 	if ( _act == ACT_JUMP ) {
@@ -736,6 +777,10 @@ void Player::move( ) {
 		_y += _vec_y;
 		return;
 	}
+	if ( _act == ACT_DRILL ) {
+		return;
+	}
+
 	_standing = false;
 	if ( _vec_y > 0 ) {
 		//下ブロックに当たる
@@ -762,6 +807,8 @@ void Player::move( ) {
 				_vec_y = target - _y;
 			}
 		}
+	} else {
+		_standing = true;
 	}
 
 	
@@ -955,9 +1002,9 @@ bool Player::isCrushed( ) const {
 	double check_left = _x + LEFT_X + 1;
 	double check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
-	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	std::shared_ptr< Block > block_left = _board->getBlockNow( ( int )check_left, ( int )check_y );
+	std::shared_ptr< Block > block_right = _board->getBlockNow( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlockNow( ( int )central_x, ( int )check_y );
 	if ( block_central ) {
 		if ( block_left || block_right ) {
 			if ( block_central->getBlockID( ) != BLOCK_ID_AIR ) {

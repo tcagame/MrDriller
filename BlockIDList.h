@@ -7,3 +7,4 @@ const int BLOCK_ID_YELLOW = 5;//'Y'
 const int BLOCK_ID_LEVEL = 6; //'L'
 const int BLOCK_ID_SOLID = 7; //'*'‰ó‚ê‚É‚­‚¢
 const int BLOCK_ID_FIRE = 8;//'F',
+const int BLOCK_ID_IRON = 9; //'I'ƒGƒA‚ÌŒ¸‚ç‚È‚¢‰ó‚ê‚É‚­‚¢

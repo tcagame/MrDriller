@@ -2,10 +2,10 @@
 
 
 enum DIR {
-	DIR_LEFT,
-	DIR_RIGHT,
 	DIR_UP,
 	DIR_DOWN,
+	DIR_LEFT,
+	DIR_RIGHT,
 	MAX_DIR,
 	DIR_NONE,
 };

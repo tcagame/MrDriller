@@ -1,8 +1,11 @@
 #include "DxLib.h"
 #include "Game.h"
+#include "Keyboard.h"
 #include "SceneTitle.h"
+#include "SceneModeSelect.h"
 #include "ScenePlay.h"
 #include "SceneResult.h"
+#include "FpsController.h"
 
 
 /*------------------定数宣言-------------------*/
@@ -15,9 +18,12 @@
 /*------------------関数定義-------------------*/
 
 Game::Game( ) :
-_now_scene( Scene::SCENE_TITLE ) {
+_now_scene( Scene::SCENE_TITLE ),
+_mode( MODE_NORMAL ) {
 	//シーン初期化
 	changeScene( _now_scene );
+	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
+	Keyboard::init( );
 }
 
 Game::~Game( ) {
@@ -27,12 +33,20 @@ void Game::run( ) {
 	//ループ
 	while ( isLoop( ) ) {
 		//更新
+		Keyboard::getInstance( )->update( );
 		Scene::SCENE next = _scene->update( );
-		//描画
-		_scene->draw( );
-		//描画反映
-		ScreenFlip( );
-		ClearDrawScreen( );
+		//FPSチェック
+		_fps_ctrl->update( );
+		if ( !_fps_ctrl->isOverFps( ) ) {
+			//描画
+			_scene->draw( );
+			#if _DEBUG
+			DrawFormatString( 1280 - 100, 0, GetColor( 255, 255, 255 ), "FPS:%.2f", _fps_ctrl->getFps( ) );
+			#endif
+			//描画反映
+			ScreenFlip( );
+			ClearDrawScreen( );
+		}
 
 		//シーン遷移
 		if ( next != _now_scene ) {
@@ -51,7 +65,7 @@ bool Game::isLoop( ) const {
 	}
 
 	//Escで終了
-	if ( CheckHitKey( KEY_INPUT_ESCAPE ) != 0 ) {
+	if ( Keyboard::getInstance( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
 		result = false;
 	}
 
@@ -64,9 +78,12 @@ void Game::changeScene( Scene::SCENE scene ) {
 	switch ( scene ) {
 	case Scene::SCENE_TITLE:
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
-		break;	
+		break;
+	case Scene::SCENE_MODE_SELECT:
+		_scene = std::shared_ptr< Scene >( new SceneModeSelect( &_mode ) );
+		break;
 	case Scene::SCENE_PLAY:
-		_scene = std::shared_ptr< Scene >( new ScenePlay );
+		_scene = std::shared_ptr< Scene >( new ScenePlay( _mode ) );
 		break;	
 	case Scene::SCENE_RESULT:
 		_scene = std::shared_ptr< Scene >( new SceneResult );

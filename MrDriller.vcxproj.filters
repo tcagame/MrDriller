@@ -1,7 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockAir.cpp" />
+    <ClCompile Include="BlockBlue.cpp" />
+    <ClCompile Include="BlockGreen.cpp" />
+    <ClCompile Include="BlockIron.cpp" />
+    <ClCompile Include="BlockLevel.cpp" />
+    <ClCompile Include="BlockRed.cpp" />
+    <ClCompile Include="BlockSolid.cpp" />
+    <ClCompile Include="BlockYellow.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SceneTitle.cpp">
       <Filter>Scene</Filter>
@@ -61,53 +74,32 @@
     <ClCompile Include="BlockFire.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Map0.cpp" />
+    <ClCompile Include="Map1.cpp" />
+    <ClCompile Include="Map2.cpp" />
+    <ClCompile Include="Map3.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneModeSelect.cpp" />
+    <ClCompile Include="ScenePlay.cpp" />
+    <ClCompile Include="SceneResult.cpp" />
+    <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="Map4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="SceneTitle.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ScenePlay.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneResult.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Play</Filter>
-    </ClInclude>
-    <ClInclude Include="Board.h">
-      <Filter>Play</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockRed.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockBlue.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockGreen.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockYellow.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockAir.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockAir.h" />
+    <ClInclude Include="BlockBlue.h" />
+    <ClInclude Include="BlockGreen.h" />
     <ClInclude Include="BlockIDList.h" />
+    <ClInclude Include="BlockIron.h" />
+    <ClInclude Include="BlockLevel.h" />
+    <ClInclude Include="BlockRed.h" />
+    <ClInclude Include="BlockSolid.h" />
+    <ClInclude Include="BlockYellow.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="BlockLevel.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockSolid.h">
-      <Filter>Play\Block</Filter>
-    </ClInclude>
     <ClInclude Include="define.h" />
     <ClInclude Include="Map.h">
       <Filter>Play\Map</Filter>
@@ -138,5 +130,20 @@
     <Filter Include="Play\Map">
       <UniqueIdentifier>{fd63666e-91ce-4223-beb2-639139bf889d}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="FpsController.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Map0.h" />
+    <ClInclude Include="Map1.h" />
+    <ClInclude Include="Map2.h" />
+    <ClInclude Include="Map3.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneModeSelect.h" />
+    <ClInclude Include="ScenePlay.h" />
+    <ClInclude Include="SceneResult.h" />
+    <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="Map4.h" />
   </ItemGroup>
 </Project>
