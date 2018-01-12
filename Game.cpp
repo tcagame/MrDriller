@@ -18,7 +18,8 @@
 /*------------------ä÷êîíËã`-------------------*/
 
 Game::Game( ) :
-_now_scene( Scene::SCENE_TITLE ) {
+_now_scene( Scene::SCENE_TITLE ),
+_mode( MODE_NORMAL ) {
 	//ÉVÅ[Éìèâä˙âª
 	changeScene( _now_scene );
 	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
@@ -80,10 +81,10 @@ void Game::changeScene( Scene::SCENE scene ) {
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
 		break;
 	case Scene::SCENE_MODE_SELECT:
-		_scene = std::shared_ptr< Scene >( new SceneModeSelect );
+		_scene = std::shared_ptr< Scene >( new SceneModeSelect( &_mode ) );
 		break;
 	case Scene::SCENE_PLAY:
-		_scene = std::shared_ptr< Scene >( new ScenePlay );
+		_scene = std::shared_ptr< Scene >( new ScenePlay( _mode ) );
 		break;	
 	case Scene::SCENE_RESULT:
 		_scene = std::shared_ptr< Scene >( new SceneResult );

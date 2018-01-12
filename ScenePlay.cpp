@@ -9,35 +9,49 @@
 const int UI_X = 900;
 const int DRAW_AIR_GAGE_X = 922;
 const int DRAW_AIR_GAGE_Y = 365;
+
 const int DRAW_AIR_NUM_X = 1105;
 const int DRAW_AIR_NUM_Y = 440;
+
 const int GAGE_WIDTH = 330;
 const int GAGE_HEIGHT = 45;
+
 const int DRAW_Depth_X = 1002;
 const int DRAW_Depth_Y = 77;
+
 const int DRAW_Level_X = 1182;
 const int DRAW_Level_Y = 560;
+
 const int DRAW_Life_X = 1000;
 const int DRAW_Life_Y = 700;
+
 const int DRAW_Score_X = 1001;
 const int DRAW_Score_Y = 191;
+
 const int NUM_WIDTH = 310;
 const int NUM_HEIGHT = 310;
 const int DRAW_NUM_SIZE_X = 37;
 const int DRAW_NUM_SIZE_Y = 37;
+
 const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
 const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
 
-ScenePlay::ScenePlay( ) {
-	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
-	_img_bg = LoadGraph( "Resource/bg.jpg" );
-	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
-	_img_life = LoadGraph( "Resource/NewCharacter.png" );
+ScenePlay::ScenePlay( Game::MODE mode ) :
+_mode( mode ) {
+	_img_ui    = LoadGraph( "Resource/DrillerUI.png" );
+	_img_bg    = LoadGraph( "Resource/bg.jpg" );
+	_img_num   = LoadGraph( "Resource/DrillerNumber.png" );
+	_img_life  = LoadGraph( "Resource/NewCharacter.png" );
+	_img_blind = LoadGraph( "Resource/Blind.png" );
 
-	_board = std::shared_ptr< Board >( new Board( ) );
+	_board  = std::shared_ptr< Board  >( new Board( ) );
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
+
+	_bgm = LoadSoundMem( "Resource/Sound/bgm/Airman.mp3" );
+	ChangeVolumeSoundMem( 255 * 50 / 100, _bgm );
+	PlaySoundMem( _bgm, DX_PLAYTYPE_LOOP );
 }
 
 ScenePlay::~ScenePlay( ) {
@@ -53,6 +67,9 @@ Scene::SCENE ScenePlay::update( ) {
 		 _board->isFinished( ) ) {
 		next = SCENE_TITLE;
 	}
+	if ( _player->isGoal( ) ) {
+		StopSoundMem( _bgm );
+	}
 	if( _player->isResultScene( ) ) {
 		next = SCENE_RESULT;
 	}
@@ -61,10 +78,14 @@ Scene::SCENE ScenePlay::update( ) {
 
 void ScenePlay::draw( ) const {
 	//Œã‚ë‚©‚ç‡‚É•`‰æ
-	drawBack( );
-	drawUIBack( );
+	//BG
+	drawBg( );
+	drawUIBg( );
+	//Play
 	_board->draw( _camera->getY( ) );
 	_player->draw( _camera->getY( ) );
+	drawBlind( );
+	//UI
 	drawAir( );
 	drawDepth( );
 	drawLevel( );
@@ -125,7 +146,7 @@ void ScenePlay::drawScore( ) const {
 	}
 }
 
-void ScenePlay::drawUIBack( ) const {
+void ScenePlay::drawUIBg( ) const {
 	DrawGraph( UI_X, 0, _img_ui, FALSE );
 }
 
@@ -142,7 +163,7 @@ void ScenePlay::drawLife( ) const {
 	}
 }
 
-void ScenePlay::drawBack( ) const {
+void ScenePlay::drawBg( ) const {
 	int y1 = ( ( _camera->getY( ) + 720 ) % 720 ) * -1;
 	if ( y1 > 0 || y1 < -720 ) {
 		int check = 0;
@@ -151,4 +172,15 @@ void ScenePlay::drawBack( ) const {
 	int y3 = y2 + 720;
 	DrawExtendGraph( 0, y1, UI_X, y2, _img_bg, FALSE );
 	DrawExtendGraph( 0, y2, UI_X, y3, _img_bg, FALSE );
+}
+
+void ScenePlay::drawBlind( ) const {
+	if ( _mode != Game::MODE_BLIND ) {
+		return;
+	}
+	int x1 = 0;
+	int y1 = 0;
+	int x2 = UI_X;
+	int y2 = SCREEN_HEIGHT;
+	DrawExtendGraph( x1, y1, x2, y2, _img_blind, TRUE );
 }

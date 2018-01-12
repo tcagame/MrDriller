@@ -190,7 +190,7 @@ void Player::actOnStand( ) {
 	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_direct = DIR_RIGHT;
 	}
-	if ( key->isPushKey( KEY_INPUT_SPACE ) ) {
+	if ( key->isHoldKey( KEY_INPUT_SPACE ) ) {
 		setAct( ACT_DRILL );
 		return;
 	}

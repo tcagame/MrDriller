@@ -31,6 +31,7 @@ public:
 	bool isStanding( ) const;
 	bool isFinished( ) const;
 	bool isResultScene( ) const;
+	bool isGoal( ) const;
 public://getån
 	int getAir( );
 	int getDepth( );
@@ -70,7 +71,6 @@ private:
 	bool isEnableJump( ) const;
 	bool isDodgeBack( ) const;
 	bool isDodgeFront( ) const;
-	bool isGoal( ) const;
 	void checkDepth( );
 	void setAct( ACT act );
 private:
