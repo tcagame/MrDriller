@@ -2,6 +2,8 @@
 #include <memory>
 #include "Player.h"
 
+const int CAMERA_PLAYER_Y = 360;
+
 class Camera {
 public:
 	Camera( );
