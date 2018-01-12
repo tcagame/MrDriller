@@ -57,6 +57,9 @@ Scene::SCENE ScenePlay::update( ) {
 		 _board->isFinished( ) ) {
 		next = SCENE_TITLE;
 	}
+	if ( _player->isGoal( ) ) {
+		StopSoundMem( _bgm );
+	}
 	if( _player->isResultScene( ) ) {
 		next = SCENE_RESULT;
 	}
