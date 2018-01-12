@@ -8,7 +8,7 @@ Map1::Map1( ) {
 		"         "
 		"         "
 		"         "
-		"**GGGGG**"
+		"**LGGGG**"
 		"RRRBGBYYY"
 		"***GGG***"
 		"BBBBABBBB"
