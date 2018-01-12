@@ -20,7 +20,7 @@ Scene::SCENE SceneModeSelect::update( ) {
 }
 
 void SceneModeSelect::draw( ) const {
-	DrawString( SCREEN_WIDTH, SCREEN_HEIGHT, "ModeSelect", GetColor( 255, 255, 255 ) );
+	DrawString( SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 60, "ModeSelect", GetColor( 255, 255, 255 ) );
 	
 	//Please Push
 	char *str = "Please Push Space";
