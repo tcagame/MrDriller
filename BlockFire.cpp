@@ -1,7 +1,7 @@
 #include "BlockFire.h"
 
 
-const int TY = 16 * 22;
+const int TY = 16 * 23;
 const int WAIT_ANIM_TIME = 10;
 const int MAX_ANIM_PATTERN = 5;
 BlockFire::BlockFire( ) :
