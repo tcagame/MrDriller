@@ -66,24 +66,24 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 
-	_se[  0 ] = LoadSoundMem( "Resource/Sound/effect/effect01.mp3" ); //ブロック破壊
-	_se[  1 ] = LoadSoundMem( "Resource/Sound/effect/effect02.mp3" ); //ブロック落ちて破壊
-	_se[  2 ] = LoadSoundMem( "Resource/Sound/effect/effect03.mp3" ); //エア
-	_se[  3 ] = LoadSoundMem( "Resource/Sound/effect/effect04.mp3" ); //お邪魔ブロックの削り
-	_se[  4 ] = LoadSoundMem( "Resource/Sound/effect/effect05.mp3" ); //お邪魔ブロックの破壊
-	_se[  5 ] = LoadSoundMem( "Resource/Sound/effect/effect06.mp3" );
-	_se[  6 ] = LoadSoundMem( "Resource/Sound/effect/effect07.mp3" );
-	_se[  7 ] = LoadSoundMem( "Resource/Sound/effect/effect08.mp3" );
-	_se[  8 ] = LoadSoundMem( "Resource/Sound/effect/effect09.mp3" );
-	_se[  9 ] = LoadSoundMem( "Resource/Sound/effect/effect10.mp3" ); //つぶれて死亡
-	_se[ 10 ] = LoadSoundMem( "Resource/Sound/effect/effect11.mp3" ); //天使
-	_se[ 11 ] = LoadSoundMem( "Resource/Sound/effect/effect12.mp3" ); //復活
-	_se[ 12 ] = LoadSoundMem( "Resource/Sound/effect/effect13.mp3" );
-	_se[ 13 ] = LoadSoundMem( "Resource/Sound/effect/effect14.mp3" ); //メニュー選択
-	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //メニュー決定
-	_se[ 15 ] = LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); 
-	_se[ 16 ] = LoadSoundMem( "Resource/Sound/effect/effect17.mp3" );
-	_se[ 17 ] = LoadSoundMem( "Resource/Sound/effect/effect18.mp3" );
+	_se[ SE_BLOCK_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect01.mp3" );	//ブロック破壊
+	_se[ SE_BLOCK_FALL_CRUSH ]		= LoadSoundMem( "Resource/Sound/effect/effect02.mp3" );	//ブロック落ちて破壊
+	_se[ SE_AIR_CAPSULE ]			= LoadSoundMem( "Resource/Sound/effect/effect03.mp3" );	//エア
+	_se[ SE_SOLID_REDUCE ]			= LoadSoundMem( "Resource/Sound/effect/effect04.mp3" );	//お邪魔ブロックの削り
+	_se[ SE_SOLID_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect05.mp3" );	//お邪魔ブロックの破壊
+	_se[ SE_LEVEL_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect06.mp3" );	//岩盤破壊
+	_se[ SE_AIR_LESS_THAN_THRITY ]	= LoadSoundMem( "Resource/Sound/effect/effect07.mp3" );	//air < 30
+	_se[ SE_AIR_LESS_THAN_TEN ]		= LoadSoundMem( "Resource/Sound/effect/effect08.mp3" );	//air < 10
+	_se[ SE_DEAD_AIR ]				= LoadSoundMem( "Resource/Sound/effect/effect09.mp3" );	//酸欠死亡
+	_se[ SE_DEAD_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect10.mp3" );	//つぶれて死亡
+	_se[ SE_ANGEL ]					= LoadSoundMem( "Resource/Sound/effect/effect11.mp3" );	//天使
+	_se[ SE_RESURRECTION ]			= LoadSoundMem( "Resource/Sound/effect/effect12.mp3" );	//復活
+	_se[ SE_xx1 ]					= LoadSoundMem( "Resource/Sound/effect/effect13.mp3" );
+	_se[ SE_MENU_SELECT ]			= LoadSoundMem( "Resource/Sound/effect/effect14.mp3" );	//メニュー選択
+	_se[ SE_MENU_CLICK ]			= LoadSoundMem( "Resource/Sound/effect/effect15.mp3" );	//メニュー決定
+	_se[ SE_RESULT_NAMING ]			= LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); //result画面で名前入力
+	_se[ SE_xx2 ]					= LoadSoundMem( "Resource/Sound/effect/effect17.mp3" );
+	_se[ SE_xx3 ]					= LoadSoundMem( "Resource/Sound/effect/effect18.mp3" );
 }
 
 Player::~Player( ) {
@@ -368,8 +368,6 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
-	PlaySoundMem( _se[  4 ], DX_PLAYTYPE_BACK );
-
 	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		eraseUpBlock( );
 
@@ -923,13 +921,18 @@ void Player::dig( ) {
 	if ( block && !block->isErase( ) ) {
 		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
 			_board->eraseBlock( block );
+			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
+				PlaySoundMem( _se[ SE_SOLID_REDUCE ], DX_PLAYTYPE_BACK, TRUE );
+			}
 		}
 		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
+			PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
 			_score += BLOCK_POINT; //ブロックのスコア
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				//AIRが減る
+				PlaySoundMem( _se[ SE_SOLID_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
 				_air -= SOLID_AIR;
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
@@ -948,6 +951,7 @@ void Player::ifAirRecover( ) {
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
 			if ( !block->isErase( ) ) {
+				PlaySoundMem( _se[ SE_AIR_CAPSULE ], DX_PLAYTYPE_BACK, TRUE );
 				block->erase( );
 				_air += AIR_RECOVERY_POINT;
 				_score += _air_point;
@@ -984,7 +988,14 @@ void Player::decreaseAir( ) {
 	if ( !isGoal( ) ) {
 		_air -= AIR_DECREASE_SPEED;
 	}
+	if ( _air <= 30 ) {
+		PlaySoundMem( _se[ SE_AIR_LESS_THAN_THRITY ], DX_PLAYTYPE_LOOP, TRUE );
+	} else if ( _air <= 10 && _air > 0 ) {
+		StopSoundMem( _se[ SE_AIR_LESS_THAN_THRITY ] );
+		PlaySoundMem( _se[ SE_AIR_LESS_THAN_TEN ], DX_PLAYTYPE_LOOP, TRUE );
+	}
 	if ( _air <= 0 ) {
+		StopSoundMem( _se[ SE_AIR_LESS_THAN_TEN ] );
 		_air = 0;
 	}
 }
@@ -1023,7 +1034,7 @@ void Player::setAct( ACT act ) {
 	_act_count = 0;
 	_act = act;
 	if ( _act == ACT_DEAD_CRUSH ) {
-		PlaySoundMem( _se[ 9 ], DX_PLAYTYPE_BACK, TRUE );
+		PlaySoundMem( _se[ SE_DEAD_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
 	}
 }
 

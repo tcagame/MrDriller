@@ -12,16 +12,36 @@ public:
 	virtual ~Player( );
 public:
 	enum ACT {
-		ACT_STAND,       //とまっているor歩く
-		ACT_FALL,        //落ちる
-		ACT_JUMP,        //のぼる
-		ACT_DRILL,       //掘る
-		ACT_DEAD_AIR,    //AIR不足で死亡
-		ACT_DEAD_CRUSH,  //つぶれて死亡
-		ACT_RESURRECTION,//復活
-		ACT_DODGE_BACK,  //つぶれる回避(後ろにブロック)
-		ACT_DODGE_FRONT,  //つぶれる回避(前にブロック)
-		ACT_GOAL
+		ACT_STAND,			//とまっているor歩く
+		ACT_FALL,			//落ちる
+		ACT_JUMP,			//のぼる
+		ACT_DRILL,			//掘る
+		ACT_DEAD_AIR,		//AIR不足で死亡
+		ACT_DEAD_CRUSH,		//つぶれて死亡
+		ACT_RESURRECTION,	//復活
+		ACT_DODGE_BACK,		//つぶれる回避(後ろにブロック)
+		ACT_DODGE_FRONT,	//つぶれる回避(前にブロック)
+		ACT_GOAL			//ゴール
+	};
+	enum SE {
+		SE_BLOCK_CRUSH,				//ブロック破壊
+		SE_BLOCK_FALL_CRUSH,		//ブロック落ちて破壊
+		SE_AIR_CAPSULE,				//エア
+		SE_SOLID_REDUCE,			//お邪魔ブロックの削り
+		SE_SOLID_CRUSH,				//お邪魔ブロックの破壊
+		SE_LEVEL_CRUSH,				//岩盤破壊
+		SE_AIR_LESS_THAN_THRITY,	//air<30
+		SE_AIR_LESS_THAN_TEN,		//air<10
+		SE_DEAD_AIR,				//酸欠死亡
+		SE_DEAD_CRUSH,				//つぶれて死亡
+		SE_ANGEL,					//天使
+		SE_RESURRECTION,			//復活
+		SE_xx1,
+		SE_MENU_SELECT,				//メニュー選択
+		SE_MENU_CLICK,				//メニュー決定
+		SE_RESULT_NAMING,			//result画面で名前入力
+		SE_xx2,
+		SE_xx3
 	};
 public:
 	void update( );
