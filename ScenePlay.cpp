@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Board.h"
 #include "dxlib.h"
+#include "Keyboard.h"
 #include <math.h>
 #include <memory>
 
@@ -36,9 +37,12 @@ const int DRAW_NUM_SIZE_Y = 37;
 const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
 const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
+const int MAX_BRIGHTNESS = 100;
+
 
 ScenePlay::ScenePlay( Game::MODE mode ) :
-_mode( mode ) {
+_mode( mode ),
+_brightness( MAX_BRIGHTNESS ) {
 	_img_ui    = LoadGraph( "Resource/DrillerUI.png" );
 	_img_bg    = LoadGraph( "Resource/bg.jpg" );
 	_img_num   = LoadGraph( "Resource/DrillerNumber.png" );
@@ -65,13 +69,16 @@ Scene::SCENE ScenePlay::update( ) {
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
-		next = SCENE_TITLE;
+		next = SCENE_MODE_SELECT;
 	}
 	if ( _player->isGoal( ) ) {
 		StopSoundMem( _bgm );
 	}
 	if( _player->isResultScene( ) ) {
 		next = SCENE_RESULT;
+	}
+	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_Q ) ) {
+		next = SCENE_MODE_SELECT;
 	}
 	return next;
 }
@@ -80,12 +87,12 @@ void ScenePlay::draw( ) const {
 	//Œã‚ë‚©‚ç‡‚É•`‰æ
 	//BG
 	drawBg( );
-	drawUIBg( );
 	//Play
 	_board->draw( _camera->getY( ) );
 	_player->draw( _camera->getY( ) );
 	drawBlind( );
 	//UI
+	drawUIBg( );
 	drawAir( );
 	drawDepth( );
 	drawLevel( );
@@ -178,9 +185,16 @@ void ScenePlay::drawBlind( ) const {
 	if ( _mode != Game::MODE_BLIND ) {
 		return;
 	}
-	int x1 = 0;
-	int y1 = 0;
-	int x2 = UI_X;
-	int y2 = SCREEN_HEIGHT;
+
+	int width  = ( int )( UI_X          * _brightness * 0.02 );
+	int height = ( int )( SCREEN_HEIGHT * _brightness * 0.02 );
+
+	int base_x = UI_X / 2;
+	int base_y = _player->getY( ) - _camera->getY( );//SCREEN_HEIGHT / 2;
+
+	int x1 = base_x - width  / 2;
+	int y1 = base_y - height / 2;
+	int x2 = base_x + width  / 2;
+	int y2 = base_y + height / 2;
 	DrawExtendGraph( x1, y1, x2, y2, _img_blind, TRUE );
 }
