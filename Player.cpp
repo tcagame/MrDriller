@@ -336,7 +336,9 @@ void Player::actOnDrill( ) {
 }
 
 void Player::actOnDeadAir( ) {
-	eraseUpBlock( );
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		eraseUpBlock( );
+	}
 	if ( _act_count > REVIVE_TIME ) {
 		//•œŠˆ
 		_life--;
@@ -349,7 +351,9 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
-	eraseUpBlock( );
+	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		eraseUpBlock( );
+	}
 	if ( _act_count > REVIVE_TIME ) {
 		//•œŠˆ
 		_life--;
@@ -604,7 +608,7 @@ void Player::drawDeadAir( int camera_y ) const {
 		int ANGEL_Y = -_angel_time * 3;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
-
+	
 }
 
 void Player::drawDeadCrash( int camera_y ) const {
