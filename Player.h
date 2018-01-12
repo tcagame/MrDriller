@@ -97,6 +97,6 @@ private:
 	bool _to_result_scene;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
+	std::array< int, 18 > _se;
 	ACT _act;
-	int _se[ 18 ];
 };

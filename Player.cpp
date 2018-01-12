@@ -46,8 +46,6 @@ const int RIGHT_X = 50 * DRAW_WIDTH / SPRITE_SIZE;
 const int CENTRAL_X = LEFT_X + ( RIGHT_X - LEFT_X ) / 2;
 const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
 
-
-
 //-----------ä÷êîíËã`------------//
 
 Player::Player( double x, double y, std::shared_ptr< Board > board ):
@@ -370,13 +368,13 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
-	//PlaySound( _se[ 4 ], DX_PLAYTYPE_BACK);
 	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
-		PlaySound( "Resource/Sound/effect/effect05.mp3", DX_PLAYTYPE_BACK);
 		eraseUpBlock( );
+
 	}
 	if ( _act_count > REVIVE_TIME ) {
 		//ïúäà
+
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
@@ -1022,6 +1020,9 @@ void Player::setAct( ACT act ) {
 	_vec_x = 0;
 	_act_count = 0;
 	_act = act;
+	if ( _act == ACT_DEAD_CRUSH ) {
+		PlaySoundMem( _se[ 9 ], DX_PLAYTYPE_BACK, TRUE );
+	}
 }
 
 bool Player::isEnableJump( ) const {
