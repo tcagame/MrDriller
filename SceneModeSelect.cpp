@@ -18,6 +18,8 @@ SceneModeSelect::SceneModeSelect( Game::MODE* mode ) :
 _select( mode ),
 _count( 0 ) {
 	_image_mode = LoadGraph( "Resource/Mode.png" );
+	_se[ 13 ] = LoadSoundMem( "Resource/Sound/effect/effect14.mp3" ); //メニュー選択
+	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //メニュー決定
 }
 
 
@@ -35,6 +37,7 @@ Scene::SCENE SceneModeSelect::update( ) {
 		//上
 		if ( *_select != 0 ) {
 			*_select = ( Game::MODE )( *_select - 1 );
+			PlaySoundMem( _se[ 13 ], DX_PLAYTYPE_BACK );
 		}
 	}
 	
@@ -42,11 +45,13 @@ Scene::SCENE SceneModeSelect::update( ) {
 		//下
 		if ( *_select != ( Game::MODE )( Game::MAX_MODE - 1 ) ) {
 			*_select = ( Game::MODE )( *_select + 1 );
+			PlaySoundMem( _se[ 13 ], DX_PLAYTYPE_BACK );
 		}
 	}
 
 	//シーン遷移
 	if ( key->isPushKey( KEY_INPUT_SPACE ) ) {
+		PlaySoundMem( _se[ 14 ], DX_PLAYTYPE_BACK );
 		return SCENE_PLAY;
 	}
 	return SCENE_MODE_SELECT;

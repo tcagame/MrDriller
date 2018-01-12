@@ -5,6 +5,7 @@
 
 SceneTitle::SceneTitle( ) {
 	_img_handle = LoadGraph( "Resource/title.png", TRUE );
+	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //ƒƒjƒ…[Œˆ’è
 }
 
 SceneTitle::~SceneTitle( ) {
@@ -13,6 +14,7 @@ SceneTitle::~SceneTitle( ) {
 Scene::SCENE SceneTitle::update( ) {
 	SCENE next = SCENE_TITLE;
 	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_SPACE ) == TRUE ) {
+		PlaySoundMem( _se[ 14 ], DX_PLAYTYPE_BACK );
 		next = SCENE_MODE_SELECT;
 	}
 	return next;

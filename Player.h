@@ -98,4 +98,5 @@ private:
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
 	ACT _act;
+	int _se[ 18 ];
 };

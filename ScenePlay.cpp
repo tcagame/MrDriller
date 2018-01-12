@@ -57,7 +57,7 @@ _brightness( MAX_BRIGHTNESS ) {
 	SetCreateSoundDataType( DX_SOUNDDATATYPE_FILE );
 	_bgm = LoadSoundMem( "Resource/Sound/bgm/Airman.mp3" );
 	ChangeVolumeSoundMem( 255 * 50 / 100, _bgm );
-	PlaySoundMem( _bgm, DX_PLAYTYPE_LOOP );
+	//PlaySoundMem( _bgm, DX_PLAYTYPE_LOOP );
 }
 
 ScenePlay::~ScenePlay( ) {

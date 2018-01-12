@@ -67,6 +67,25 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_finished( false ) {
 	setAct( ACT_FALL );
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
+
+	_se[  0 ] = LoadSoundMem( "Resource/Sound/effect/effect01.mp3" ); //ブロック破壊
+	_se[  1 ] = LoadSoundMem( "Resource/Sound/effect/effect02.mp3" ); //ブロック落ちて破壊
+	_se[  2 ] = LoadSoundMem( "Resource/Sound/effect/effect03.mp3" ); //エア
+	_se[  3 ] = LoadSoundMem( "Resource/Sound/effect/effect04.mp3" ); //お邪魔ブロックの削り
+	_se[  4 ] = LoadSoundMem( "Resource/Sound/effect/effect05.mp3" ); //お邪魔ブロックの破壊
+	_se[  5 ] = LoadSoundMem( "Resource/Sound/effect/effect06.mp3" );
+	_se[  6 ] = LoadSoundMem( "Resource/Sound/effect/effect07.mp3" );
+	_se[  7 ] = LoadSoundMem( "Resource/Sound/effect/effect08.mp3" );
+	_se[  8 ] = LoadSoundMem( "Resource/Sound/effect/effect09.mp3" );
+	_se[  9 ] = LoadSoundMem( "Resource/Sound/effect/effect10.mp3" ); //つぶれて死亡
+	_se[ 10 ] = LoadSoundMem( "Resource/Sound/effect/effect11.mp3" ); //天使
+	_se[ 11 ] = LoadSoundMem( "Resource/Sound/effect/effect12.mp3" ); //復活
+	_se[ 12 ] = LoadSoundMem( "Resource/Sound/effect/effect13.mp3" );
+	_se[ 13 ] = LoadSoundMem( "Resource/Sound/effect/effect14.mp3" ); //メニュー選択
+	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //メニュー決定
+	_se[ 15 ] = LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); 
+	_se[ 16 ] = LoadSoundMem( "Resource/Sound/effect/effect17.mp3" );
+	_se[ 17 ] = LoadSoundMem( "Resource/Sound/effect/effect18.mp3" );
 }
 
 Player::~Player( ) {
@@ -351,6 +370,8 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
+	PlaySoundMem( _se[  4 ], DX_PLAYTYPE_BACK );
+
 	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
 		eraseUpBlock( );
 	}
@@ -624,6 +645,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 	int y2 = y1 + DRAW_HEIGHT;
 	int tx = 0;
 	int ty = 0;
+
 
 	if ( _act_count <= 20 ){
 		tx = SPRITE_SIZE * ( _act_count / 10 % 3 );

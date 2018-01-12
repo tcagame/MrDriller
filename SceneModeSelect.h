@@ -13,4 +13,5 @@ private:
 	int _image_mode;
 	Game::MODE* _select;
 	int _count;
+	int _se[ 18 ];
 };
