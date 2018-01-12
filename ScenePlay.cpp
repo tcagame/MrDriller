@@ -68,6 +68,8 @@ Scene::SCENE ScenePlay::update( ) {
 	_board->update( );
 	_camera->update( _player->getY( ) );
 
+	_brightness = 50 + ( int )( _player->getAir( ) * 0.50 );
+
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
@@ -188,8 +190,8 @@ void ScenePlay::drawBlind( ) const {
 		return;
 	}
 
-	int width  = ( int )( UI_X          * _brightness * 0.02 );
-	int height = ( int )( SCREEN_HEIGHT * _brightness * 0.02 );
+	int width  = ( int )( UI_X          * _brightness * 0.04 );
+	int height = ( int )( SCREEN_HEIGHT * _brightness * 0.04 );
 
 	int base_x = _player->getX( ) + SPRITE_SIZE / 2;
 	int base_y = _player->getY( ) - _camera->getY( );//SCREEN_HEIGHT / 2;
