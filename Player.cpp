@@ -67,7 +67,7 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
 
 	_se[  0 ] = LoadSoundMem( "Resource/Sound/effect/effect01.mp3" ); //ブロック破壊
-	_se[  1 ] = LoadSoundMem( "Resource/Sound/effect/effect02.mp3" );
+	_se[  1 ] = LoadSoundMem( "Resource/Sound/effect/effect02.mp3" ); //ブロック落ちて破壊
 	_se[  2 ] = LoadSoundMem( "Resource/Sound/effect/effect03.mp3" ); //エア
 	_se[  3 ] = LoadSoundMem( "Resource/Sound/effect/effect04.mp3" ); //お邪魔ブロックの削り
 	_se[  4 ] = LoadSoundMem( "Resource/Sound/effect/effect05.mp3" ); //お邪魔ブロックの破壊
