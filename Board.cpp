@@ -8,6 +8,7 @@
 #include "BlockAir.h"
 #include "BlockLevel.h"
 #include "BlockSolid.h"
+#include "BlockFire.h"
 #include "Camera.h"
 #include "Map0.h"
 #include "Map1.h"
@@ -117,6 +118,9 @@ void Board::loadBlock( ) {
 			break;
 		case '*':
 			block = std::shared_ptr< Block >( new BlockSolid );
+			break;
+		case 'F':
+			block = std::shared_ptr< Block >( new BlockFire );
 			break;
 		}
 		if ( !block ) {

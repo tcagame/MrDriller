@@ -165,6 +165,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BlockAir.cpp" />
     <ClCompile Include="BlockBlue.cpp" />
+    <ClCompile Include="BlockFire.cpp" />
     <ClCompile Include="BlockGreen.cpp" />
     <ClCompile Include="BlockLevel.cpp" />
     <ClCompile Include="BlockRed.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockAir.h" />
     <ClInclude Include="BlockBlue.h" />
+    <ClInclude Include="BlockFire.h" />
     <ClInclude Include="BlockGreen.h" />
     <ClInclude Include="BlockIDList.h" />
     <ClInclude Include="BlockLevel.h" />
