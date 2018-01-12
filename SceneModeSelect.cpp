@@ -1,5 +1,6 @@
 #include "SceneModeSelect.h"
 #include "define.h"
+#include "Keyboard.h"
 #include "DxLib.h"
 
 
@@ -12,7 +13,7 @@ SceneModeSelect::~SceneModeSelect( ) {
 
 
 Scene::SCENE SceneModeSelect::update( ) {
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_SPACE ) == TRUE ) {
 		return SCENE_PLAY;
 	}
 	return SCENE_MODE_SELECT;

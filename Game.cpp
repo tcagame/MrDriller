@@ -32,6 +32,7 @@ void Game::run( ) {
 	//ループ
 	while ( isLoop( ) ) {
 		//更新
+		Keyboard::getInstance( )->update( );
 		Scene::SCENE next = _scene->update( );
 		//FPSチェック
 		_fps_ctrl->update( );

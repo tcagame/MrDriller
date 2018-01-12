@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Block.h"
+#include "Keyboard.h"
 #include <math.h>
 
 //-----------’è”éŒ¾------------//
@@ -176,26 +177,27 @@ void Player::actOnStand( ) {
 
 
 	//--------------ƒL[‘€ì------------//
-	if ( CheckHitKey( KEY_INPUT_UP    ) == TRUE ) {
+	std::shared_ptr< Keyboard > key = Keyboard::getInstance( );
+	if ( key->isHoldKey( KEY_INPUT_UP ) ) {
 		_direct = DIR_UP;
 	}
-	if ( CheckHitKey( KEY_INPUT_DOWN  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_DOWN ) ) {
 		_direct = DIR_DOWN;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_direct = DIR_LEFT;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_direct = DIR_RIGHT;
 	}
-	if ( CheckHitKey( KEY_INPUT_SPACE ) == TRUE ) {
+	if ( key->isPushKey( KEY_INPUT_SPACE ) ) {
 		setAct( ACT_DRILL );
 		return;
 	}
-	if ( CheckHitKey( KEY_INPUT_LEFT  ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_LEFT ) ) {
 		_vec_x += PLAYER_SPEED * -1;
 	}
-	if ( CheckHitKey( KEY_INPUT_RIGHT ) == TRUE ) {
+	if ( key->isHoldKey( KEY_INPUT_RIGHT ) ) {
 		_vec_x += PLAYER_SPEED;
 	}
 
