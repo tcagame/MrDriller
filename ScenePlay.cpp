@@ -28,13 +28,9 @@ const int DRAW_NUM_SIZE_Y = 37;
 const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
 const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
-<<<<<<< HEAD
-ScenePlay::ScenePlay( ) {
-=======
 
 ScenePlay::ScenePlay( Game::MODE mode ) :
 _mode( mode ) {
->>>>>>> e1b102d036f96ab7e50d2e3d782a721d0ef1c5e4
 	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
 	_img_bg = LoadGraph( "Resource/bg.jpg" );
 	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
@@ -44,9 +40,8 @@ _mode( mode ) {
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
 
-	//_bgm = LoadSoundMem( "Resource/Sound/bgm/Airman.mp3" );3
-	_bgm = LoadSoundMem( "Resource/Sound/effect/effect01.mp3" );
-	//ChangeVolumeSoundMem( 255 * 50 / 100, _bgm );
+	_bgm = LoadSoundMem( "Resource/Sound/bgm/Airman.mp3" );
+	ChangeVolumeSoundMem( 255 * 50 / 100, _bgm );
 	PlaySoundMem( _bgm, DX_PLAYTYPE_LOOP );
 }
 
