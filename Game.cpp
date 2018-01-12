@@ -65,7 +65,7 @@ bool Game::isLoop( ) const {
 	}
 
 	//Esc‚ÅI—¹
-	if ( CheckHitKey( KEY_INPUT_ESCAPE ) != 0 ) {
+	if ( Keyboard::getInstance( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
 		result = false;
 	}
 
