@@ -14,6 +14,7 @@
 #include "Map1.h"
 #include "Map2.h"
 #include "Map3.h"
+#include "Map4.h"
 #include <list>
 #include <assert.h>
 
@@ -87,6 +88,9 @@ void Board::loadBlock( ) {
 		break;
 	case 3:
 		map = std::shared_ptr< Map >( new Map3 )->getMap( pattern );
+		break;
+	case 4:
+		map = std::shared_ptr< Map >( new Map4 )->getMap( pattern );
 		break;
 	default:
 		map = std::shared_ptr< Map >( new Map0 )->getMap( pattern );
