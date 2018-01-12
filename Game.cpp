@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Game.h"
+#include "Keyboard.h"
 #include "SceneTitle.h"
 #include "SceneModeSelect.h"
 #include "ScenePlay.h"
@@ -20,7 +21,8 @@ Game::Game( ) :
 _now_scene( Scene::SCENE_TITLE ) {
 	//ƒV[ƒ“‰Šú‰»
 	changeScene( _now_scene );
-	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
+	Keyboard::init( );
+	
 }
 
 Game::~Game( ) {

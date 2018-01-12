@@ -174,6 +174,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Map0.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="define.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Map0.h" />
     <ClInclude Include="Map1.h" />
