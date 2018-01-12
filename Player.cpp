@@ -329,8 +329,7 @@ void Player::actOnDrill( ) {
 		}
 		std::shared_ptr< Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 		if ( !block ||
-			  block->getBlockID( ) == BLOCK_ID_SOLID ||
-			  block->getBlockID( ) == BLOCK_ID_AIR ) {
+			 !block->isErase( ) ) {
 			setAct( ACT_STAND );
 		}
 	}
