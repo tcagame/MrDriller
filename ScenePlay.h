@@ -31,5 +31,6 @@ private:
 	int _img_num;
 	int _img_life;
 	int _img_blind;
+	int _bgm;
 	Game::MODE _mode;
 };
