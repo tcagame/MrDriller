@@ -24,7 +24,7 @@ _mode( MODE_NORMAL ) {
 	changeScene( _now_scene );
 	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
 	Keyboard::init( );
-	
+	SetCreateSoundDataType( DX_SOUNDDATATYPE_MEMNOPRESS );
 }
 
 Game::~Game( ) {
