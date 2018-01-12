@@ -29,7 +29,8 @@ const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
 const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
 
-ScenePlay::ScenePlay( ) {
+ScenePlay::ScenePlay( Game::MODE mode ) :
+_mode( mode ) {
 	_img_ui = LoadGraph( "Resource/DrillerUI.png" );
 	_img_bg = LoadGraph( "Resource/bg.jpg" );
 	_img_num = LoadGraph( "Resource/DrillerNumber.png" );
