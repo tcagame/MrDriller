@@ -97,8 +97,8 @@ void Player::update( ) {
 	_vec_x = 0;
 	_vec_y = 0;
 
-	fall( );    //óéâ∫
 	act( );
+	fall( );    //óéâ∫
 	move( );    //à⁄ìÆ
 	//ê[Ç≥
 	checkDepth( );
@@ -231,11 +231,11 @@ bool Player::isDodgeBack( ) const {
 	double check_left = _x + LEFT_X + 1;
 	double check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
-	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	std::shared_ptr< Block > block_left    = _board->getBlock( ( int )check_left , ( int )check_y );
+	std::shared_ptr< Block > block_right   = _board->getBlock( ( int )check_right, ( int )check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x  , ( int )check_y );
 	if ( !block_central ) {
-		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( ) != BLOCK_ID_AIR ) ||
+		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( )  != BLOCK_ID_AIR ) ||
 			 ( block_right && _direct == DIR_LEFT  && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
 			result = true;
 		}
@@ -540,7 +540,7 @@ void Player::drawFall( int camera_y ) const {
 
 void Player::drawJump( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) / ( JUMP_Y / ANIM_PATTERN );
+	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) * ANIM_PATTERN / JUMP_Y;
 	if ( pattern < 0 ) {
 		pattern = 0;
 	}
@@ -567,7 +567,7 @@ void Player::drawJump( int camera_y ) const {
 
 void Player::drawDrill( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int pattern = _act_count / ( MAX_DLILL_COUNT / ANIM_PATTERN );
+	int pattern = _act_count * ANIM_PATTERN / MAX_DLILL_COUNT;
 	if ( pattern >= ANIM_PATTERN ) {
 		pattern = ANIM_PATTERN - 1;
 	}
@@ -777,6 +777,10 @@ void Player::move( ) {
 		_y += _vec_y;
 		return;
 	}
+	if ( _act == ACT_DRILL ) {
+		return;
+	}
+
 	_standing = false;
 	if ( _vec_y > 0 ) {
 		//â∫ÉuÉçÉbÉNÇ…ìñÇΩÇÈ
@@ -803,6 +807,8 @@ void Player::move( ) {
 				_vec_y = target - _y;
 			}
 		}
+	} else {
+		_standing = true;
 	}
 
 	
