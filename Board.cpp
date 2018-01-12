@@ -8,15 +8,17 @@
 #include "BlockAir.h"
 #include "BlockLevel.h"
 #include "BlockSolid.h"
+#include "BlockIron.h"
 #include "Camera.h"
 #include "Map0.h"
 #include "Map1.h"
 #include "Map2.h"
+#include "Map3.h"
 #include <list>
 #include <assert.h>
 
 const int BLOCK_NUM = BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM;
-const int MAX_LEVEL = 3;
+const int MAX_LEVEL = 5;
 
 Board::Board( ) :
 _level( 0 ),
@@ -83,6 +85,9 @@ void Board::loadBlock( ) {
 	case 2:
 		map = std::shared_ptr< Map >( new Map2 )->getMap( pattern );
 		break;
+	case 3:
+		map = std::shared_ptr< Map >( new Map3 )->getMap( pattern );
+		break;
 	default:
 		map = std::shared_ptr< Map >( new Map0 )->getMap( pattern );
 		break;
@@ -112,6 +117,9 @@ void Board::loadBlock( ) {
 			break;
 		case '*':
 			block = std::shared_ptr< Block >( new BlockSolid );
+			break;
+		case 'I':
+			block = std::shared_ptr< Block >( new BlockIron );
 			break;
 		}
 		if ( !block ) {

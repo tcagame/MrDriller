@@ -6,3 +6,4 @@ const int BLOCK_ID_RED = 4;   //'R'
 const int BLOCK_ID_YELLOW = 5;//'Y'
 const int BLOCK_ID_LEVEL = 6; //'L'
 const int BLOCK_ID_SOLID = 7; //'*'‰ó‚ê‚É‚­‚¢
+const int BLOCK_ID_IRON = 8; //'I'ƒGƒA‚ÌŒ¸‚ç‚È‚¢‰ó‚ê‚É‚­‚¢

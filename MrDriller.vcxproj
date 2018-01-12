@@ -166,6 +166,7 @@
     <ClCompile Include="BlockAir.cpp" />
     <ClCompile Include="BlockBlue.cpp" />
     <ClCompile Include="BlockGreen.cpp" />
+    <ClCompile Include="BlockIron.cpp" />
     <ClCompile Include="BlockLevel.cpp" />
     <ClCompile Include="BlockRed.cpp" />
     <ClCompile Include="BlockSolid.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Map0.cpp" />
     <ClCompile Include="Map1.cpp" />
     <ClCompile Include="Map2.cpp" />
+    <ClCompile Include="Map3.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneModeSelect.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="BlockBlue.h" />
     <ClInclude Include="BlockGreen.h" />
     <ClInclude Include="BlockIDList.h" />
+    <ClInclude Include="BlockIron.h" />
     <ClInclude Include="BlockLevel.h" />
     <ClInclude Include="BlockRed.h" />
     <ClInclude Include="BlockSolid.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="Map0.h" />
     <ClInclude Include="Map1.h" />
     <ClInclude Include="Map2.h" />
+    <ClInclude Include="Map3.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneModeSelect.h" />
