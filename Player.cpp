@@ -354,6 +354,7 @@ void Player::actOnDrill( ) {
 
 void Player::actOnDeadAir( ) {
 	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
 	}
 	if ( _act_count > REVIVE_TIME ) {
@@ -369,8 +370,8 @@ void Player::actOnDeadAir( ) {
 
 void Player::actOnDeadCrash( ) {
 	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
-
 	}
 	if ( _act_count > REVIVE_TIME ) {
 		//復活
@@ -924,16 +925,21 @@ void Player::dig( ) {
 
 	std::shared_ptr < Block > block = _board->getBlock( ( int )check_x, ( int )check_y );
 	//ポインタが存在する場合true
-	if ( block && !block->isErase( ) ) {
-		if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
-			_board->eraseBlock( block );
+	if ( block ) {
+		if ( !block->isErase( ) ) {
+			if ( block->getBlockID( ) != BLOCK_ID_AIR ) {
+				_board->eraseBlock( block );
+			}
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				PlaySoundMem( _se[ SE_SOLID_REDUCE ], DX_PLAYTYPE_BACK, TRUE );
 			}
-		}
-		if ( block->getBlockID( ) != BLOCK_ID_SOLID ) {
-			PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
-			_score += BLOCK_POINT; //ブロックのスコア
+			if ( block->getBlockID( ) == BLOCK_ID_RED   ||
+				 block->getBlockID( ) == BLOCK_ID_GREEN ||
+				 block->getBlockID( ) == BLOCK_ID_BLUE  ||
+				 block->getBlockID( ) == BLOCK_ID_YELLOW ) {
+				PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				_score += BLOCK_POINT; //ブロックのスコア
+			}
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
@@ -943,8 +949,11 @@ void Player::dig( ) {
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
 			}
-			if ( block->getBlockID( ) == BLOCK_ID_LEVEL && _board->getLevel() == GOAL_LEVEL ) {
-				_goal = true;
+			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
+				PlaySoundMem( _se[ SE_LEVEL_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				if ( _board->getLevel( ) == GOAL_LEVEL ) {
+					_goal = true;
+				}
 			}
 		}
 	}
@@ -994,14 +1003,18 @@ void Player::decreaseAir( ) {
 	if ( !isGoal( ) ) {
 		_air -= AIR_DECREASE_SPEED;
 	}
-	if ( _air <= 30 ) {
-		PlaySoundMem( _se[ SE_AIR_LESS_THAN_THRITY ], DX_PLAYTYPE_LOOP, TRUE );
-	} else if ( _air <= 10 && _air > 0 ) {
+	if ( _air <= 30 && _air > 10 ) {
+		PlaySoundMem( _se[ SE_AIR_LESS_THAN_THRITY ], DX_PLAYTYPE_LOOP, FALSE );
+	} else {
 		StopSoundMem( _se[ SE_AIR_LESS_THAN_THRITY ] );
-		PlaySoundMem( _se[ SE_AIR_LESS_THAN_TEN ], DX_PLAYTYPE_LOOP, TRUE );
+	}
+		
+	if ( _air <= 10 && _air > 0 ) {
+		PlaySoundMem( _se[ SE_AIR_LESS_THAN_TEN ], DX_PLAYTYPE_LOOP, FALSE );
+	} else {
+		StopSoundMem( _se[ SE_AIR_LESS_THAN_TEN ] );
 	}
 	if ( _air <= 0 ) {
-		StopSoundMem( _se[ SE_AIR_LESS_THAN_TEN ] );
 		_air = 0;
 	}
 }
@@ -1041,6 +1054,12 @@ void Player::setAct( ACT act ) {
 	_act = act;
 	if ( _act == ACT_DEAD_CRUSH ) {
 		PlaySoundMem( _se[ SE_DEAD_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+	}
+	if ( _act == ACT_DEAD_AIR ) {
+		PlaySoundMem( _se[ SE_DEAD_AIR ], DX_PLAYTYPE_BACK, TRUE );
+	}
+	if ( _act == ACT_RESURRECTION ) {
+		PlaySoundMem( _se[ SE_RESURRECTION ], DX_PLAYTYPE_BACK, TRUE );
 	}
 }
 
