@@ -8,11 +8,13 @@
 
 class ScenePlay : public Scene {
 public:
-	ScenePlay( Game::MODE mode );
+	ScenePlay( Game::MODE mode, int *score, int *depth );
 	virtual ~ScenePlay( );
 public:
 	SCENE update( );
 	void draw( ) const;
+	int getScore( );
+	int getDepth( );
 private:
 	void drawDepth( ) const;
 	void drawAir( ) const;
@@ -33,5 +35,8 @@ private:
 	int _img_life;
 	int _img_blind;
 	int _bgm;
+	int _se_result;
+	int *_score;
+	int *_depth;
 	Game::MODE _mode;
 };

@@ -34,15 +34,16 @@ const int NUM_HEIGHT = 310;
 const int DRAW_NUM_SIZE_X = 37;
 const int DRAW_NUM_SIZE_Y = 37;
 
-const int DRAW_STRING_COLOR = GetColor( 255, 255, 255 );
 const int GAGE_COLOR = GetColor( 255, 0, 0 );
 
 const int MAX_BRIGHTNESS = 100;
 
 const int SPRITE_SIZE = 64;
 
-ScenePlay::ScenePlay( Game::MODE mode ) :
+ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth ) :
 _mode( mode ),
+_score( score ),
+_depth( depth ),
 _brightness( MAX_BRIGHTNESS ) {
 	_img_ui    = LoadGraph( "Resource/DrillerUI.png" );
 	_img_bg    = LoadGraph( "Resource/bg.jpg" );
@@ -79,6 +80,8 @@ Scene::SCENE ScenePlay::update( ) {
 		StopSoundMem( _bgm );
 	}
 	if( _player->isResultScene( ) ) {
+		*_score = _player->getScore( );
+		*_depth = _player->getDepth( );
 		next = SCENE_RESULT;
 	}
 	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_Q ) ) {
@@ -201,4 +204,12 @@ void ScenePlay::drawBlind( ) const {
 	int x2 = base_x + width  / 2;
 	int y2 = base_y + height / 2;
 	DrawExtendGraph( x1, y1, x2, y2, _img_blind, TRUE );
+}
+
+int ScenePlay::getScore( ) {
+	return _player->getScore( );
+}
+
+int ScenePlay::getDepth( ) {
+	return _player->getDepth( );
 }

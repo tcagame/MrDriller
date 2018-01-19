@@ -48,7 +48,6 @@ void Board::draw( int camera_y ) const {
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		block->draw( camera_y, _img_handle );
 	}
-	DrawFormatString( 0, 0, GetColor( 255, 255, 255 ), "Block:%d", ( int )_blocks.size( ) );
 }
 
 void Board::updateBlocks( ) {
@@ -253,16 +252,6 @@ void Board::eraseBlock( std::shared_ptr< Block > block ) {
 		_level++;
 	}
 
-}
-
-int Board::getGroupBlockNum( int group ) const {
-	int num = 0;
-	for ( std::shared_ptr< Block > block : _blocks ) {
-		if ( block->getGroup( ) == group ) {
-			num++;
-		}
-	}
-	return num;
 }
 
 void Board::eraseColumnBlockUp( int x, int y ) {
