@@ -944,6 +944,10 @@ void Player::dig( ) {
 				PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
 				_score += BLOCK_POINT; //ブロックのスコア
 			}
+			if ( block->getBlockID( ) == BLOCK_ID_FIRE ||
+				block->getBlockID( ) == BLOCK_ID_BALLOON ) {
+				PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+			}
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {

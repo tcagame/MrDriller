@@ -6,6 +6,7 @@ public:
 	virtual ~BlockBalloon();
 public:
 	int getBlockID( ) { return BLOCK_ID_BALLOON; };
+	void setFall( bool fall ) { };
 protected:
 	void act( );
 };
