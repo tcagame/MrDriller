@@ -8,9 +8,9 @@
 //レベルデザイン系
 const int PLAYER_SPEED = 8;
 const double AIR_DECREASE_SPEED = 0.06;//AIRの減る速度
-const int MOVE_WAIT = 3;
+const int MOVE_WAIT = 2;
 const int DRILL_RANGE = 7;
-const int REVIVE_TIME = 150;
+const int REVIVE_TIME = 75;
 const int CHECK_AIR = 0;
 const int DODGE_X = 32;
 const int DODGE_SPEED = 2;
@@ -23,7 +23,7 @@ const int MAX_UP_COUNT = 10;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
-const int MAX_DLILL_COUNT = 30;
+const int MAX_DLILL_COUNT = 15;
 const int GOAL_LEVEL = 3;
 const int To_Result_Scene_Time = 10;
 
