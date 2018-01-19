@@ -39,6 +39,7 @@ public:
 	virtual void setFall( bool fall );
 	void resetConnect( );
 protected:
+	std::shared_ptr< class Board > getBoard( );
 	void setFinished( bool finish );
 	virtual void changeTxByConnect( );
 	virtual void eraseAnimation( );
