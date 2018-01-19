@@ -6,25 +6,25 @@
 
 //-----------定数宣言------------//
 //レベルデザイン系
-const int PLAYER_SPEED = 4;
-const double AIR_DECREASE_SPEED = 0.03;//AIRの減る速度
-const int MOVE_WAIT = 5;
+const int PLAYER_SPEED = 8;
+const double AIR_DECREASE_SPEED = 0.06;//AIRの減る速度
+const int MOVE_WAIT = 3;
 const int DRILL_RANGE = 7;
-const int REVIVE_TIME = 300;
+const int REVIVE_TIME = 150;
 const int CHECK_AIR = 0;
 const int DODGE_X = 32;
-const int DODGE_SPEED = 1;
-const int JUMP_SPEED_X = 4;
-const int JUMP_SPEED_Y = 6;
+const int DODGE_SPEED = 2;
+const int JUMP_SPEED_X = 3;
+const int JUMP_SPEED_Y = 3;
 const int JUMP_X = 60;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
-const int MAX_UP_COUNT = 20;
+const int MAX_UP_COUNT = 10;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 30;
-const int GOAL_LEVEL = 1;
+const int GOAL_LEVEL = 3;
 const int To_Result_Scene_Time = 10;
 
 //その他
@@ -78,7 +78,7 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 	_se[ SE_DEAD_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect10.mp3" );	//つぶれて死亡
 	_se[ SE_ANGEL ]					= LoadSoundMem( "Resource/Sound/effect/effect11.mp3" );	//天使
 	_se[ SE_RESURRECTION ]			= LoadSoundMem( "Resource/Sound/effect/effect12.mp3" );	//復活
-	_se[ SE_xx1 ]					= LoadSoundMem( "Resource/Sound/effect/effect13.mp3" );
+	_se[ SE_FALL ]					= LoadSoundMem( "Resource/Sound/effect/effect13.mp3" ); //落下
 	_se[ SE_MENU_SELECT ]			= LoadSoundMem( "Resource/Sound/effect/effect14.mp3" );	//メニュー選択
 	_se[ SE_MENU_CLICK ]			= LoadSoundMem( "Resource/Sound/effect/effect15.mp3" );	//メニュー決定
 	_se[ SE_RESULT_NAMING ]			= LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); //result画面で名前入力
@@ -88,6 +88,9 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 
 Player::~Player( ) {
 	DeleteGraph( _img_handle );
+	for ( int i = 0; i < MAX_SE; i++ ) {
+		DeleteSoundMem( _se[ i ] );
+	}
 }
 
 
@@ -149,6 +152,7 @@ void Player::actOnStand( ) {
 
 	if ( !isStanding( ) && !isGoal( ) ) {
 		setAct( ACT_FALL );
+		PlaySoundMem( _se[ SE_FALL ], DX_PLAYTYPE_LOOP, TRUE );
 		return;
 	}
 	if ( _up_count > MAX_UP_COUNT ) {
@@ -258,11 +262,11 @@ bool Player::isDodgeFront( ) const {
 	return result;
 }
 
-
 void Player::actOnFall( ) {
 	//落下中操作できない
 	if ( isStanding( ) ) {
 		setAct( ACT_STAND );
+		StopSoundMem( _se[ SE_FALL ] );
 	}
 	ifAirRecover( ); //エア回復
 }
@@ -531,7 +535,7 @@ void Player::drawFall( int camera_y ) const {
 	int x2 = ( int )( _x + DRAW_WIDTH );
 	int y1 = ( int )( _y - camera_y);
 	int y2 = ( int )( y1 + DRAW_HEIGHT );
-	int tx = SPRITE_SIZE * 0;
+	int tx = SPRITE_SIZE * ( _act_count / 10 % 2 );
 	int ty = SPRITE_SIZE * 1;
 
 	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );

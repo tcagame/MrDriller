@@ -36,12 +36,13 @@ public:
 		SE_DEAD_CRUSH,				//つぶれて死亡
 		SE_ANGEL,					//天使
 		SE_RESURRECTION,			//復活
-		SE_xx1,
+		SE_FALL,
 		SE_MENU_SELECT,				//メニュー選択
 		SE_MENU_CLICK,				//メニュー決定
 		SE_RESULT_NAMING,			//result画面で名前入力
 		SE_xx2,
-		SE_xx3
+		SE_xx3,
+		MAX_SE
 	};
 public:
 	void update( );

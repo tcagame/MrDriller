@@ -27,8 +27,8 @@ public:
 	bool isErase( ) const;
 	bool isFall( ) const;
 	int getGroup( ) const;
-	double getX( ) const;
-	double getY( ) const;
+	int getX( ) const;
+	int getY( ) const;
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
 public:
@@ -62,6 +62,7 @@ private:
 	bool _erase;
 	bool _finished;
 	bool _fall;
+	bool _falled;
 	int _group;
 	int _init_group;
 	int _fall_count;
