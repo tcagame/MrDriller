@@ -88,6 +88,9 @@ Player::Player( double x, double y, std::shared_ptr< Board > board ):
 
 Player::~Player( ) {
 	DeleteGraph( _img_handle );
+	for ( int i = 0; i < MAX_SE; i++ ) {
+		DeleteSoundMem( _se[ i ] );
+	}
 }
 
 
