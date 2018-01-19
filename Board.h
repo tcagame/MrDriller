@@ -27,7 +27,6 @@ private:
 	void checkConnect( );
 	void checkFall( );
 private:
-	bool _init_connect;
 	bool _finished;
 	bool _level_erase;
 	int _level;

@@ -26,8 +26,7 @@ const int MAX_LEVEL = 5;
 Board::Board( ) :
 _level( 0 ),
 _level_erase( true ),
-_finished( false ),
-_init_connect( true ) {
+_finished( false ) {
 	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 }
 
@@ -171,10 +170,7 @@ void Board::checkConnect( ) {
 		block->resetConnect( );
 	}
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->checkConnect( );//!_init_connect
-	}
-	if ( _init_connect ) {
-		_init_connect = false;
+		block->checkConnect( );
 	}
 }
 
@@ -247,14 +243,12 @@ void Board::checkFall( ) {
 	}
 }
 
-
 void Board::eraseBlock( std::shared_ptr< Block > block ) {
-	block->erase( );
+	block->erase( true, false );
 	if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
 		for ( std::shared_ptr< Block > block2 : _blocks ) {
-			block2->erase( true );
+			block2->erase( true, true );
 		}
-		_init_connect = true;
 		_level_erase = true;
 		_level++;
 	}
@@ -284,7 +278,7 @@ void Board::eraseColumnBlockUp( int x, int y ) {
 			continue;
 		}
 		if ( _virtual_blocks[ idx ]->getBlockID( ) != BLOCK_ID_AIR ) {
-			_virtual_blocks[ idx ]->erase( true );
+			_virtual_blocks[ idx ]->erase( false, true );
 		}
 	}
 	checkConnect( );

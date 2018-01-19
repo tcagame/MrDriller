@@ -9,7 +9,7 @@ public:
 	int getBlockID( ) { return BLOCK_ID_IRON; };
 	void act( );
 	void changeTxByConnect( ) { };
-	void erase( bool destroy = false );
+	void erase( bool connect_erase, bool destroy );
 private:
 	int _dv;
 };
