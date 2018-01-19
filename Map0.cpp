@@ -8,7 +8,7 @@ Map0::Map0( ) {
 		"         "
 		"         "
 		"         "
-		" O       "
+		" OO      "
 		"**YYGFF**"
 		"***GGG***"
 		"YYYRRRYYY"
