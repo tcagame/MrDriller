@@ -8,7 +8,7 @@
 
 class Player {
 public:
-	Player( double x, double y, std::shared_ptr< Board > board );
+	Player( int x, int y, std::shared_ptr< Board > board );
 	virtual ~Player( );
 public:
 	enum ACT {
@@ -105,12 +105,12 @@ private:
 	int _up_count;
 	int _air_point;
 	int _move_anim_count;
-	double _x;
-	double _y;
-	double _vec_x;
-	double _vec_y;
-	double _target_x;
-	double _target_y;
+	int _x;
+	int _y;
+	int _vec_x;
+	int _vec_y;
+	int _target_x;
+	int _target_y;
 	bool _standing;
 	bool _dig;
 	bool _finished;
