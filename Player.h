@@ -39,9 +39,6 @@ public:
 		SE_FALL,
 		SE_MENU_SELECT,				//メニュー選択
 		SE_MENU_CLICK,				//メニュー決定
-		SE_RESULT_NAMING,			//result画面で名前入力
-		SE_xx2,
-		SE_xx3,
 		MAX_SE
 	};
 public:
@@ -118,6 +115,6 @@ private:
 	bool _to_result_scene;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
-	std::array< int, 18 > _se;
+	std::array< int, MAX_SE > _se;
 	ACT _act;
 };
