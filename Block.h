@@ -62,6 +62,7 @@ private:
 	bool _erase;
 	bool _finished;
 	bool _fall;
+	bool _falled;
 	int _group;
 	int _init_group;
 	int _fall_count;

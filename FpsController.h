@@ -1,6 +1,6 @@
 #pragma once
 
-const int FPS = 60;
+const int FPS = 30;
 
 class FpsController {
 public:
@@ -12,8 +12,9 @@ public:
 	double getFps( ) const;
 private:
 	void init( );
+	void wait( );
 private:
-	int _before_time;
+	int _start_time;
 	int _count;
 	int _wait_time;
 	double _fps;

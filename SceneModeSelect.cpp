@@ -77,7 +77,7 @@ void SceneModeSelect::draw( ) const {
 	}
 	{//Arrow
 		int x = SCREEN_WIDTH  / 2 - MODE_SPRITE_WIDTH / 2 - MODE_SPRITE_ARROW_SIZE / 2;
-		x += ( int )( ( sin( _count * 0.03 ) - 1 ) * 6 );
+		x += ( int )( ( sin( _count * 0.06 ) - 1 ) * 6 );
 		int y = SCREEN_HEIGHT / 2 - MODE_SPRITE_HEIGHT;
 		y += *_select * MODE_SPRITE_HEIGHT;
 		DrawRectGraph( x, y, MODE_SPRITE_WIDTH, 0, MODE_SPRITE_ARROW_SIZE, MODE_SPRITE_ARROW_SIZE, _image_mode, TRUE, FALSE );

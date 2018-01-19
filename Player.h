@@ -41,7 +41,8 @@ public:
 		SE_MENU_CLICK,				//ƒƒjƒ…[Œˆ’è
 		SE_RESULT_NAMING,			//result‰æ–Ê‚Å–¼‘O“ü—Í
 		SE_xx2,
-		SE_xx3
+		SE_xx3,
+		MAX_SE
 	};
 public:
 	void update( );
