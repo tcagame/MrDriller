@@ -12,12 +12,12 @@ public:
 	void update( );
 	void draw( int camera_y ) const;
 public:
-	std::shared_ptr< class Block > getBlockNow( double x, double y ) const;
-	std::shared_ptr< class Block > getBlock( double x, double y ) const;
+	std::shared_ptr< class Block > getBlockNow( int x, int y ) const;
+	std::shared_ptr< class Block > getBlock( int x, int y ) const;
 	std::shared_ptr< class Block > getBlockM( int mx, int my ) const;
 	int getGroupBlockNum( int group ) const;
 	void eraseBlock( std::shared_ptr< class Block > block );
-	void eraseColumnBlockUp( double x, double y );
+	void eraseColumnBlockUp( int x, int y );
 	int getLevel( ) const;
 	bool isFinished( ) const;
 private:

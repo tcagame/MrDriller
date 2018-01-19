@@ -137,8 +137,8 @@ void Board::loadBlock( ) {
 		if ( !block ) {
 			continue;
 		}
-		double x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH + 0.1;
-		double y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT + 0.1;
+		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH;
+		int y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT;
 		block->init( x, y, shared_from_this( ) );
 		_blocks.push_back( block );
 	}
@@ -148,8 +148,8 @@ void Board::checkBlockPos( ) {
 	std::array< std::shared_ptr< class Block >, BLOCK_NUM > tmp = { };
 	
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		int mx = ( int )block->getX( ) / BLOCK_WIDTH;
-		int my = ( int )block->getY( ) / BLOCK_HEIGHT - _level * BLOCK_HEIGHT_NUM;
+		int mx = block->getX( ) / BLOCK_WIDTH;
+		int my = block->getY( ) / BLOCK_HEIGHT - _level * BLOCK_HEIGHT_NUM;
 		int idx = my * BLOCK_WIDTH_NUM + mx;
 		if ( idx < 0 || idx >= BLOCK_NUM ) {
 			continue;
@@ -182,7 +182,7 @@ int Board::getLevel( ) const {
 	return _level;
 }
 
-std::shared_ptr< Block > Board::getBlockNow( double x, double y ) const {
+std::shared_ptr< Block > Board::getBlockNow( int x, int y ) const {
 	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
 		return std::shared_ptr< Block >( );
 	}
@@ -194,12 +194,12 @@ std::shared_ptr< Block > Board::getBlockNow( double x, double y ) const {
 	return std::shared_ptr< Block >( );
 }
 
-std::shared_ptr< Block > Board::getBlock( double x, double y ) const {
+std::shared_ptr< Block > Board::getBlock( int x, int y ) const {
 	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
 		return std::shared_ptr< Block >( );
 	}
-	int mx = ( int )x / BLOCK_WIDTH;
-	int my = ( int )y / BLOCK_HEIGHT;
+	int mx = x / BLOCK_WIDTH;
+	int my = y / BLOCK_HEIGHT;
 	return getBlockM( mx, my );
 }
 
@@ -271,13 +271,13 @@ int Board::getGroupBlockNum( int group ) const {
 	return num;
 }
 
-void Board::eraseColumnBlockUp( double x, double y ) {
+void Board::eraseColumnBlockUp( int x, int y ) {
 	if ( x < 0 || x > BLOCK_WIDTH * BLOCK_WIDTH_NUM ) {
 		return;
 	}
 	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_HEIGHT;
-	int mx = ( int )x / BLOCK_WIDTH;
-	int my = ( int )y / BLOCK_HEIGHT;
+	int mx = x / BLOCK_WIDTH;
+	int my = y / BLOCK_HEIGHT;
 	for ( int i = 0; i <= my; i++ ) {
 		int idx = i * BLOCK_WIDTH_NUM + mx;
 		if ( !_virtual_blocks[ idx ] ) {
