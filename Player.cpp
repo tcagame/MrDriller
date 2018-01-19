@@ -34,7 +34,7 @@ const int BLOCK_DEPTH = 5;
 const int FRAME = 30;
 
 //•`‰æŒn
-const double TIME_ANIMATION = 2.0;
+const int TIME_ANIMATION = 2;
 const int SPRITE_SIZE = 64;
 const int DRAW_WIDTH = 100;
 const int DRAW_HEIGHT = 90;
@@ -225,14 +225,14 @@ void Player::actOnStand( ) {
 }
 
 bool Player::isDodgeBack( ) const {
-	double central_x = _x + CENTRAL_X;
-	double check_y = _y + CENTRAL_Y;
-	double check_left = _x + LEFT_X + 1;
-	double check_right = _x + RIGHT_X - 1;
+	int central_x = _x + CENTRAL_X;
+	int check_y = _y + CENTRAL_Y;
+	int check_left = _x + LEFT_X + 1;
+	int check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left    = _board->getBlock( ( int )check_left , ( int )check_y );
-	std::shared_ptr< Block > block_right   = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x  , ( int )check_y );
+	std::shared_ptr< Block > block_left    = _board->getBlock( check_left , check_y );
+	std::shared_ptr< Block > block_right   = _board->getBlock( check_right, check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( central_x  , check_y );
 	if ( !block_central ) {
 		if ( ( block_left  && _direct == DIR_RIGHT && block_left->getBlockID( )  != BLOCK_ID_AIR ) ||
 			 ( block_right && _direct == DIR_LEFT  && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
@@ -242,14 +242,14 @@ bool Player::isDodgeBack( ) const {
 	return result;
 }
 bool Player::isDodgeFront( ) const {
-	double central_x = _x + CENTRAL_X;
-	double check_y = _y + CENTRAL_Y;
-	double check_left = _x + LEFT_X + 1;
-	double check_right = _x + RIGHT_X - 1;
+	int central_x   = _x + CENTRAL_X;
+	int check_y     = _y + CENTRAL_Y;
+	int check_left  = _x + LEFT_X + 1;
+	int check_right = _x + RIGHT_X - 1;
 	bool result = false;
-	std::shared_ptr< Block > block_left = _board->getBlock( ( int )check_left, ( int )check_y );
-	std::shared_ptr< Block > block_right = _board->getBlock( ( int )check_right, ( int )check_y );
-	std::shared_ptr< Block > block_central = _board->getBlock( ( int )central_x, ( int )check_y );
+	std::shared_ptr< Block > block_left    = _board->getBlock( check_left , check_y );
+	std::shared_ptr< Block > block_right   = _board->getBlock( check_right, check_y );
+	std::shared_ptr< Block > block_central = _board->getBlock( central_x  , check_y );
 	if ( !block_central ) {
 		if ( ( block_left && _direct == DIR_LEFT  && block_left->getBlockID( )  != BLOCK_ID_AIR ) ||
 			( block_right && _direct == DIR_RIGHT && block_right->getBlockID( ) != BLOCK_ID_AIR ) ) {
@@ -354,7 +354,7 @@ void Player::actOnDrill( ) {
 }
 
 void Player::actOnDeadAir( ) {
-	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
 		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
 	}
@@ -370,7 +370,7 @@ void Player::actOnDeadAir( ) {
 }
 
 void Player::actOnDeadCrash( ) {
-	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
 		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
 	}
@@ -488,11 +488,11 @@ void Player::draw( int camera_y ) {
 	int up    = _y - camera_y + UP_Y;
 	int down  = _y - camera_y + DOWN_Y;
 	unsigned int color = GetColor( 255, 0, 0 );
-	//DrawCircle( ( int )_x + CENTRAL_X, ( int )_y + CENTRAL_Y - camera_y, 5, color, TRUE );
+	//DrawCircle( _x + CENTRAL_X, _y + CENTRAL_Y - camera_y, 5, color, TRUE );
 	//DrawCircle( right, up, 5, GetColor( 0, 255, 0 ), TRUE );
 	//DrawCircle( left, up, 5, GetColor(0,0,255), TRUE );	
 	DrawBox( left, up, right, down, color, FALSE );
-	int central = ( int )_x + CENTRAL_X;
+	int central = _x + CENTRAL_X;
 	DrawLine( central, up, central, down, color );
 #endif
 }
@@ -539,7 +539,7 @@ void Player::drawFall( int camera_y ) const {
 
 void Player::drawJump( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
-	int pattern = ANIM_PATTERN - ( int )( abs( _y - _target_y ) ) * ANIM_PATTERN / JUMP_Y;
+	int pattern = ANIM_PATTERN - ( abs( _y - _target_y ) ) * ANIM_PATTERN / JUMP_Y;
 	if ( pattern < 0 ) {
 		pattern = 0;
 	}
@@ -594,9 +594,9 @@ void Player::drawDrill( int camera_y ) const {
 }
 
 void Player::drawDeadAir( int camera_y ) const {
-	int _angel_time = ( int )( _act_count - FRAME * TIME_ANIMATION );
+	int _angel_time = ( _act_count - FRAME * TIME_ANIMATION );
 	int anim = 0;
-	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 7;
 	}
 
@@ -624,7 +624,7 @@ void Player::drawDeadAir( int camera_y ) const {
 
 	//“VŽg‚ð•`‰æ
 	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.15 ) );
+		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
 		int ANGEL_Y = -_angel_time * 6;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
@@ -632,9 +632,9 @@ void Player::drawDeadAir( int camera_y ) const {
 }
 
 void Player::drawDeadCrash( int camera_y ) const {
-	int _angel_time = ( int )( _act_count - FRAME * TIME_ANIMATION );
+	int _angel_time = ( _act_count - FRAME * TIME_ANIMATION );
 	int anim = 0;
-	if ( _act_count / ( int )( FRAME * TIME_ANIMATION ) > 0 ) {
+	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
 		anim = 7;
 	}
 
@@ -661,7 +661,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 
 	//“VŽg‚ð•`‰æ
 	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( 50 * sin( _angel_time * 0.15 ) );
+		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
 		int ANGEL_Y = -_angel_time * 6;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
@@ -682,7 +682,7 @@ void Player::drawResurrection( int camera_y ) const {
 void Player::drawDodgeBack( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
 	int pattern = ANIM_PATTERN - abs( _target_x - _x ) * ANIM_PATTERN / DODGE_X - 1;
-	//int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	//int pattern = ANIM_PATTERN - ( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = _x;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
@@ -700,7 +700,7 @@ void Player::drawDodgeBack( int camera_y ) const {
 void Player::drawDodgeFront( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
 	int pattern = ANIM_PATTERN - abs( _target_x - _x ) * ANIM_PATTERN / DODGE_X - 1;
-	//int pattern = ANIM_PATTERN - ( int )( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	//int pattern = ANIM_PATTERN - ( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = _x;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
@@ -749,11 +749,11 @@ int Player::getScore( ) {
 }
 
 int Player::getX( ) {
-	return ( int )_x;
+	return _x;
 }
 
 int Player::getY( ) {
-	return ( int )_y;
+	return _y;
 }
 
 bool Player::isStanding( ) const {
