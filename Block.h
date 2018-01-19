@@ -33,7 +33,7 @@ public:
 	void setFallGroup( bool fall );
 public:
 	virtual void erase( bool destroy = false );
-	virtual void checkConnect( bool erase = false );
+	virtual void checkConnect( );
 	void connectBlock( std::shared_ptr< class Block > block, int connect );
 	void setGroup( int group );
 	virtual void setFall( bool fall );
@@ -62,6 +62,7 @@ private:
 	bool _erase;
 	bool _finished;
 	bool _fall;
+	bool _falled;
 	int _group;
 	int _init_group;
 	int _fall_count;
