@@ -10,6 +10,7 @@
 #include "BlockSolid.h"
 #include "BlockFire.h"
 #include "BlockIron.h"
+#include "BlockBalloon.h"
 #include "Camera.h"
 #include "Map0.h"
 #include "Map1.h"
@@ -128,6 +129,9 @@ void Board::loadBlock( ) {
 			break;
 		case 'I':
 			block = std::shared_ptr< Block >( new BlockIron );
+			break;
+		case 'O':
+			block = std::shared_ptr< Block >( new BlockBalloon );
 			break;
 		}
 		if ( !block ) {

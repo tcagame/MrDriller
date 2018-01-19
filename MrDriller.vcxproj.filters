@@ -120,6 +120,9 @@
     <ClCompile Include="Game.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="BlockBalloon.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="define.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockBalloon.h">
+      <Filter>Play\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
