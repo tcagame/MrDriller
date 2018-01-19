@@ -24,7 +24,7 @@ const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 15;
-const int GOAL_LEVEL = 3;
+const int GOAL_LEVEL = 1;
 const int To_Result_Scene_Time = 10;
 
 //その他
@@ -81,9 +81,6 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_se[ SE_FALL ]					= LoadSoundMem( "Resource/Sound/effect/effect13.mp3" ); //落下
 	_se[ SE_MENU_SELECT ]			= LoadSoundMem( "Resource/Sound/effect/effect14.mp3" );	//メニュー選択
 	_se[ SE_MENU_CLICK ]			= LoadSoundMem( "Resource/Sound/effect/effect15.mp3" );	//メニュー決定
-	_se[ SE_RESULT_NAMING ]			= LoadSoundMem( "Resource/Sound/effect/effect16.mp3" ); //result画面で名前入力
-	_se[ SE_xx2 ]					= LoadSoundMem( "Resource/Sound/effect/effect17.mp3" );
-	_se[ SE_xx3 ]					= LoadSoundMem( "Resource/Sound/effect/effect18.mp3" );
 }
 
 Player::~Player( ) {

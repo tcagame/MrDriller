@@ -22,4 +22,6 @@ private:
 	std::shared_ptr< class FpsController > _fps_ctrl;
 	Scene::SCENE _now_scene;
 	MODE _mode;
+	int _score;
+	int _depth;
 };
