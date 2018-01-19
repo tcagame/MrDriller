@@ -18,11 +18,11 @@ public:
 	Block( int tx, int ty );
 	virtual ~Block( );
 public:
-	void init( double x, double y, std::shared_ptr< class Board > board );
+	void init( int x, int y, std::shared_ptr< class Board > board );
 	void update( );
 	void draw( int camera_y, int img_handle ) const;
 public:
-	bool isExistence( double x, double y ) const;
+	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	bool isFall( ) const;
@@ -52,9 +52,9 @@ private:
 	void move( );
 	bool isInCamera( int camera_y ) const;
 private:
-	double _x;
-	double _y;
-	double _vec_y;
+	int _x;
+	int _y;
+	int _vec_y;
 	int _tx;
 	int _ty;
 	int _count_erase;

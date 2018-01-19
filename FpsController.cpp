@@ -4,6 +4,8 @@
 const int UPDATE_INTERVAL = 30;
 const int FRAME_TIME = 1000 / FPS;//  ˆê•b/ˆê•bŠÔ‚ÌXV‰ñ”
 
+#define FPS_SKIP 0
+
 FpsController::FpsController( ) :
 _count( UPDATE_INTERVAL ) {
 	_fps = FPS;
@@ -42,7 +44,11 @@ void FpsController::wait( ) {
 
 
 bool FpsController::isOverFps( ) const {
+#if FPS_SKIP
 	return _wait_time < -FRAME_TIME;
+#else
+	return false;
+#endif
 }
 
 double FpsController::getFps( ) const {
