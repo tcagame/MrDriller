@@ -10,7 +10,7 @@ const int PLAYER_SPEED = 8;
 const double AIR_DECREASE_SPEED = 0.06;//AIR‚ÌŒ¸‚é‘¬“x
 const int MOVE_WAIT = 2;
 const int DRILL_RANGE = 7;
-const int REVIVE_TIME = 75;
+const int REVIVE_TIME = 4;
 const int CHECK_AIR = 0;
 const int DODGE_X = 32;
 const int DODGE_SPEED = 2;
@@ -31,7 +31,7 @@ const int To_Result_Scene_Time = 10;
 const int AIR_MAX = 100;
 const int MOVE_PATTERN = 8;
 const int BLOCK_DEPTH = 5;
-const int FRAME = 60;
+const int FRAME = 30;
 
 //•`‰æŒn
 const int TIME_ANIMATION = 2;
@@ -361,7 +361,7 @@ void Player::actOnDeadAir( ) {
 		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
 	}
-	if ( _act_count > REVIVE_TIME ) {
+	if ( _act_count > REVIVE_TIME * FRAME ) {
 		//•œŠˆ
 		_life--;
 		if ( _life >= 0 ) {
@@ -377,9 +377,8 @@ void Player::actOnDeadCrash( ) {
 		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
 		eraseUpBlock( );
 	}
-	if ( _act_count > REVIVE_TIME ) {
+	if ( _act_count > REVIVE_TIME * FRAME ) {
 		//•œŠˆ
-
 		_life--;
 		if ( _life >= 0 ) {
 			setAct( ACT_RESURRECTION );
@@ -628,8 +627,8 @@ void Player::drawDeadAir( int camera_y ) const {
 
 	//“VŽg‚ð•`‰æ
 	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( sin( _angel_time * 0.1 ) * 50 );
-		int ANGEL_Y = -_angel_time * 3;
+		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
+		int ANGEL_Y = -_angel_time * 6;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
 	
@@ -665,8 +664,8 @@ void Player::drawDeadCrash( int camera_y ) const {
 
 	//“VŽg‚ð•`‰æ
 	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( sin( _angel_time * 0.1 ) * 50 );
-		int ANGEL_Y = -_angel_time * 3;
+		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
+		int ANGEL_Y = -_angel_time * 6;
 		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
 	}
 }
