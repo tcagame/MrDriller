@@ -10,7 +10,9 @@ const char* TITLE_NAME = "Mr.Driller";
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmdLine, int nCmdShow ) {
 	
 	//ウィンドウモード
+#if _DEBUG
 	ChangeWindowMode( TRUE );
+#endif
 
 	//解像度を指定
 	SetGraphMode( SCREEN_WIDTH, SCREEN_HEIGHT, 32, FPS );

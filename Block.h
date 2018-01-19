@@ -26,11 +26,13 @@ public:
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	bool isFall( ) const;
+	bool isNumCheck( ) const;
 	int getGroup( ) const;
 	int getX( ) const;
 	int getY( ) const;
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
+	void checkGroupNum( int* num );
 public:
 	virtual void erase( bool connect_erase = false, bool destroy = false );
 	virtual void checkConnect( );
@@ -63,7 +65,9 @@ private:
 	bool _finished;
 	bool _fall;
 	bool _falled;
+	bool _num_check;
 	int _group;
+	int _group_num;
 	int _init_group;
 	int _fall_count;
 	std::shared_ptr< class Board > _board;
