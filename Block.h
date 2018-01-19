@@ -32,7 +32,7 @@ public:
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
 public:
-	virtual void erase( bool destroy = false );
+	virtual void erase( bool connect_erase = false, bool destroy = false );
 	virtual void checkConnect( );
 	void connectBlock( std::shared_ptr< class Block > block, int connect );
 	void setGroup( int group );

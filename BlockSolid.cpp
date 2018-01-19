@@ -16,9 +16,9 @@ void BlockSolid::act( ) {
 	setTx( tx );
 }
 
-void BlockSolid::erase( bool destroy ) {
+void BlockSolid::erase( bool connect_erase, bool destroy ) {
 	_hp--;
 	if ( _hp <= 0 || destroy ) {
-		Block::erase( );
+		Block::erase( connect_erase, destroy );
 	}
 }

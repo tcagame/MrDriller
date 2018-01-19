@@ -16,9 +16,9 @@ int tx = 16 * ( 5 - _dv );
 	setTx( tx );
 }
 
-void BlockIron::erase( bool destroy ) {
+void BlockIron::erase( bool connect_erase, bool destroy ) {
 	_dv--;
 	if ( _dv <= 0 || destroy ) {
-		Block::erase( );
+		Block::erase( connect_erase, destroy );
 	}
 }

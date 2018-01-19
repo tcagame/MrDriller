@@ -8,7 +8,7 @@ public:
 	int getBlockID( ) { return BLOCK_ID_SOLID; };
 	void act( );
 	void changeTxByConnect( ) { };
-	void erase( bool destroy = false );
+	void erase( bool connect_erase = false, bool destroy = false );
 private:
 	int _hp;
 };
