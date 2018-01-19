@@ -8,7 +8,7 @@ public:
 	int getBlockID( ) { return BLOCK_ID_BALLOON; };
 protected:
 	void act( );
-	void checkConnect( bool erase = false ){ };
+	void checkConnect( ){ };
 	void fall( ){ };
 };
 
