@@ -73,7 +73,7 @@ Scene::SCENE ScenePlay::update( ) {
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
-		next = SCENE_MODE_SELECT;
+		next = SCENE_RESULT;
 	}
 	if ( _player->isGoal( ) ) {
 		StopSoundMem( _bgm );
