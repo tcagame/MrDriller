@@ -2,7 +2,7 @@
 
 
 const int TY = 16 * 20;
-const int WAIT_ANIM_TIME = 10;
+const int WAIT_ANIM_TIME = 5;
 const int MAX_ANIM_PATTERN = 4;
 
 
