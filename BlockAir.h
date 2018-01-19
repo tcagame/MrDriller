@@ -10,7 +10,7 @@ protected:
 	void act( );//ŒÅ—Lˆ—H
 	void eraseAnimation( );
 	void changeTxByConnect( ) { };
-	void checkConnect( bool erase = false ) { };
+	void checkConnect( ) { };
 private:
 	int _count;
 };
