@@ -27,13 +27,13 @@ public:
 	bool isErase( ) const;
 	bool isFall( ) const;
 	int getGroup( ) const;
-	double getX( ) const;
-	double getY( ) const;
+	int getX( ) const;
+	int getY( ) const;
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
 public:
 	virtual void erase( bool destroy = false );
-	virtual void checkConnect( );
+	virtual void checkConnect( bool erase = false );
 	void connectBlock( std::shared_ptr< class Block > block, int connect );
 	void setGroup( int group );
 	virtual void setFall( bool fall );
