@@ -1,13 +1,15 @@
 #include "Player.h"
-#include "DxLib.h"
 #include "Block.h"
 #include "Keyboard.h"
 #include <math.h>
+#include "Sound.h"
+#include "Graph.h"
+#include "DxLib.h"
 
 //-----------定数宣言------------//
 //レベルデザイン系
-const int PLAYER_SPEED = 8;
 const double AIR_DECREASE_SPEED = 0.06;//AIRの減る速度
+const int PLAYER_SPEED = 8;
 const int MOVE_WAIT = 2;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 4;
@@ -52,7 +54,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_board( board ),
 	_air( AIR_MAX ),
 	_depth( 0 ),
-	_life( 2 ),
+	_life( PLAYER_MAX_LIFE ),
 	_score( 0 ),
 	_x( x ),
 	_y( y ),
@@ -64,30 +66,9 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_standing( true ),
 	_finished( false ) {
 	setAct( ACT_FALL );
-	_img_handle = LoadGraph( "Resource/NewCharacter.png", TRUE );
-
-	_se[ SE_BLOCK_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect01.mp3" );	//ブロック破壊
-	_se[ SE_BLOCK_FALL_CRUSH ]		= LoadSoundMem( "Resource/Sound/effect/effect02.mp3" );	//ブロック落ちて破壊
-	_se[ SE_AIR_CAPSULE ]			= LoadSoundMem( "Resource/Sound/effect/effect03.mp3" );	//エア
-	_se[ SE_SOLID_REDUCE ]			= LoadSoundMem( "Resource/Sound/effect/effect04.mp3" );	//お邪魔ブロックの削り
-	_se[ SE_SOLID_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect05.mp3" );	//お邪魔ブロックの破壊
-	_se[ SE_LEVEL_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect06.mp3" );	//岩盤破壊
-	_se[ SE_AIR_LESS_THAN_THRITY ]	= LoadSoundMem( "Resource/Sound/effect/effect07.mp3" );	//air < 30
-	_se[ SE_AIR_LESS_THAN_TEN ]		= LoadSoundMem( "Resource/Sound/effect/effect08.mp3" );	//air < 10
-	_se[ SE_DEAD_AIR ]				= LoadSoundMem( "Resource/Sound/effect/effect09.mp3" );	//酸欠死亡
-	_se[ SE_DEAD_CRUSH ]			= LoadSoundMem( "Resource/Sound/effect/effect10.mp3" );	//つぶれて死亡
-	_se[ SE_ANGEL ]					= LoadSoundMem( "Resource/Sound/effect/effect11.mp3" );	//天使
-	_se[ SE_RESURRECTION ]			= LoadSoundMem( "Resource/Sound/effect/effect12.mp3" );	//復活
-	_se[ SE_FALL ]					= LoadSoundMem( "Resource/Sound/effect/effect13.mp3" ); //落下
-	_se[ SE_MENU_SELECT ]			= LoadSoundMem( "Resource/Sound/effect/effect14.mp3" );	//メニュー選択
-	_se[ SE_MENU_CLICK ]			= LoadSoundMem( "Resource/Sound/effect/effect15.mp3" );	//メニュー決定
 }
 
 Player::~Player( ) {
-	DeleteGraph( _img_handle );
-	for ( int i = 0; i < MAX_SE; i++ ) {
-		DeleteSoundMem( _se[ i ] );
-	}
 }
 
 
@@ -149,7 +130,7 @@ void Player::actOnStand( ) {
 
 	if ( !isStanding( ) && !isGoal( ) ) {
 		setAct( ACT_FALL );
-		PlaySoundMem( _se[ SE_FALL ], DX_PLAYTYPE_LOOP, TRUE );
+		Sound::get( )->play( Sound::SOUND_FALL, true );
 		return;
 	}
 	if ( _up_count > MAX_UP_COUNT ) {
@@ -195,7 +176,7 @@ void Player::actOnStand( ) {
 
 
 	//--------------キー操作------------//
-	std::shared_ptr< Keyboard > key = Keyboard::getInstance( );
+	std::shared_ptr< Keyboard > key = Keyboard::get( );
 	if ( key->isHoldKey( KEY_INPUT_UP ) ) {
 		_direct = DIR_UP;
 	}
@@ -263,7 +244,7 @@ void Player::actOnFall( ) {
 	//落下中操作できない
 	if ( isStanding( ) ) {
 		setAct( ACT_STAND );
-		StopSoundMem( _se[ SE_FALL ] );
+		Sound::get( )->stop( Sound::SOUND_FALL );
 	}
 	ifAirRecover( ); //エア回復
 }
@@ -355,7 +336,7 @@ void Player::actOnDrill( ) {
 
 void Player::actOnDeadAir( ) {
 	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
-		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
+		Sound::get( )->play( Sound::SOUND_ANGEL );
 		eraseUpBlock( );
 	}
 	if ( _act_count > REVIVE_TIME * FRAME ) {
@@ -371,7 +352,7 @@ void Player::actOnDeadAir( ) {
 
 void Player::actOnDeadCrash( ) {
 	if ( _act_count / ( FRAME * TIME_ANIMATION ) > 0 ) {
-		PlaySoundMem( _se[ SE_ANGEL ], DX_PLAYTYPE_BACK, FALSE );
+		Sound::get( )->play( Sound::SOUND_ANGEL );
 		eraseUpBlock( );
 	}
 	if ( _act_count > REVIVE_TIME * FRAME ) {
@@ -523,7 +504,7 @@ void Player::drawStand( int camera_y ) const {
 		ty = SPRITE_SIZE * 20;
 		break;
 	}
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawFall( int camera_y ) const {
@@ -534,7 +515,7 @@ void Player::drawFall( int camera_y ) const {
 	int tx = SPRITE_SIZE * ( _act_count / 10 % 2 );
 	int ty = SPRITE_SIZE * 1;
 
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawJump( int camera_y ) const {
@@ -561,7 +542,7 @@ void Player::drawJump( int camera_y ) const {
 		break;
 	}
 
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawDrill( int camera_y ) const {
@@ -590,7 +571,7 @@ void Player::drawDrill( int camera_y ) const {
 		ty = SPRITE_SIZE * 8;
 		break;
 	}
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawDeadAir( int camera_y ) const {
@@ -620,13 +601,19 @@ void Player::drawDeadAir( int camera_y ) const {
 	}
 	
 	
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 
 	//天使を描画
 	if ( anim == 7 ) {
-		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
-		int ANGEL_Y = -_angel_time * 6;
-		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+		int angel_x = ( int )( sin( _angel_time * 0.15 ) * 50 );
+		int angel_y = -_angel_time * 6;
+		x1 += angel_x;
+		x2 += angel_x;
+		y1 += angel_y;
+		y2 += angel_y;
+		tx = SPRITE_SIZE * ( _act_count / 10 % 4 );
+		ty = SPRITE_SIZE * 0;
+		Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 	}
 	
 }
@@ -657,13 +644,19 @@ void Player::drawDeadCrash( int camera_y ) const {
 		ty = SPRITE_SIZE * 12;
 	}
 	
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 
 	//天使を描画
 	if ( anim == 7 ) {
 		int ANGEL_X = ( int )( sin( _angel_time * 0.15 ) * 50 );
 		int ANGEL_Y = -_angel_time * 6;
-		DrawRectExtendGraph( x1 + ANGEL_X, y1 + ANGEL_Y, x2 + ANGEL_X, y2 + ANGEL_Y, SPRITE_SIZE * ( _act_count / 10 % 4 ), SPRITE_SIZE * 0, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+		x1 += ANGEL_X;
+		x2 += ANGEL_X;
+		y1 += ANGEL_Y;
+		y2 += ANGEL_Y;
+		tx = SPRITE_SIZE * ( _act_count / 10 % 4 );
+		ty = SPRITE_SIZE * 0;
+		Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 	}
 }
 
@@ -676,7 +669,7 @@ void Player::drawResurrection( int camera_y ) const {
 	int y2 = y1 + DRAW_HEIGHT;
 	int tx = SPRITE_SIZE * ( _act_count / WAIT % ANIM_PATTERN );
 	int ty = SPRITE_SIZE * 10;
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawDodgeBack( int camera_y ) const {
@@ -694,7 +687,7 @@ void Player::drawDodgeBack( int camera_y ) const {
 	} else {
 		ty = SPRITE_SIZE * 14;
 	}
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawDodgeFront( int camera_y ) const {
@@ -712,7 +705,7 @@ void Player::drawDodgeFront( int camera_y ) const {
 	} else {
 		ty = SPRITE_SIZE * 16;
 	}
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 void Player::drawGoal( int camera_y ) const {
@@ -725,7 +718,7 @@ void Player::drawGoal( int camera_y ) const {
 	int y2 = y1 + DRAW_HEIGHT;
 	int tx = SPRITE_SIZE * pattern;
 	int ty = SPRITE_SIZE * 21;
-	DrawRectExtendGraph( x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE, _img_handle, TRUE );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, tx, ty, SPRITE_SIZE, SPRITE_SIZE );
 }
 
 bool Player::isDead( ) const {
@@ -933,30 +926,30 @@ void Player::dig( ) {
 				_board->eraseBlock( block );
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
-				PlaySoundMem( _se[ SE_SOLID_REDUCE ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_SOLID_REDUCE );
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_RED   ||
 				 block->getBlockID( ) == BLOCK_ID_GREEN ||
 				 block->getBlockID( ) == BLOCK_ID_BLUE  ||
 				 block->getBlockID( ) == BLOCK_ID_YELLOW ) {
-				PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_BLOCK_CRUSH );
 				_score += BLOCK_POINT; //ブロックのスコア
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_FIRE ||
 				block->getBlockID( ) == BLOCK_ID_BALLOON ) {
-				PlaySoundMem( _se[ SE_BLOCK_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_BLOCK_CRUSH );
 			}
 		}
 		if ( block->isErase( ) ) {
 			if ( block->getBlockID( ) == BLOCK_ID_SOLID ) {
 				//AIRが減る
-				PlaySoundMem( _se[ SE_SOLID_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_SOLID_CRUSH );
 				_air -= SOLID_AIR;
 				_score += SOLID_BLOCK_POINT;
 				if ( _score < 0 ) _score = 0;
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
-				PlaySoundMem( _se[ SE_LEVEL_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_LEVEL_CRUSH );
 				if ( _board->getLevel( ) == GOAL_LEVEL ) {
 					_goal = true;
 				}
@@ -972,7 +965,7 @@ void Player::ifAirRecover( ) {
 	if ( block ) {
 		if ( block->getBlockID( ) == BLOCK_ID_AIR ) {
 			if ( !block->isErase( ) ) {
-				PlaySoundMem( _se[ SE_AIR_CAPSULE ], DX_PLAYTYPE_BACK, TRUE );
+				Sound::get( )->play( Sound::SOUND_AIR_CAPSULE );
 				block->erase( );
 				_air += AIR_RECOVERY_POINT;
 				_score += _air_point;
@@ -1010,15 +1003,15 @@ void Player::decreaseAir( ) {
 		_air -= AIR_DECREASE_SPEED;
 	}
 	if ( _air <= 30 && _air > 10 ) {
-		PlaySoundMem( _se[ SE_AIR_LESS_THAN_THRITY ], DX_PLAYTYPE_LOOP, FALSE );
+		Sound::get( )->play( Sound::SOUND_AIR_LESS_THAN_THRITY, true );
 	} else {
-		StopSoundMem( _se[ SE_AIR_LESS_THAN_THRITY ] );
+		Sound::get( )->stop( Sound::SOUND_AIR_LESS_THAN_THRITY );
 	}
 		
 	if ( _air <= 10 && _air > 0 ) {
-		PlaySoundMem( _se[ SE_AIR_LESS_THAN_TEN ], DX_PLAYTYPE_LOOP, FALSE );
+		Sound::get( )->play( Sound::SOUND_AIR_LESS_THAN_TEN, true );
 	} else {
-		StopSoundMem( _se[ SE_AIR_LESS_THAN_TEN ] );
+		Sound::get( )->stop( Sound::SOUND_AIR_LESS_THAN_TEN );
 	}
 	if ( _air <= 0 ) {
 		_air = 0;
@@ -1059,13 +1052,13 @@ void Player::setAct( ACT act ) {
 	_act_count = 0;
 	_act = act;
 	if ( _act == ACT_DEAD_CRUSH ) {
-		PlaySoundMem( _se[ SE_DEAD_CRUSH ], DX_PLAYTYPE_BACK, TRUE );
+		Sound::get( )->play( Sound::SOUND_DEAD_CRUSH );
 	}
 	if ( _act == ACT_DEAD_AIR ) {
-		PlaySoundMem( _se[ SE_DEAD_AIR ], DX_PLAYTYPE_BACK, TRUE );
+		Sound::get( )->play( Sound::SOUND_DEAD_AIR );
 	}
 	if ( _act == ACT_RESURRECTION ) {
-		PlaySoundMem( _se[ SE_RESURRECTION ], DX_PLAYTYPE_BACK, TRUE );
+		Sound::get( )->play( Sound::SOUND_RESURRECTION );
 	}
 }
 

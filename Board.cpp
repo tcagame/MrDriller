@@ -27,11 +27,9 @@ Board::Board( ) :
 _level( 0 ),
 _level_erase( true ),
 _finished( false ) {
-	_img_handle = LoadGraph( "Resource/Blocks.png", TRUE );
 }
 
 Board::~Board( ) {
-	DeleteGraph( _img_handle );
 }
 
 void Board::update( ) {
@@ -46,7 +44,7 @@ void Board::update( ) {
 
 void Board::draw( int camera_y ) const {
 	for ( std::shared_ptr< Block > block : _blocks ) {
-		block->draw( camera_y, _img_handle );
+		block->draw( camera_y );
 	}
 }
 

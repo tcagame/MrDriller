@@ -5,10 +5,14 @@ class SceneTitle : public Scene {
 public:
 	SceneTitle( );
 	virtual ~SceneTitle( );
-public:
+public://åpè≥
 	SCENE update( );
 	void draw( ) const;
+	void loadSound( );
+	void loadGraph( );
 private:
-	int _img_handle;
-	int _se[ 18 ];
+	void drawBg( ) const;
+	void drawPleasePush( ) const;
+private:
+	int _count;
 };

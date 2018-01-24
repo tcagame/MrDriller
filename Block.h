@@ -20,18 +20,20 @@ public:
 public:
 	void init( int x, int y, std::shared_ptr< class Board > board );
 	void update( );
-	void draw( int camera_y, int img_handle ) const;
+	void draw( int camera_y ) const;
 public:
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
 	bool isFall( ) const;
+	bool isCheckGroupNum( ) const;
 	int getGroup( ) const;
 	int getX( ) const;
 	int getY( ) const;
 	virtual int getBlockID( ) = 0;
 	void setFallGroup( bool fall );
 public:
+	int checkGroupNum( int num );
 	virtual void erase( bool connect_erase = false, bool destroy = false );
 	virtual void checkConnect( );
 	void connectBlock( std::shared_ptr< class Block > block, int connect );
@@ -64,6 +66,7 @@ private:
 	bool _finished;
 	bool _fall;
 	bool _falled;
+	bool _check_groupnum;
 	int _group;
 	int _init_group;
 	int _fall_count;

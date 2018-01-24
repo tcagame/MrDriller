@@ -1,4 +1,7 @@
 #pragma once
+#include "Sound.h"
+#include "Graph.h"
+
 class Scene {
 public:
 	enum SCENE {
@@ -13,5 +16,7 @@ public:
 public:
 	virtual SCENE update( ) = 0;
 	virtual void draw( ) const = 0;
+	virtual void loadSound( ) = 0;
+	virtual void loadGraph( ) = 0;
 };
 

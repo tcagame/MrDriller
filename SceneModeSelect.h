@@ -6,12 +6,12 @@ class SceneModeSelect : public Scene {
 public:
 	SceneModeSelect( Game::MODE* mode );
 	virtual ~SceneModeSelect( );
-public:
+public://åpè≥
 	SCENE update( );
 	void draw( ) const;
+	void loadSound( );
+	void loadGraph( );
 private:
-	int _image_mode;
 	Game::MODE* _select;
 	int _count;
-	int _se[ 18 ];
 };

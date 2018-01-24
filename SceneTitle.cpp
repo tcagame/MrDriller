@@ -3,30 +3,56 @@
 #include "define.h"
 #include "Keyboard.h"
 
-SceneTitle::SceneTitle( ) {
-	_img_handle = LoadGraph( "Resource/title.png", TRUE );
-	_se[ 14 ] = LoadSoundMem( "Resource/Sound/effect/effect15.mp3" ); //メニュー決定
+const int DRAW_PLEASE_PUSH_Y = 550;
+const int DRAW_PLEASE_PUSH_WIDTH  = 600;
+const int DRAW_PLEASE_PUSH_HEIGHT = 120;
+
+SceneTitle::SceneTitle( ) :
+_count( 0 ) {
 }
 
 SceneTitle::~SceneTitle( ) {
 }
 
+//--------------Load---------------//
+void SceneTitle::loadSound( ) {
+	Sound::get( )->load( Sound::SOUND_MENU_CLICK ); //メニュー決定
+}
+
+void SceneTitle::loadGraph( ) {
+	std::shared_ptr< Graph > graph = Graph::get( );
+	graph->load( Graph::GRAPH_TITLE_BG          );
+	graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
+}
+
+//-----------Update Draw-----------//
 Scene::SCENE SceneTitle::update( ) {
 	SCENE next = SCENE_TITLE;
-	if ( Keyboard::getInstance( )->isPushKey( KEY_INPUT_SPACE ) == TRUE ) {
-		PlaySoundMem( _se[ 14 ], DX_PLAYTYPE_BACK );
+	if ( Keyboard::get( )->isPushKey( KEY_INPUT_SPACE ) ) {
+		Sound::get( )->play( Sound::SOUND_MENU_CLICK );
 		next = SCENE_MODE_SELECT;
 	}
+	_count++;
 	return next;
 }
 
 void SceneTitle::draw( ) const {
-	//BG
-	DrawExtendGraph( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, _img_handle, FALSE );
-	//Please Push
-	char *str = "Please Push Space";
-	int str_width = GetDrawStringWidth( str, strlen( str ) );
-	DrawString( ( SCREEN_WIDTH - str_width ) / 2, 600, str, GetColor( 255, 50, 100 ) );
-	//
-	DrawString( 10, 700, "製作　山田チーム", GetColor( 255, 0, 13 ) );
+	drawBg( );
+	drawPleasePush( );
+	//DrawString( 10, 700, "製作　山田チーム", GetColor( 255, 0, 13 ) );
+}
+
+void SceneTitle::drawBg( ) const {
+	Graph::get( )->draw( Graph::GRAPH_TITLE_BG, FALSE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT );
+}
+
+void SceneTitle::drawPleasePush( ) const {
+	std::shared_ptr< Graph > graph = Graph::get( );
+	int x1 = ( SCREEN_WIDTH - DRAW_PLEASE_PUSH_WIDTH ) / 2;
+	int y1 = DRAW_PLEASE_PUSH_Y;
+	int x2 = x1 + DRAW_PLEASE_PUSH_WIDTH;
+	int y2 = y1 + DRAW_PLEASE_PUSH_HEIGHT;
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, ( int )( ( sin( _count * 0.06 ) + 1 ) * 64 + 156 ) );//透明化
+	Graph::get( )->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, TRUE, x1, y1, x2, y2 );
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND, 0 );
 }

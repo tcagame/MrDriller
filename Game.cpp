@@ -6,6 +6,8 @@
 #include "ScenePlay.h"
 #include "SceneResult.h"
 #include "FpsController.h"
+#include "Sound.h"
+#include "Graph.h"
 
 
 /*------------------定数宣言-------------------*/
@@ -23,7 +25,6 @@ _mode( MODE_NORMAL ) {
 	//シーン初期化
 	changeScene( _now_scene );
 	_fps_ctrl = std::shared_ptr< FpsController >( new FpsController );
-	Keyboard::init( );
 }
 
 Game::~Game( ) {
@@ -33,7 +34,7 @@ void Game::run( ) {
 	//ループ
 	while ( isLoop( ) ) {
 		//更新
-		Keyboard::getInstance( )->update( );
+		Keyboard::get( )->update( );
 		Scene::SCENE next = _scene->update( );
 		//FPSチェック
 		_fps_ctrl->update( );
@@ -65,7 +66,7 @@ bool Game::isLoop( ) const {
 	}
 
 	//Escで終了
-	if ( Keyboard::getInstance( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
+	if ( Keyboard::get( )->isHoldKey( KEY_INPUT_ESCAPE ) != 0 ) {
 		result = false;
 	}
 
@@ -75,6 +76,9 @@ bool Game::isLoop( ) const {
 void Game::changeScene( Scene::SCENE scene ) {
 	//シーン終了処理
 	_scene.reset( );
+	Sound::get( )->unLoadAll( );
+	Graph::get( )->unLoadAll( );
+
 	switch ( scene ) {
 	case Scene::SCENE_TITLE:
 		_scene = std::shared_ptr< Scene >( new SceneTitle );
@@ -89,6 +93,7 @@ void Game::changeScene( Scene::SCENE scene ) {
 		_scene = std::shared_ptr< Scene >( new SceneResult( _score, _depth ) );
 		break;	
 	}
-
+	_scene->loadGraph( );
+	_scene->loadSound( );
 	_now_scene = scene;
 }

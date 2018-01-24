@@ -4,11 +4,11 @@
 static std::shared_ptr< Keyboard > _instance;
 
 
-std::shared_ptr< Keyboard > Keyboard::getInstance( ) {
+std::shared_ptr< Keyboard > Keyboard::get( ) {
 	return _instance;
 }
 
-void Keyboard::init( ) {
+void Keyboard::initalize( ) {
 	if ( _instance == std::shared_ptr< Keyboard >( ) ) {
 		_instance = std::shared_ptr< Keyboard >( new Keyboard );
 	}

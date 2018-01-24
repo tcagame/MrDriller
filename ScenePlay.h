@@ -10,14 +10,18 @@ class ScenePlay : public Scene {
 public:
 	ScenePlay( Game::MODE mode, int *score, int *depth );
 	virtual ~ScenePlay( );
-public:
+public://åpè≥
 	SCENE update( );
 	void draw( ) const;
+	void loadSound( );
+	void loadGraph( );
+public://get
 	int getScore( );
 	int getDepth( );
 private:
 	void drawDepth( ) const;
 	void drawAir( ) const;
+	void drawAirGauge( ) const;
 	void drawLevel( ) const;
 	void drawLife( ) const;
 	void drawBg( ) const;
@@ -29,13 +33,6 @@ private:
 	std::shared_ptr< Board > _board;
 	std::shared_ptr< Camera > _camera;
 	char _brightness;//ñæÇÈÇ≥( MAX 100 )
-	int _img_ui;
-	int _img_bg;
-	int _img_num;
-	int _img_life;
-	int _img_blind;
-	int _bgm;
-	int _se_result;
 	int *_score;
 	int *_depth;
 	Game::MODE _mode;

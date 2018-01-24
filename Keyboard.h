@@ -3,8 +3,8 @@
 
 class Keyboard {
 public:
-	static std::shared_ptr< Keyboard > getInstance( );
-	static void init( );
+	static std::shared_ptr< Keyboard > get( );
+	static void initalize( );
 public:
 	Keyboard( );
 	virtual ~Keyboard( );

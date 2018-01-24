@@ -5,6 +5,7 @@
 #include "Board.h"
 #include "BlockIDList.h"
 
+const int PLAYER_MAX_LIFE = 2;
 
 class Player {
 public:
@@ -22,24 +23,6 @@ public:
 		ACT_DODGE_BACK,		//つぶれる回避(後ろにブロック)
 		ACT_DODGE_FRONT,	//つぶれる回避(前にブロック)
 		ACT_GOAL			//ゴール
-	};
-	enum SE {
-		SE_BLOCK_CRUSH,				//ブロック破壊
-		SE_BLOCK_FALL_CRUSH,		//ブロック落ちて破壊
-		SE_AIR_CAPSULE,				//エア
-		SE_SOLID_REDUCE,			//お邪魔ブロックの削り
-		SE_SOLID_CRUSH,				//お邪魔ブロックの破壊
-		SE_LEVEL_CRUSH,				//岩盤破壊
-		SE_AIR_LESS_THAN_THRITY,	//air<30
-		SE_AIR_LESS_THAN_TEN,		//air<10
-		SE_DEAD_AIR,				//酸欠死亡
-		SE_DEAD_CRUSH,				//つぶれて死亡
-		SE_ANGEL,					//天使
-		SE_RESURRECTION,			//復活
-		SE_FALL,
-		SE_MENU_SELECT,				//メニュー選択
-		SE_MENU_CLICK,				//メニュー決定
-		MAX_SE
 	};
 public:
 	void update( );
@@ -97,7 +80,6 @@ private:
 	int _depth;
 	int _life;
 	int _score;
-	int _img_handle;
 	int _act_count;
 	int _up_count;
 	int _air_point;
@@ -115,6 +97,5 @@ private:
 	bool _to_result_scene;
 	enum DIR _direct;
 	std::shared_ptr< Board > _board;
-	std::array< int, MAX_SE > _se;
 	ACT _act;
 };
