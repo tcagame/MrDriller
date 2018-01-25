@@ -9,14 +9,14 @@
 
 //’è”éŒ¾
 const int UI_X = 900;
-const int DRAW_AIR_GAGE_X = 922;
-const int DRAW_AIR_GAGE_Y = 365;
+const int DRAW_AIR_GAGE_X = 917;
+const int DRAW_AIR_GAGE_Y = 362;
 
 const int DRAW_AIR_NUM_X = 1105;
 const int DRAW_AIR_NUM_Y = 440;
 
-const int GAGE_WIDTH = 330;
-const int GAGE_HEIGHT = 45;
+const int GAGE_WIDTH = 340;
+const int GAGE_HEIGHT = 51;
 
 const int DRAW_Depth_X = 1002;
 const int DRAW_Depth_Y = 77;
@@ -24,8 +24,8 @@ const int DRAW_Depth_Y = 77;
 const int DRAW_Level_X = 1182;
 const int DRAW_Level_Y = 560;
 
-const int DRAW_Life_X = 1000;
-const int DRAW_Life_Y = 700;
+const int DRAW_Life_X = 1182;
+const int DRAW_Life_Y = 670;
 
 const int DRAW_Score_X = 1001;
 const int DRAW_Score_Y = 191;
@@ -192,7 +192,7 @@ void ScenePlay::drawAirGauge( ) const {
 			int y1 = DRAW_AIR_GAGE_Y;
 			int x2 = x1 + GAGE_WIDTH;
 			int y2 = y1 + GAGE_HEIGHT;
-			graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 64, 256, 64 );
+			graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 0, 256, 64 );
 		}
 		return;
 	}
@@ -202,14 +202,14 @@ void ScenePlay::drawAirGauge( ) const {
 		int y1 = DRAW_AIR_GAGE_Y;
 		int x2 = x1 + width;
 		int y2 = y1 + GAGE_HEIGHT;
-		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE, x1, y1, x2, y2, 0, 0, 256, 64 );
+		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE, x1, y1, x2, y2, 0, 64, 256, 64 );
 	}
 	{//cover•`‰æ
 		int x1 = DRAW_AIR_GAGE_X;
 		int y1 = DRAW_AIR_GAGE_Y;
 		int x2 = x1 + GAGE_WIDTH;
 		int y2 = y1 + GAGE_HEIGHT;
-		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 64, 256, 64 );
+		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 0, 256, 64 );
 	}
 }
 

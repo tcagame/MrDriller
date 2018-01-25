@@ -999,6 +999,9 @@ void Player::decreaseAir( ) {
 	if ( isDead( ) ) {
 		return;
 	}
+	if ( _depth < 0 ) {
+		return;
+	}
 	if ( !isGoal( ) ) {
 		_air -= AIR_DECREASE_SPEED;
 	}
