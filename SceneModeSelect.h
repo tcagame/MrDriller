@@ -15,4 +15,5 @@ private:
 	Game::MODE* _select;
 	int _count;
 	bool _next;
+	bool _mode_select;
 };
