@@ -25,6 +25,7 @@ public:
 		GRAPH_PLAY_AIRGAUGE,
 		//Result
 		GRAPH_RESULT_BG,
+		GRAPH_RESULT_COMMENT,
 		MAX_GRAPH
 	};
 public:

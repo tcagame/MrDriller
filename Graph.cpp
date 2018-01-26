@@ -26,6 +26,7 @@ Graph::Graph( ) {
 	_filenames[ GRAPH_PLAY_CHARACTER	] = "Resource/Graph/Play/Character.png";
 	_filenames[ GRAPH_PLAY_AIRGAUGE     ] = "Resource/Graph/Play/AirGauge.png";
 	_filenames[ GRAPH_RESULT_BG			] = "Resource/Graph/Result/Bg.png";
+	_filenames[ GRAPH_RESULT_COMMENT    ] = "Resource/Graph/Result/Bg_comment.png";
 
 
 	for ( int i = 0; i < MAX_GRAPH; i++ ) {

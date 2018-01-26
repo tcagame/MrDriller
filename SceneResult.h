@@ -11,6 +11,7 @@ public://åpè≥
 	void loadSound( );
 	void loadGraph( );
 private:
+	void drawComment( ) const;
 	void drawDepth( ) const;
 	void drawScore( ) const;
 	void drawPleasePush( ) const;
