@@ -38,6 +38,7 @@ void SceneResult::loadGraph( ) {
 	std::shared_ptr< Graph > graph = Graph::get( );
 	graph->load( Graph::GRAPH_NUMBER );
 	graph->load( Graph::GRAPH_RESULT_BG );
+	graph->load( Graph::GRAPH_RESULT_COMMENT );
 	graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
 }
 
