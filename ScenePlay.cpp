@@ -102,6 +102,7 @@ Scene::SCENE ScenePlay::update( ) {
 		//if ( _player->getAct( ) == Player::ACT_GOAL ) {
 			*_score = _player->getScore( );
 			*_depth = _player->getDepth( );
+			*_level = _board->getLevel( );
 		//}
 		next = SCENE_RESULT;
 	}
@@ -186,14 +187,14 @@ void ScenePlay::drawAir( ) const {
 void ScenePlay::drawAirGauge( ) const {
 	//ÉQÅ[ÉW
 	std::shared_ptr< Graph > graph = Graph::get( );
+	{//coverï`âÊ
+		int x1 = DRAW_AIR_GAGE_X;
+		int y1 = DRAW_AIR_GAGE_Y;
+		int x2 = x1 + GAGE_WIDTH;
+		int y2 = y1 + GAGE_HEIGHT;
+		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 0, 256, 64 );
+	}
 	if ( _player->getDepth( ) < 0 ) {
-		{//coverï`âÊ
-			int x1 = DRAW_AIR_GAGE_X;
-			int y1 = DRAW_AIR_GAGE_Y;
-			int x2 = x1 + GAGE_WIDTH;
-			int y2 = y1 + GAGE_HEIGHT;
-			graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 0, 256, 64 );
-		}
 		return;
 	}
 	{//gaugeï`âÊ
@@ -203,13 +204,6 @@ void ScenePlay::drawAirGauge( ) const {
 		int x2 = x1 + width;
 		int y2 = y1 + GAGE_HEIGHT;
 		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE, x1, y1, x2, y2, 0, 64, 256, 64 );
-	}
-	{//coverï`âÊ
-		int x1 = DRAW_AIR_GAGE_X;
-		int y1 = DRAW_AIR_GAGE_Y;
-		int x2 = x1 + GAGE_WIDTH;
-		int y2 = y1 + GAGE_HEIGHT;
-		graph->draw( Graph::GRAPH_PLAY_AIRGAUGE, TRUE,x1, y1, x2, y2, 0, 0, 256, 64 );
 	}
 }
 
