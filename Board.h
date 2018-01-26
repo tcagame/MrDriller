@@ -4,6 +4,8 @@
 #include <array>
 #include "Map.h"
 
+const int BOARD_INTERVAL = 8;
+
 class Board : public std::enable_shared_from_this< Board > {
 public:
 	Board( );
