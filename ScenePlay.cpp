@@ -8,8 +8,8 @@
 #include "Sound.h"
 
 //’è”éŒ¾
-const int UI_X = 900;
-const int DRAW_AIR_GAGE_X = 917;
+const int UI_X = 900 + BOARD_INTERVAL * 2;
+const int DRAW_AIR_GAGE_X = 930;
 const int DRAW_AIR_GAGE_Y = 362;
 
 const int DRAW_AIR_NUM_X = 1105;
@@ -268,7 +268,7 @@ void ScenePlay::drawUIBg( ) const {
 	int y1 = 0;
 	int x2 = SCREEN_WIDTH;
 	int y2 = SCREEN_HEIGHT;
-	Graph::get( )->draw( Graph::GRAPH_PLAY_UI, FALSE, x1, y1, x2, y2 );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_UI, TRUE, x1, y1, x2, y2 );
 }
 
 void ScenePlay::drawLife( ) const {

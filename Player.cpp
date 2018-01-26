@@ -482,7 +482,7 @@ void Player::draw( int camera_y ) {
 
 
 void Player::drawStand( int camera_y ) const {
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int x2 = _x + DRAW_WIDTH;
 	int y1 = _y - camera_y;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -510,7 +510,7 @@ void Player::drawStand( int camera_y ) const {
 }
 
 void Player::drawFall( int camera_y ) const {
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int x2 = _x + DRAW_WIDTH;
 	int y1 = _y - camera_y;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -529,7 +529,7 @@ void Player::drawJump( int camera_y ) const {
 	if ( pattern > ANIM_PATTERN - 1 ) {
 		pattern = ANIM_PATTERN - 1;
 	}
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int x2 = _x + DRAW_WIDTH;
 	int y1 = _y - camera_y;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -553,7 +553,7 @@ void Player::drawDrill( int camera_y ) const {
 	if ( pattern >= ANIM_PATTERN ) {
 		pattern = ANIM_PATTERN - 1;
 	}
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int x2 = _x + DRAW_WIDTH;
 	int y1 = _y - camera_y;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -584,7 +584,7 @@ void Player::drawDeadAir( int camera_y ) const {
 	}
 
 	//Ž_Œ‡
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -627,7 +627,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 		anim = 7;
 	}
 
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -665,7 +665,7 @@ void Player::drawDeadCrash( int camera_y ) const {
 void Player::drawResurrection( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
 	const int WAIT = 10;
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -677,7 +677,7 @@ void Player::drawResurrection( int camera_y ) const {
 void Player::drawDodgeBack( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
 	int pattern = ANIM_PATTERN - ( abs( _target_x - _x ) - 1 )  * ANIM_PATTERN / DODGE_X - 1;
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -694,7 +694,7 @@ void Player::drawDodgeBack( int camera_y ) const {
 void Player::drawDodgeFront( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
 	int pattern = ANIM_PATTERN - ( abs( _target_x - _x ) - 1 )  * ANIM_PATTERN / DODGE_X - 1;
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
@@ -712,7 +712,7 @@ void Player::drawGoal( int camera_y ) const {
 	const int ANIM_PATTERN = 8;
 	const int ANIM_WAIT = 10;
 	int pattern = _act_count / ANIM_WAIT % ANIM_PATTERN;
-	int x1 = _x;
+	int x1 = _x + BOARD_INTERVAL;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
 	int y2 = y1 + DRAW_HEIGHT;
