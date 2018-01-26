@@ -335,5 +335,5 @@ int ScenePlay::getDepth( ) {
 }
 
 int ScenePlay::getLevel( ) {
-	return _board->getLevel( ) + 1;
+	return _board->getLevel( );
 }
