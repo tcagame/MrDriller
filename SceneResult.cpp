@@ -6,8 +6,10 @@
 
 const int DRAW_COMMENT_X = 400;
 const int DRAW_COMMENT_Y = 400;
-const int DRAW_COMMENT_SIZE_X = 600;
-const int DRAW_COMMENT_SIZE_Y = 250;
+const int DRAW_COMMENT_SIZE_X = 660;
+const int DRAW_COMMENT_SIZE_Y = 220;
+const int DRAW_COMMENT_WIDTH = 845;
+const int DRAW_COMMENT_HEIGHT = 279;
 
 const int DRAW_Depth_X = 650;
 const int DRAW_Depth_Y = 155;
@@ -77,7 +79,7 @@ void SceneResult::drawComment( ) const {
 	int y2 = DRAW_COMMENT_Y + DRAW_COMMENT_SIZE_Y;
 	int tx = 0;
 	int ty = 0;
-	graph->draw( Graph::GRAPH_RESULT_COMMENT, TRUE, x1, y1, x2, y2, tx, ty, 850, 300 );
+	graph->draw( Graph::GRAPH_RESULT_COMMENT, TRUE, x1, y1, x2, y2, tx, ty, DRAW_COMMENT_WIDTH, DRAW_COMMENT_HEIGHT );
 }
 
 void SceneResult::drawScore( ) const {
