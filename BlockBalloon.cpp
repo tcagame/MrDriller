@@ -32,6 +32,8 @@ void BlockBalloon::erase( bool connect_erase, bool destroy ) {
 	int mx = getX( ) / BLOCK_WIDTH;
 	int my = getY( ) / BLOCK_HEIGHT;
 
+	Block::erase( false, destroy );
+
 	for ( int i = 0; i < 8; i++ ) {
 		int check_mx = mx - ERASE_BLOCK[ i ][ 0 ];
 		int check_my = my - ERASE_BLOCK[ i ][ 1 ];
@@ -40,13 +42,13 @@ void BlockBalloon::erase( bool connect_erase, bool destroy ) {
 		if ( !block ) {
 			continue;
 		}
-		if ( block->getBlockID( ) == BLOCK_ID_BALLOON ) {
+		//‚·‚Å‚ÉÁ‚¦‚Ä‚¢‚éê‡‚Í
+		if ( block->isErase( ) ) {
 			continue;
 		}
 		//ƒuƒƒbƒN‚ğÁ‚·
-		block->erase( connect_erase, true );
+		block->erase( false, true );
 	}
 
 	//©•ª‚ğíœ
-	Block::erase( connect_erase, destroy );
 }

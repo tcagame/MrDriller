@@ -26,7 +26,6 @@ const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 15;
-const int GOAL_LEVEL = 1;
 const int To_Result_Scene_Time = 10;
 
 //‚»‚Ì‘¼
@@ -950,7 +949,7 @@ void Player::dig( ) {
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
 				Sound::get( )->play( Sound::SOUND_LEVEL_CRUSH );
-				if ( _board->getLevel( ) == GOAL_LEVEL ) {
+				if ( _board->isFinished( ) ) {
 					_goal = true;
 				}
 			}

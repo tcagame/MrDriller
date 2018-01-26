@@ -33,7 +33,7 @@ public:
 public:
 	void load  ( SOUND sound );
 	void unLoad( SOUND sound );
-	void play  ( SOUND sound, bool loop = false, int volume = -1 );
+	void play  ( SOUND sound, bool loop = false, bool top = false, int volume = -1 );
 	void stop  ( SOUND sound );
 	void unLoadAll( );
 private:
