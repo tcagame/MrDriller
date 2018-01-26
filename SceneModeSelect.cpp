@@ -16,7 +16,8 @@ const int MODE_SPRITE_HEIGHT = 128;
 
 SceneModeSelect::SceneModeSelect( Game::MODE* mode ) :
 _select( mode ),
-_count( 0 ) {
+_count( 0 ),
+_next( false ) {
 }
 
 
@@ -39,16 +40,16 @@ void SceneModeSelect::loadGraph( ) {
 //-----------Update Draw-----------//
 Scene::SCENE SceneModeSelect::update( ) {
 	_count++;
-
 	std::shared_ptr< Keyboard > key = Keyboard::get( );
 	//‘I‘ð
 	if ( key->isPushKey( KEY_INPUT_UP ) ) {
 		//ã
 		if ( *_select != 0 ) {
-			*_select = ( Game::MODE )( *_select - 1 );
 			Sound::get( )->play( Sound::SOUND_MENU_SELECT );
+			*_select = ( Game::MODE )( *_select - 1 );
 		}
 	}
+
 	
 	if ( key->isPushKey( KEY_INPUT_DOWN ) ) {
 		//‰º
@@ -61,6 +62,9 @@ Scene::SCENE SceneModeSelect::update( ) {
 	//ƒV[ƒ“‘JˆÚ
 	if ( key->isPushKey( KEY_INPUT_SPACE ) ) {
 		Sound::get( )->play( Sound::SOUND_MENU_CLICK );
+		_next = true;
+	}
+	if ( _next && !Sound::get( )->isPlaying( Sound::SOUND_MENU_CLICK ) ) {
 		return SCENE_PLAY;
 	}
 	return SCENE_MODE_SELECT;

@@ -14,4 +14,5 @@ public://åpè≥
 private:
 	Game::MODE* _select;
 	int _count;
+	bool _next;
 };

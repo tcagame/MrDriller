@@ -8,17 +8,18 @@
 
 //-----------定数宣言------------//
 //レベルデザイン系
-const double AIR_DECREASE_SPEED      = 0.06;//AIRの減る速度
-const double AIR_DECREASE_SPEED_FIRE = 0.10;//AIRの減る速度
+const double AIR_DECREASE_SPEED      = 0.05;//AIRの減る速度
+const double AIR_DECREASE_SPEED_FIRE = 0.08;//AIRの減る速度
 const int PLAYER_SPEED = 8;
+const int FALL_SPEED = 15;
 const int MOVE_WAIT = 2;
 const int DRILL_RANGE = 7;
 const int REVIVE_TIME = 4;
 const int CHECK_AIR = 0;
 const int DODGE_X = 32;
 const int DODGE_SPEED = 2;
-const int JUMP_SPEED_X = 6;
-const int JUMP_SPEED_Y = 8;
+const int JUMP_SPEED_X = 8;
+const int JUMP_SPEED_Y = 12;
 const int JUMP_X = 60;
 const int JUMP_Y = BLOCK_HEIGHT + 1;
 const int AIR_RECOVERY_POINT = 20;
@@ -26,7 +27,8 @@ const int MAX_UP_COUNT = 10;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
-const int MAX_DLILL_COUNT = 15;
+const int GOAL_LEVEL = 1;
+const int MAX_DLILL_COUNT = 4;
 const int To_Result_Scene_Time = 10;
 
 //その他
@@ -885,7 +887,11 @@ void Player::fall( ) {
 		 _act != ACT_STAND ) {
 		return;
 	}
-	_vec_y = PLAYER_SPEED;
+	if ( _depth < 0 ) { 
+		_vec_y = PLAYER_SPEED;
+	} else {
+		_vec_y = FALL_SPEED;
+	}
 }
 
 void Player::dig( ) {
@@ -1078,6 +1084,7 @@ void Player::setAct( ACT act ) {
 
 bool Player::isEnableJump( ) const {
 	//登れるかチェック
+	if ( _depth < BLOCK_DEPTH ) return false;
 	bool result = false;
 	int adjust_x = 0;
 	if ( _direct == DIR_RIGHT ) {
