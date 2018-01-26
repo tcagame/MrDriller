@@ -4,6 +4,13 @@
 #include "Keyboard.h"
 #include "Game.h"
 
+const int DRAW_COMMENT_X = 400;
+const int DRAW_COMMENT_Y = 400;
+const int DRAW_COMMENT_SIZE_X = 660;
+const int DRAW_COMMENT_SIZE_Y = 220;
+const int DRAW_COMMENT_WIDTH = 845;
+const int DRAW_COMMENT_HEIGHT = 279;
+
 const int DRAW_Depth_X = 650;
 const int DRAW_Depth_Y = 155;
 
@@ -20,9 +27,10 @@ const int PLEASE_PUSH_DRAW_WIDTH = 700;
 const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 
-SceneResult::SceneResult( int score, int depth ):
+SceneResult::SceneResult( int score, int depth, int level ):
 _score ( score ),
-_depth ( depth ) {
+_depth ( depth ),
+_level ( 4 ) {
 }
 
 SceneResult::~SceneResult( ) {
@@ -38,6 +46,7 @@ void SceneResult::loadGraph( ) {
 	std::shared_ptr< Graph > graph = Graph::get( );
 	graph->load( Graph::GRAPH_NUMBER );
 	graph->load( Graph::GRAPH_RESULT_BG );
+	graph->load( Graph::GRAPH_RESULT_COMMENT );
 	graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
 }
 
@@ -48,6 +57,7 @@ Scene::SCENE SceneResult::update( ) {
 		//Sound::get( )->play( Sound::SOUND_MENU_CLICK );
 		next = SCENE_TITLE;
 	}
+	_count++;
 	return next;
 }
 
@@ -59,6 +69,18 @@ void SceneResult::draw( ) const {
 	drawScore( );
 	drawDepth( );
 	drawPleasePush( );
+	drawComment( );
+}
+
+void SceneResult::drawComment( ) const {
+	std::shared_ptr< Graph > graph = Graph::get( );
+	int x1 = DRAW_COMMENT_X;
+	int y1 = DRAW_COMMENT_Y;
+	int x2 = DRAW_COMMENT_X + DRAW_COMMENT_SIZE_X;
+	int y2 = DRAW_COMMENT_Y + DRAW_COMMENT_SIZE_Y;
+	int tx = DRAW_COMMENT_WIDTH * 0;
+	int ty = DRAW_COMMENT_HEIGHT * _level;
+	graph->draw( Graph::GRAPH_RESULT_COMMENT, TRUE, x1, y1, x2, y2, tx, ty, DRAW_COMMENT_WIDTH, DRAW_COMMENT_HEIGHT );
 }
 
 void SceneResult::drawScore( ) const {
@@ -102,7 +124,7 @@ void SceneResult::drawDepth( ) const {
 }
 
 void SceneResult::drawPleasePush( ) const{
-	std::shared_ptr<Graph>graph=Graph::get( );
+	std::shared_ptr< Graph >graph = Graph::get( );
 	int x1 = ( SCREEN_WIDTH - PLEASE_PUSH_DRAW_WIDTH ) / 2;
 	int y1 = PLEASH_PUSH_DRAW_Y;
 	int x2 = x1 + PLEASE_PUSH_DRAW_WIDTH;

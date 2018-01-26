@@ -5,7 +5,7 @@
 #include "Board.h"
 #include "BlockIDList.h"
 
-const int PLAYER_MAX_LIFE = 2;
+const int PLAYER_MAX_LIFE = 0;
 
 class Player {
 public:

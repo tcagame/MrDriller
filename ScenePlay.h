@@ -8,7 +8,7 @@
 
 class ScenePlay : public Scene {
 public:
-	ScenePlay( Game::MODE mode, int *score, int *depth );
+	ScenePlay( Game::MODE mode, int *score, int *depth, int *level );
 	virtual ~ScenePlay( );
 public://åpè≥
 	SCENE update( );
@@ -18,6 +18,7 @@ public://åpè≥
 public://get
 	int getScore( );
 	int getDepth( );
+	int getLevel( );
 private:
 	void drawDepth( ) const;
 	void drawAir( ) const;
@@ -35,5 +36,6 @@ private:
 	char _brightness;//ñæÇÈÇ≥( MAX 100 )
 	int *_score;
 	int *_depth;
+	int *_level;
 	Game::MODE _mode;
 };
