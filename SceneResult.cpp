@@ -27,9 +27,10 @@ const int PLEASE_PUSH_DRAW_WIDTH = 700;
 const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 
-SceneResult::SceneResult( int score, int depth ):
+SceneResult::SceneResult( int score, int depth, int level ):
 _score ( score ),
-_depth ( depth ) {
+_depth ( depth ),
+_level ( level ) {
 }
 
 SceneResult::~SceneResult( ) {
