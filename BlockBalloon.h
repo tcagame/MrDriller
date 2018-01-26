@@ -7,7 +7,6 @@ public:
 public:
 	int getBlockID( ) { return BLOCK_ID_BALLOON; };
 	void setFall( bool fall ) { };
-	void erase( bool connect_erase, bool destroy );
 protected:
 	void act( );
 	void checkConnect( ){ };

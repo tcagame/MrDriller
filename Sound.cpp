@@ -32,7 +32,7 @@ Sound::Sound( ) {
 	_filenames[ SOUND_FALL 				   ] = "Resource/Sound/effect/effect13.mp3";
 	_filenames[ SOUND_MENU_SELECT 		   ] = "Resource/Sound/effect/effect14.mp3";
 	_filenames[ SOUND_MENU_CLICK 		   ] = "Resource/Sound/effect/effect15.mp3";
-	_filenames[ SOUND_BGM_AIRMAN 		   ] = "Resource/Sound/bgm/Airman.mp3";
+	_filenames[ SOUND_BGM_AIRMAN 		   ] = "Resource/Sound/bgm/Mr.Driller's Theme(Ardenten Ver.).mp3";
 	for ( int i = 0; i < MAX_SOUND; i++ ) {
 		_sounds[ i ] = -1;
 	}
