@@ -273,3 +273,44 @@ void Board::eraseColumnBlockUp( int x, int y ) {
 bool Board::isFinished( ) const {
 	return _finished;
 }
+
+bool Board::isFireArea( int x, int y ) const {
+	if ( x < 0 || x > BLOCK_WIDTH * BLOCK_WIDTH_NUM ) {
+		return false;
+	}
+	y -= _level * BLOCK_HEIGHT_NUM * BLOCK_HEIGHT;
+	int mx = x / BLOCK_WIDTH;
+	int my = y / BLOCK_HEIGHT;
+
+	const int OFFSET[ 8 ][ 2 ] = {
+		{ -1, -1 },
+		{  0, -1 },
+		{  1, -1 },
+
+		{ -1,  0 },
+		{  1,  0 },
+
+		{ -1,  1 },
+		{  0,  1 },
+		{  1,  1 },
+	};
+	for ( int i = 0; i < 8; i++ ) {
+		int check_mx = mx + OFFSET[ i ][ 0 ];
+		int check_my = my + OFFSET[ i ][ 1 ];
+		//範囲外
+		if ( check_mx < 0 || check_mx >= BLOCK_WIDTH_NUM || check_my < 0 ) {
+			continue;
+		}
+		int idx = check_mx + check_my * BLOCK_WIDTH_NUM;
+		//ブロック無し
+		if ( _virtual_blocks[ idx ] == std::shared_ptr< Block >( ) ) {
+			continue;
+		}
+		//Fireブロック
+		if ( _virtual_blocks[ idx ]->getBlockID( ) == BLOCK_ID_FIRE ) {
+			return true;
+		}
+	}
+	return false;
+}
+

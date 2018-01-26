@@ -11,14 +11,16 @@ public:
 public:
 	void update( );
 	void draw( int camera_y ) const;
-public:
+public://get is
 	std::shared_ptr< class Block > getBlockNow( int x, int y ) const;
 	std::shared_ptr< class Block > getBlock( int x, int y ) const;
 	std::shared_ptr< class Block > getBlockM( int mx, int my ) const;
-	void eraseBlock( std::shared_ptr< class Block > block );
-	void eraseColumnBlockUp( int x, int y );
 	int getLevel( ) const;
 	bool isFinished( ) const;
+	bool isFireArea( int x, int y ) const;
+public:
+	void eraseBlock( std::shared_ptr< class Block > block );
+	void eraseColumnBlockUp( int x, int y );
 private:
 	void loadBlock( );
 	void updateBlocks( );
