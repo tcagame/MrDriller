@@ -8,8 +8,8 @@
 #include "Sound.h"
 
 //íËêîêÈåæ
-const int UI_X = 900;
-const int DRAW_AIR_GAGE_X = 917;
+const int UI_X = 900 + BOARD_INTERVAL * 2;
+const int DRAW_AIR_GAGE_X = 930;
 const int DRAW_AIR_GAGE_Y = 362;
 
 const int DRAW_AIR_NUM_X = 1105;
@@ -41,10 +41,11 @@ const int MAX_BRIGHTNESS = 100;
 
 const int SPRITE_SIZE = 64;
 
-ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth ) :
+ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth, int *level ) :
 _mode( mode ),
 _score( score ),
 _depth( depth ),
+_level( level ),
 _brightness( MAX_BRIGHTNESS ) {
 	_board  = std::shared_ptr< Board  >( new Board( ) );
 	_board->loadBlock( );
@@ -268,7 +269,7 @@ void ScenePlay::drawUIBg( ) const {
 	int y1 = 0;
 	int x2 = SCREEN_WIDTH;
 	int y2 = SCREEN_HEIGHT;
-	Graph::get( )->draw( Graph::GRAPH_PLAY_UI, FALSE, x1, y1, x2, y2 );
+	Graph::get( )->draw( Graph::GRAPH_PLAY_UI, TRUE, x1, y1, x2, y2 );
 }
 
 void ScenePlay::drawLife( ) const {
@@ -331,4 +332,8 @@ int ScenePlay::getScore( ) {
 
 int ScenePlay::getDepth( ) {
 	return _player->getDepth( );
+}
+
+int ScenePlay::getLevel( ) {
+	return _board->getLevel( );
 }
