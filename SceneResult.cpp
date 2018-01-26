@@ -54,6 +54,7 @@ Scene::SCENE SceneResult::update( ) {
 		//Sound::get( )->play( Sound::SOUND_MENU_CLICK );
 		next = SCENE_TITLE;
 	}
+	_count++;
 	return next;
 }
 
@@ -120,7 +121,7 @@ void SceneResult::drawDepth( ) const {
 }
 
 void SceneResult::drawPleasePush( ) const{
-	std::shared_ptr<Graph>graph=Graph::get( );
+	std::shared_ptr< Graph >graph = Graph::get( );
 	int x1 = ( SCREEN_WIDTH - PLEASE_PUSH_DRAW_WIDTH ) / 2;
 	int y1 = PLEASH_PUSH_DRAW_Y;
 	int x2 = x1 + PLEASE_PUSH_DRAW_WIDTH;
