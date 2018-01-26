@@ -47,6 +47,7 @@ _score( score ),
 _depth( depth ),
 _brightness( MAX_BRIGHTNESS ) {
 	_board  = std::shared_ptr< Board  >( new Board( ) );
+	_board->loadBlock( );
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
 }

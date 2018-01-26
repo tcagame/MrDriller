@@ -20,11 +20,11 @@ public://get is
 	bool isFinished( ) const;
 	bool isFireArea( int x, int y ) const;
 public:
+	void loadBlock( );
 	void eraseBlock( std::shared_ptr< class Block > block );
 	void eraseColumnBlockUp( int x, int y );
 	void setCheck( bool check );
 private:
-	void loadBlock( );
 	void updateBlocks( );
 	void checkBlock( );
 	void checkBlockPos( );
