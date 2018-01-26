@@ -78,11 +78,11 @@ void SceneModeSelect::draw( ) const {
 	
 	{//Please Push
 		int x1 = ( SCREEN_WIDTH - PLEASE_PUSH_DRAW_WIDTH ) / 2;
-		int y1 = 600;
+		int y1 = 550;
 		int x2 = x1 + PLEASE_PUSH_DRAW_WIDTH;
 		int y2 = y1 + PLEASE_PUSH_DRAW_HEIGHT;
 		SetDrawBlendMode( DX_BLENDMODE_ADD, ( int )( ( sin( _count * 0.03 ) + 1 ) * 64 + 64 ) );//–¾‚é‚­‚·‚é
-		graph->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, TRUE, x1, y1, x2, y2, MODE_SPRITE_WIDTH, 256, MODE_SPRITE_WIDTH, MODE_SPRITE_HEIGHT );
+		graph->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, TRUE, x1, y1, x2, y2 );
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND, 0 );
 	}
 	{//Arrow

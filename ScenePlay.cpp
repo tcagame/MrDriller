@@ -92,7 +92,6 @@ Scene::SCENE ScenePlay::update( ) {
 	_player->update( );
 	_board->update( );
 	_camera->update( _player->getY( ) );
-
 	_brightness = 25 + ( int )( _player->getAir( ) * 0.75 );
 
 	SCENE next = SCENE_PLAY;
