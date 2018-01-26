@@ -97,10 +97,10 @@ Scene::SCENE ScenePlay::update( ) {
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
-		if ( _player->getAct( ) == Player::ACT_GOAL ) {
+		//if ( _player->getAct( ) == Player::ACT_GOAL ) {
 			*_score = _player->getScore( );
 			*_depth = _player->getDepth( );
-		}
+		//}
 		next = SCENE_RESULT;
 	}
 	if ( _player->isGoal( ) ) {

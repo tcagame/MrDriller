@@ -13,8 +13,10 @@ public://åpè≥
 private:
 	void drawDepth( ) const;
 	void drawScore( ) const;
+	void drawPleasePush( ) const;
 private:
 	int _score;
 	int _depth;
+	int _count;
 	//int _se[ 18 ];
 };
