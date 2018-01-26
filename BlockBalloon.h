@@ -10,6 +10,7 @@ public:
 protected:
 	void act( );
 	void checkConnect( ){ };
+	void changeTy( ) { };
 	void fall( ){ };
 };
 

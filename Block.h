@@ -53,6 +53,7 @@ protected://Œp³
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 	virtual void fall( );//—‰ºˆ—
+	virtual void changeTy( );
 protected://setŒn
 	void setFinished( bool finish );
 	void setTx( int tx );//‰æ‘œ“àÀ•W
