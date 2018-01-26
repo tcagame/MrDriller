@@ -30,7 +30,8 @@ const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 SceneResult::SceneResult( int score, int depth, int level ):
 _score ( score ),
 _depth ( depth ),
-_level ( 4 ) {
+_rand ( GetRand( 1 ) ),
+_level ( level ) {
 }
 
 SceneResult::~SceneResult( ) {
@@ -78,7 +79,7 @@ void SceneResult::drawComment( ) const {
 	int y1 = DRAW_COMMENT_Y;
 	int x2 = DRAW_COMMENT_X + DRAW_COMMENT_SIZE_X;
 	int y2 = DRAW_COMMENT_Y + DRAW_COMMENT_SIZE_Y;
-	int tx = DRAW_COMMENT_WIDTH * 0;
+	int tx = DRAW_COMMENT_WIDTH * _rand;
 	int ty = DRAW_COMMENT_HEIGHT * _level;
 	graph->draw( Graph::GRAPH_RESULT_COMMENT, TRUE, x1, y1, x2, y2, tx, ty, DRAW_COMMENT_WIDTH, DRAW_COMMENT_HEIGHT );
 }

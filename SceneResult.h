@@ -19,6 +19,7 @@ private:
 	int _score;
 	int _depth;
 	int _level;
+	int _rand;
 	int _count;
 	//int _se[ 18 ];
 };
