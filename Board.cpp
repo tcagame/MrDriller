@@ -71,8 +71,7 @@ void Board::loadBlock( ) {
 	}
 	std::array< char, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM + 1 > map = { };
 
-	srand( MAX_PATTERN );
-	int pattern = rand( ) % MAX_PATTERN;
+	int pattern = GetRand( MAX_PATTERN );
 	
 	switch ( _level ) {
 	case 0:

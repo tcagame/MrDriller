@@ -15,4 +15,5 @@ private:
 	void drawPleasePush( ) const;
 private:
 	int _count;
+	bool _next;
 };
