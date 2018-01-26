@@ -8,7 +8,8 @@
 
 //-----------定数宣言------------//
 //レベルデザイン系
-const double AIR_DECREASE_SPEED = 0.05;//AIRの減る速度
+const double AIR_DECREASE_SPEED      = 0.05;//AIRの減る速度
+const double AIR_DECREASE_SPEED_FIRE = 0.08;//AIRの減る速度
 const int PLAYER_SPEED = 8;
 const int FALL_SPEED = 15;
 const int MOVE_WAIT = 2;
@@ -81,6 +82,7 @@ void Player::update( ) {
 	move( );    //移動
 	//深さ
 	checkDepth( );
+	checkAirDecreaseSpeed( );
 	decreaseAir( );
 	_act_count++;
 }
@@ -1051,6 +1053,15 @@ bool Player::isRunOutAir( ) const {
 void Player::checkDepth( ) {
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH - 20;
 }
+
+void Player::checkAirDecreaseSpeed( ) {
+	if ( _board->isFireArea( _x, _y ) ) {
+		_air_decrease_speed = AIR_DECREASE_SPEED_FIRE;
+	} else {
+		_air_decrease_speed = AIR_DECREASE_SPEED;
+	}
+}
+
 
 void Player::setAct( ACT act ) {
 	_dig = false;

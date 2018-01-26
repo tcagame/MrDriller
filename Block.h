@@ -35,6 +35,7 @@ public://Get Is
 	int getGroup( ) const;
 	int getX( ) const;
 	int getY( ) const;
+	int getFallCount( ) const;
 	std::shared_ptr< class Board > getBoard( );
 	virtual int getBlockID( ) = 0;
 public://ÇªÇÃëº(åpè≥)
