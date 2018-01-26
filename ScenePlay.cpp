@@ -102,6 +102,7 @@ Scene::SCENE ScenePlay::update( ) {
 		//if ( _player->getAct( ) == Player::ACT_GOAL ) {
 			*_score = _player->getScore( );
 			*_depth = _player->getDepth( );
+			*_level = _board->getLevel( );
 		//}
 		next = SCENE_RESULT;
 	}

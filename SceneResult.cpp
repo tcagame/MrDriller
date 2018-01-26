@@ -30,8 +30,8 @@ const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 SceneResult::SceneResult( int score, int depth, int level ):
 _score ( score ),
 _depth ( depth ),
-_rand ( GetRand( 1 ) ),
-_level ( level ) {
+_level ( level ),
+_rand ( GetRand( 1 ) ) {
 }
 
 SceneResult::~SceneResult( ) {
