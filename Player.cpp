@@ -8,7 +8,8 @@
 
 //-----------定数宣言------------//
 //レベルデザイン系
-const double AIR_DECREASE_SPEED = 0.06;//AIRの減る速度
+const double AIR_DECREASE_SPEED      = 0.06;//AIRの減る速度
+const double AIR_DECREASE_SPEED_FIRE = 0.10;//AIRの減る速度
 const int PLAYER_SPEED = 8;
 const int MOVE_WAIT = 2;
 const int DRILL_RANGE = 7;
@@ -49,7 +50,7 @@ const int CENTRAL_Y = UP_Y + ( DOWN_Y - UP_Y ) / 2;
 
 //-----------関数定義------------//
 
-Player::Player( int x, int y, std::shared_ptr< Board > board ):
+Player::Player( int x, int y, std::shared_ptr< Board > board ) :
 	_board( board ),
 	_air( AIR_MAX ),
 	_depth( 0 ),
@@ -60,6 +61,7 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_air_point( 100 ),
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
+	_air_decrease_speed( AIR_DECREASE_SPEED ),
 	_direct( DIR_RIGHT ),
 	_standing( true ),
 	_finished( false ) {
@@ -79,6 +81,7 @@ void Player::update( ) {
 	move( );    //移動
 	//深さ
 	checkDepth( );
+	checkAirDecreaseSpeed( );
 	decreaseAir( );
 	_act_count++;
 }
@@ -1002,7 +1005,7 @@ void Player::decreaseAir( ) {
 		return;
 	}
 	if ( !isGoal( ) ) {
-		_air -= AIR_DECREASE_SPEED;
+		_air -= _air_decrease_speed;
 	}
 	if ( _air <= 30 && _air > 10 ) {
 		Sound::get( )->play( Sound::SOUND_AIR_LESS_THAN_THRITY, true );
@@ -1047,6 +1050,15 @@ bool Player::isRunOutAir( ) const {
 void Player::checkDepth( ) {
 	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH - 20;
 }
+
+void Player::checkAirDecreaseSpeed( ) {
+	if ( _board->isFireArea( _x, _y ) ) {
+		_air_decrease_speed = AIR_DECREASE_SPEED_FIRE;
+	} else {
+		_air_decrease_speed = AIR_DECREASE_SPEED;
+	}
+}
+
 
 void Player::setAct( ACT act ) {
 	_dig = false;

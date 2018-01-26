@@ -40,7 +40,7 @@ public://getån
 	int getX( ) const;
 	int getY( ) const;
 	ACT getAct( ) const;
-private:
+private://Act
 	void act( );
 	void actOnStand( );
 	void actOnFall( );
@@ -52,6 +52,7 @@ private:
 	void actOnDodgeBack( );
 	void actOnDodgeFront( );
 	void actOnGoal( );
+private://Draw
 	void drawStand( int camera_y ) const;
 	void drawFall( int camera_y ) const;
 	void drawJump( int camera_y ) const;
@@ -62,19 +63,22 @@ private:
 	void drawDodgeBack( int camera_y ) const;
 	void drawDodgeFront( int camera_y ) const;
 	void drawGoal( int camera_y ) const;
+private://is
+	bool isCrushed( ) const;
+	bool isRunOutAir( ) const;
+	bool isEnableJump( ) const;
+	bool isDodgeBack( ) const;
+	bool isDodgeFront( ) const;
+private://other
 	void move( );
 	void fall( );
 	void dig( );
 	void ifAirRecover( );
 	void eraseUpBlock( );
 	void decreaseAir( );
-	bool isCrushed( ) const;
-	bool isRunOutAir( ) const;
-	bool isEnableJump( ) const;
-	bool isDodgeBack( ) const;
-	bool isDodgeFront( ) const;
-	void checkDepth( );
 	void setAct( ACT act );
+	void checkDepth( );
+	void checkAirDecreaseSpeed( );
 private:
 	double _air;
 	int _depth;
@@ -90,6 +94,7 @@ private:
 	int _vec_y;
 	int _target_x;
 	int _target_y;
+	double _air_decrease_speed;
 	bool _standing;
 	bool _dig;
 	bool _finished;
