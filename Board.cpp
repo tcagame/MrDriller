@@ -248,8 +248,12 @@ void Board::checkBlockFall( ) {
 			continue;
 		}
 		if ( _virtual_blocks[ check_idx ]->isFall( ) ) {
-			_virtual_blocks[ idx ]->setFall( true );
-			continue;
+			int count1 = _virtual_blocks[ check_idx ]->getFallCount( );
+			int count2 = _virtual_blocks[ idx       ]->getFallCount( );
+			if ( count1 == count2 ) {
+				_virtual_blocks[ idx ]->setFall( true );
+				continue;
+			}
 		}
 		_virtual_blocks[ idx ]->setFallGroup( false );
 	}
