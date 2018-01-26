@@ -9,6 +9,7 @@ const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 SceneTitle::SceneTitle( ) :
 _count( 0 ),
+_click( true ),
 _next( false ) {
 }
 
@@ -29,9 +30,10 @@ void SceneTitle::loadGraph( ) {
 //-----------Update Draw-----------//
 Scene::SCENE SceneTitle::update( ) {
 	SCENE next = SCENE_TITLE;
-	if ( Keyboard::get( )->isPushKey( KEY_INPUT_SPACE ) ) {
+	if ( Keyboard::get( )->isPushKey( KEY_INPUT_SPACE ) && _click ) {
 		Sound::get( )->play( Sound::SOUND_MENU_CLICK );
 		_next = true;
+		_click = false;
 	}
 	if ( _next && !Sound::get( )->isPlaying( Sound::SOUND_MENU_CLICK ) ) {
 		next = SCENE_MODE_SELECT;
