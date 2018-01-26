@@ -15,7 +15,7 @@ const int NUM_HEIGHT = 128;
 const int DRAW_NUM_SIZE_X = 80;
 const int DRAW_NUM_SIZE_Y = 80;
 
-const int PLEASH_PUSH_DRAW_Y = 600;
+const int PLEASH_PUSH_DRAW_Y = 650;
 const int PLEASE_PUSH_DRAW_WIDTH = 700;
 const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
