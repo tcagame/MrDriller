@@ -41,12 +41,14 @@ const int MAX_BRIGHTNESS = 100;
 
 const int SPRITE_SIZE = 64;
 
-ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth ) :
+ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth, int *level ) :
 _mode( mode ),
 _score( score ),
 _depth( depth ),
+_level( level ),
 _brightness( MAX_BRIGHTNESS ) {
 	_board  = std::shared_ptr< Board  >( new Board( ) );
+	_board->loadBlock( );
 	_camera = std::shared_ptr< Camera >( new Camera( ) );
 	_player = std::shared_ptr< Player >( new Player( 400, -50, _board ) );
 }
@@ -73,7 +75,7 @@ void ScenePlay::loadSound( ) {
 	sound->load( Sound::SOUND_MENU_SELECT  		   );//メニュー選択
 	sound->load( Sound::SOUND_MENU_CLICK  		   );//メニュー決定
 	sound->load( Sound::SOUND_BGM_AIRMAN           );//BGM
-	sound->play( Sound::SOUND_BGM_AIRMAN, true, true, 256 );
+	sound->play( Sound::SOUND_BGM_AIRMAN, true, true, 128 );
 }
 
 void ScenePlay::loadGraph( ) {
@@ -283,7 +285,7 @@ void ScenePlay::drawLife( ) const {
 	int y2 = y1 + DRAW_NUM_SIZE_Y;
 	for ( int i = 0; i < PLAYER_MAX_LIFE; i++ ) {
 		int check_life = PLAYER_MAX_LIFE - i - 1;
-		if ( life >= check_life ) {
+		if ( life > check_life ) {
 			//顔描画
 			graph->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, 0, 0, 64, 64 );
 		} else {
@@ -330,4 +332,8 @@ int ScenePlay::getScore( ) {
 
 int ScenePlay::getDepth( ) {
 	return _player->getDepth( );
+}
+
+int ScenePlay::getLevel( ) {
+	return _board->getLevel( ) + 1;
 }

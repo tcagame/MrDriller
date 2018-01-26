@@ -24,4 +24,5 @@ private:
 	MODE _mode;
 	int _score;
 	int _depth;
+	int _level;
 };

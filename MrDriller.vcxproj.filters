@@ -35,7 +35,6 @@
     <ClCompile Include="BlockAir.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="BlockLevel.cpp">
       <Filter>Play\Block</Filter>
     </ClCompile>
@@ -131,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="BlockBomb.cpp">
       <Filter>Play\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,9 +7,10 @@ public:
 public:
 	int getBlockID( ) { return BLOCK_ID_AIR; };
 protected:
-	void act( );//ŒÅ—Lˆ—H
+	void act( );
 	void eraseAnimation( );
 	void changeTxByConnect( ) { };
+	void changeTy( ) { };
 	void checkConnect( ) { };
 private:
 	int _count;

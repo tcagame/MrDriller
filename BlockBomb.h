@@ -7,6 +7,7 @@ public:
 protected:
 	void erase( bool connect_erase, bool destroy );
 	void checkConnect( ) { };
+	void changeTy( ) { };
 	int getBlockID( ) { return BLOCK_ID_BOMB; };
 	void act( ) { };
 };

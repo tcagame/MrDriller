@@ -39,6 +39,9 @@ void BlockBomb::erase( bool connect_erase, bool destroy ) {
 		if ( !block ) {
 			continue;
 		}
+		if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
+			continue;
+		}
 		//‚·‚Å‚ÉÁ‚¦‚Ä‚¢‚éê‡‚Í
 		if ( block->isErase( ) ) {
 			continue;

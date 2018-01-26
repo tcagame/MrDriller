@@ -8,6 +8,7 @@ protected:
 	void act( );//ŒÅ—Lˆ—
 	int getBlockID( ) { return BLOCK_ID_FIRE; };
 	void changeTxByConnect( ) { };
+	void changeTy( ) { };
 	void checkConnect( ) { };
 private:
 	int _count;
