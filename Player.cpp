@@ -26,12 +26,8 @@ const int MAX_UP_COUNT = 10;
 const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
-<<<<<<< HEAD
-const int MAX_DLILL_COUNT = 4;
 const int GOAL_LEVEL = 1;
-=======
-const int MAX_DLILL_COUNT = 15;
->>>>>>> 655dde9aca5b1ade097026e5205d28047a145c06
+const int MAX_DLILL_COUNT = 4;
 const int To_Result_Scene_Time = 10;
 
 //‚»‚Ì‘¼
