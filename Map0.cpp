@@ -9,7 +9,7 @@ Map0::Map0( ) {
 		"         "
 		"  A      "
 		" OO G    "
-		"**YYGFF**"
+		"**YY#FF**"
 		"***GGG***"
 		"YYYRRRYYY"
 		"RLBRARBBB"

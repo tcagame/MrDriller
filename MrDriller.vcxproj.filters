@@ -129,6 +129,9 @@
     <ClCompile Include="Graph.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="BlockBomb.cpp">
+      <Filter>Play\Block</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Graph.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockBomb.h">
+      <Filter>Play\Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

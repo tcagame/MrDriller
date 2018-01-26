@@ -11,6 +11,7 @@
 #include "BlockFire.h"
 #include "BlockIron.h"
 #include "BlockBalloon.h"
+#include "BlockBomb.h"
 #include "Camera.h"
 #include "Map0.h"
 #include "Map1.h"
@@ -123,10 +124,13 @@ void Board::loadBlock( ) {
 			block = std::shared_ptr< Block >( new BlockFire );
 			break;
 		case 'I':
-			block = std::shared_ptr< Block >( new BlockIron );
+			block = std::shared_ptr< Block >( new BlockIron ); 
 			break;
 		case 'O':
 			block = std::shared_ptr< Block >( new BlockBalloon );
+			break;
+		case '#':
+			block = std::shared_ptr< Block >( new BlockBomb );
 			break;
 		}
 		if ( !block ) {
