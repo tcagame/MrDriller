@@ -59,7 +59,7 @@ void Board::updateBlocks( ) {
 		std::shared_ptr< Block > block = *ite;
 		block->update( );
 		if ( block->isFinished( ) ) {
-			setCheck( true );
+			//setCheck( true );
 			ite = _blocks.erase( ite );
 			continue;
 		}
@@ -160,6 +160,9 @@ void Board::checkBlockPos( ) {
 	_virtual_blocks = { };
 
 	for ( std::shared_ptr< Block > block : _blocks ) {
+		if ( block->isErase( ) ) {
+			continue;
+		}
 		int mx = block->getX( ) / BLOCK_WIDTH;
 		int my = block->getY( ) / BLOCK_HEIGHT - _level * BLOCK_HEIGHT_NUM;
 		int idx = my * BLOCK_WIDTH_NUM + mx;
@@ -195,6 +198,9 @@ std::shared_ptr< Block > Board::getBlockNow( int x, int y ) const {
 		return std::shared_ptr< Block >( );
 	}
 	for ( std::shared_ptr< Block > block : _blocks ) {
+		if ( block->isErase( ) ) {
+			continue;
+		}
 		if ( block->isExistence( x, y ) ) {
 			return block;
 		}
@@ -274,6 +280,7 @@ void Board::eraseBlock( std::shared_ptr< Block > block ) {
 		_level_erase = true;
 		_level++;
 	}
+	setCheck( true );
 }
 
 void Board::eraseColumnBlockUp( int x, int y ) {
@@ -292,7 +299,7 @@ void Board::eraseColumnBlockUp( int x, int y ) {
 			_virtual_blocks[ idx ]->erase( false, true );
 		}
 	}
-	checkBlockConnect( );
+	setCheck( true );
 }
 
 void Board::setCheck( bool check ) {
