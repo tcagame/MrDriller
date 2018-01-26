@@ -42,6 +42,9 @@ Sound::Sound( ) {
 Sound::~Sound( ) {
 }
 
+bool Sound::isPlaying( SOUND sound ) const {
+	return CheckSoundMem( _sounds[ sound ] ) == TRUE;
+}
 
 void Sound::load( SOUND sound ) {
 	_sounds[ sound ] = LoadSoundMem( _filenames[ sound ].c_str( ) );

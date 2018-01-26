@@ -31,10 +31,11 @@ public:
 	Sound( );
 	virtual ~Sound( );
 public:
-	void load  ( SOUND sound );
-	void unLoad( SOUND sound );
-	void play  ( SOUND sound, bool loop = false, bool top = false, int volume = -1 );
-	void stop  ( SOUND sound );
+	bool isPlaying( SOUND sound ) const;
+	void load     ( SOUND sound );
+	void unLoad   ( SOUND sound );
+	void play     ( SOUND sound, bool loop = false, bool top = false, int volume = -1 );
+	void stop     ( SOUND sound );
 	void unLoadAll( );
 private:
 	std::array< std::string, MAX_SOUND > _filenames;
