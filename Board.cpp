@@ -59,7 +59,7 @@ void Board::updateBlocks( ) {
 		std::shared_ptr< Block > block = *ite;
 		block->update( );
 		if ( block->isFinished( ) ) {
-			//setCheck( true );
+			setCheck( true );
 			ite = _blocks.erase( ite );
 			continue;
 		}
