@@ -30,6 +30,9 @@ Scene::SCENE SceneTitle::update( ) {
 	SCENE next = SCENE_TITLE;
 	if ( Keyboard::get( )->isPushKey( KEY_INPUT_SPACE ) ) {
 		Sound::get( )->play( Sound::SOUND_MENU_CLICK );
+		_next = true;
+	}
+	if ( _next && !Sound::get( )->isPlaying( Sound::SOUND_MENU_CLICK ) ) {
 		next = SCENE_MODE_SELECT;
 	}
 	_count++;
