@@ -55,14 +55,18 @@ void Sound::unLoad( SOUND sound ) {
 	_sounds[ sound ] = -1;
 }
 
-void Sound::play( SOUND sound, bool loop, int volume ) {
+void Sound::play( SOUND sound, bool loop, bool top, int volume ) {
 	if ( volume > 0 ) {
 		ChangeVolumeSoundMem( volume, _sounds[ sound ] );
 	}
+	int top_flag = FALSE;
+	if ( top ) {
+		top_flag = TRUE;
+	}
 	if ( !loop ) {
-		PlaySoundMem( _sounds[ sound ], DX_PLAYTYPE_BACK );
+		PlaySoundMem( _sounds[ sound ], DX_PLAYTYPE_BACK, top_flag );
 	} else {
-		PlaySoundMem( _sounds[ sound ], DX_PLAYTYPE_LOOP );
+		PlaySoundMem( _sounds[ sound ], DX_PLAYTYPE_LOOP, top_flag );
 	}
 }
 
