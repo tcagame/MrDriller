@@ -31,15 +31,15 @@ public:
 	bool isDead( ) const;
 	bool isStanding( ) const;
 	bool isFinished( ) const;
-	bool isResultScene( ) const;
 	bool isGoal( ) const;
 public://getån
-	int getAir( );
-	int getDepth( );
-	int getLife( );
-	int getScore( );
-	int getX( );
-	int getY( );
+	int getAir( ) const;
+	int getDepth( ) const;
+	int getLife( ) const;
+	int getScore( ) const;
+	int getX( ) const;
+	int getY( ) const;
+	ACT getAct( ) const;
 private:
 	void act( );
 	void actOnStand( );

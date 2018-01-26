@@ -98,15 +98,14 @@ Scene::SCENE ScenePlay::update( ) {
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
+		if ( _player->getAct( ) == Player::ACT_GOAL ) {
+			*_score = _player->getScore( );
+			*_depth = _player->getDepth( );
+		}
 		next = SCENE_RESULT;
 	}
 	if ( _player->isGoal( ) ) {
 		Sound::get( )->stop( Sound::SOUND_BGM_AIRMAN );
-	}
-	if( _player->isResultScene( ) ) {
-		*_score = _player->getScore( );
-		*_depth = _player->getDepth( );
-		next = SCENE_RESULT;
 	}
 	if ( Keyboard::get( )->isPushKey( KEY_INPUT_Q ) ) {
 		next = SCENE_MODE_SELECT;
