@@ -283,7 +283,7 @@ void ScenePlay::drawLife( ) const {
 	int y2 = y1 + DRAW_NUM_SIZE_Y;
 	for ( int i = 0; i < PLAYER_MAX_LIFE; i++ ) {
 		int check_life = PLAYER_MAX_LIFE - i - 1;
-		if ( life >= check_life ) {
+		if ( life > check_life ) {
 			//Šç•`‰æ
 			graph->draw( Graph::GRAPH_PLAY_CHARACTER, TRUE, x1, y1, x2, y2, 0, 0, 64, 64 );
 		} else {
