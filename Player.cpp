@@ -26,7 +26,6 @@ const int BLOCK_POINT = 10;
 const int SOLID_BLOCK_POINT = -20;
 const int SOLID_AIR = 20;
 const int MAX_DLILL_COUNT = 15;
-const int GOAL_LEVEL = 1;
 const int To_Result_Scene_Time = 10;
 
 //‚»‚Ì‘¼
@@ -62,7 +61,6 @@ Player::Player( int x, int y, std::shared_ptr< Board > board ):
 	_up_count( 0 ),
 	_move_anim_count( 0 ),
 	_direct( DIR_RIGHT ),
-	_to_result_scene( false ),
 	_standing( true ),
 	_finished( false ) {
 	setAct( ACT_FALL );
@@ -423,7 +421,7 @@ void Player::actOnDodgeFront( ) {
 void Player::actOnGoal( ) {
 	_act_count++;
 	if( _act_count >= To_Result_Scene_Time * FRAME ) {
-		_to_result_scene = true;
+		_finished = true;
 	}
 }
 
@@ -725,28 +723,33 @@ bool Player::isDead( ) const {
 	return _act == ACT_DEAD_AIR || _act == ACT_DEAD_CRUSH;
 }
 
-int Player::getAir( ) {
+int Player::getAir( ) const {
 	return ( int )_air;
 }
 
-int Player::getDepth( ) {
+int Player::getDepth( ) const {
 	return _depth;
 }
 
-int Player::getLife( ) {
+int Player::getLife( ) const {
 	return _life;
 }
 
-int Player::getScore( ) {
+int Player::getScore( ) const {
 	return _score;
 }
 
-int Player::getX( ) {
+int Player::getX( ) const {
 	return _x;
 }
 
-int Player::getY( ) {
+int Player::getY( ) const {
 	return _y;
+}
+
+
+Player::ACT Player::getAct( ) const {
+	return _act;
 }
 
 bool Player::isStanding( ) const {
@@ -759,10 +762,6 @@ bool Player::isFinished( ) const {
 
 bool Player::isGoal( ) const {
 	return _goal;
-}
-
-bool Player::isResultScene( ) const {
-	return _to_result_scene;
 }
 
 void Player::move( ) {
@@ -950,7 +949,7 @@ void Player::dig( ) {
 			}
 			if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
 				Sound::get( )->play( Sound::SOUND_LEVEL_CRUSH );
-				if ( _board->getLevel( ) == GOAL_LEVEL ) {
+				if ( _board->isFinished( ) ) {
 					_goal = true;
 				}
 			}

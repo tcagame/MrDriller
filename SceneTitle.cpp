@@ -3,9 +3,9 @@
 #include "define.h"
 #include "Keyboard.h"
 
-const int DRAW_PLEASE_PUSH_Y = 550;
-const int DRAW_PLEASE_PUSH_WIDTH  = 600;
-const int DRAW_PLEASE_PUSH_HEIGHT = 120;
+const int PLEASE_PUSH_DRAW_Y = 550;
+const int PLEASE_PUSH_DRAW_WIDTH = 700;
+const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 SceneTitle::SceneTitle( ) :
 _count( 0 ) {
@@ -48,10 +48,10 @@ void SceneTitle::drawBg( ) const {
 
 void SceneTitle::drawPleasePush( ) const {
 	std::shared_ptr< Graph > graph = Graph::get( );
-	int x1 = ( SCREEN_WIDTH - DRAW_PLEASE_PUSH_WIDTH ) / 2;
-	int y1 = DRAW_PLEASE_PUSH_Y;
-	int x2 = x1 + DRAW_PLEASE_PUSH_WIDTH;
-	int y2 = y1 + DRAW_PLEASE_PUSH_HEIGHT;
+	int x1 = ( SCREEN_WIDTH - PLEASE_PUSH_DRAW_WIDTH ) / 2;
+	int y1 = PLEASE_PUSH_DRAW_Y;
+	int x2 = x1 + PLEASE_PUSH_DRAW_WIDTH;
+	int y2 = y1 + PLEASE_PUSH_DRAW_HEIGHT;
 	SetDrawBlendMode( DX_BLENDMODE_ALPHA, ( int )( ( sin( _count * 0.06 ) + 1 ) * 64 + 156 ) );//“§–¾‰»
 	Graph::get( )->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, TRUE, x1, y1, x2, y2 );
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND, 0 );

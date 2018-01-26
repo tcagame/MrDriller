@@ -73,7 +73,7 @@ void ScenePlay::loadSound( ) {
 	sound->load( Sound::SOUND_MENU_SELECT  		   );//メニュー選択
 	sound->load( Sound::SOUND_MENU_CLICK  		   );//メニュー決定
 	sound->load( Sound::SOUND_BGM_AIRMAN           );//BGM
-	sound->play( Sound::SOUND_BGM_AIRMAN, true, 128 );
+	sound->play( Sound::SOUND_BGM_AIRMAN, true, true, 128 );
 }
 
 void ScenePlay::loadGraph( ) {
@@ -92,21 +92,19 @@ Scene::SCENE ScenePlay::update( ) {
 	_player->update( );
 	_board->update( );
 	_camera->update( _player->getY( ) );
-
 	_brightness = 25 + ( int )( _player->getAir( ) * 0.75 );
 
 	SCENE next = SCENE_PLAY;
 	if ( _player->isFinished( ) ||
 		 _board->isFinished( ) ) {
+		if ( _player->getAct( ) == Player::ACT_GOAL ) {
+			*_score = _player->getScore( );
+			*_depth = _player->getDepth( );
+		}
 		next = SCENE_RESULT;
 	}
 	if ( _player->isGoal( ) ) {
 		Sound::get( )->stop( Sound::SOUND_BGM_AIRMAN );
-	}
-	if( _player->isResultScene( ) ) {
-		*_score = _player->getScore( );
-		*_depth = _player->getDepth( );
-		next = SCENE_RESULT;
 	}
 	if ( Keyboard::get( )->isPushKey( KEY_INPUT_Q ) ) {
 		next = SCENE_MODE_SELECT;
