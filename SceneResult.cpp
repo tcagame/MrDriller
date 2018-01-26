@@ -10,8 +10,8 @@ const int DRAW_Depth_Y = 155;
 const int DRAW_Score_X = 650;
 const int DRAW_Score_Y = 285;
 
-const int NUM_WIDTH = 310;
-const int NUM_HEIGHT = 310;
+const int NUM_WIDTH = 128;
+const int NUM_HEIGHT = 128;
 const int DRAW_NUM_SIZE_X = 80;
 const int DRAW_NUM_SIZE_Y = 80;
 
@@ -82,8 +82,8 @@ void SceneResult::drawDepth( ) const {
 	sprintf_s( buf, "%6d", _depth );
 	int x1 = DRAW_Depth_X;
 	int y1 = DRAW_Depth_Y;
-	int x2 = DRAW_Score_X + DRAW_NUM_SIZE_X;
-	int y2 = DRAW_Score_Y + DRAW_NUM_SIZE_Y;
+	int x2 = DRAW_Depth_X + DRAW_NUM_SIZE_X;
+	int y2 = DRAW_Depth_Y + DRAW_NUM_SIZE_Y;
 	int ty = 0;
 
 	for ( int i = 0; i < 6; i++ ) {
