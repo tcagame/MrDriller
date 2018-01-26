@@ -27,7 +27,9 @@ const int MAX_LEVEL = 5;
 Board::Board( ) :
 _level( 0 ),
 _level_erase( true ),
-_finished( false ) {
+_finished( false ),
+_check( true ),
+_top_y( -1 ) {
 }
 
 Board::~Board( ) {
@@ -39,7 +41,9 @@ void Board::update( ) {
 			loadBlock( );
 		}
 	}
-	checkBlockPos( );
+	if ( _check ) {
+		checkBlock( );
+	}
 	updateBlocks( );
 }
 
@@ -55,15 +59,13 @@ void Board::updateBlocks( ) {
 		std::shared_ptr< Block > block = *ite;
 		block->update( );
 		if ( block->isFinished( ) ) {
+			setCheck( true );
 			ite = _blocks.erase( ite );
 			continue;
 		}
 		ite++;
 	}
-
-
 }
-
 
 void Board::loadBlock( ) {
 	if ( MAX_LEVEL <= _level ) {
@@ -138,14 +140,25 @@ void Board::loadBlock( ) {
 		}
 		int x = ( i % BLOCK_WIDTH_NUM ) * BLOCK_WIDTH;
 		int y = ( i / BLOCK_WIDTH_NUM + _level * BLOCK_HEIGHT_NUM ) * BLOCK_HEIGHT;
+		if ( _top_y < 0 ) {
+			_top_y = y;
+		}
 		block->init( x, y, shared_from_this( ) );
 		_blocks.push_back( block );
 	}
+	checkBlock( );
 }
 
+void Board::checkBlock( ) {
+	checkBlockPos( );
+	checkBlockConnect( );
+	checkBlockFall( );
+	checkBlockFallErase( );
+	setCheck( false );
+}
 void Board::checkBlockPos( ) {
-	std::array< std::shared_ptr< class Block >, BLOCK_NUM > tmp = { };
-	
+	_virtual_blocks = { };
+
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		int mx = block->getX( ) / BLOCK_WIDTH;
 		int my = block->getY( ) / BLOCK_HEIGHT - _level * BLOCK_HEIGHT_NUM;
@@ -154,17 +167,11 @@ void Board::checkBlockPos( ) {
 			continue;
 		}
 		//assert( !tmp[ idx ] );
-		tmp[ idx ] = block;
-	}
-
-	if ( _virtual_blocks != tmp ) {
-		_virtual_blocks = tmp;
-		checkConnect( );
-		checkFall( );
+		_virtual_blocks[ idx ] = block;
 	}
 }
 
-void Board::checkConnect( ) {
+void Board::checkBlockConnect( ) {
 	std::shared_ptr< Board > this_ptr = shared_from_this( );
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		block->resetConnect( );
@@ -177,6 +184,11 @@ void Board::checkConnect( ) {
 int Board::getLevel( ) const {
 	return _level;
 }
+
+int Board::getTopY( ) const {
+	return _top_y;
+}
+
 
 std::shared_ptr< Block > Board::getBlockNow( int x, int y ) const {
 	if ( x < 0 || y < 0 || x >= BLOCK_WIDTH_NUM * BLOCK_WIDTH ) {
@@ -213,7 +225,7 @@ std::shared_ptr< Block > Board::getBlockM( int mx, int my ) const {
 	return _virtual_blocks[ idx ];
 }
 
-void Board::checkFall( ) {
+void Board::checkBlockFall( ) {
 	for ( std::shared_ptr< Block > block : _blocks ) {
 		block->setFall( true );
 	}
@@ -243,6 +255,12 @@ void Board::checkFall( ) {
 	}
 }
 
+void Board::checkBlockFallErase( ) {
+	for ( std::shared_ptr< Block > block : _blocks ) {
+		block->checkFallErase( );
+	}
+}
+
 void Board::eraseBlock( std::shared_ptr< Block > block ) {
 	block->erase( true, false );
 	if ( block->getBlockID( ) == BLOCK_ID_LEVEL ) {
@@ -252,7 +270,6 @@ void Board::eraseBlock( std::shared_ptr< Block > block ) {
 		_level_erase = true;
 		_level++;
 	}
-
 }
 
 void Board::eraseColumnBlockUp( int x, int y ) {
@@ -271,8 +288,13 @@ void Board::eraseColumnBlockUp( int x, int y ) {
 			_virtual_blocks[ idx ]->erase( false, true );
 		}
 	}
-	checkConnect( );
+	checkBlockConnect( );
 }
+
+void Board::setCheck( bool check ) {
+	_check = check;
+}
+
 
 bool Board::isFinished( ) const {
 	return _finished;

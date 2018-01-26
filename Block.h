@@ -6,10 +6,15 @@
 
 const int BLOCK_WIDTH = 100;
 const int BLOCK_HEIGHT = 60;
+
 const int CONNECT_DOWN  = 0b0000001;
 const int CONNECT_UP    = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
+
+const int BLOCK_FALL_TIME = 30;
+const int BLOCK_FALL_COUNT = 6;
+const int BLOCK_FALL_SPEED = BLOCK_HEIGHT / BLOCK_FALL_COUNT;
 
 
 //ブロック親クラス
@@ -37,6 +42,7 @@ public://その他(継承)
 	virtual void checkConnect( );
 	virtual void setFall( bool fall );
 public://その他
+	void checkFallErase( );
 	int checkGroupNum( int num );
 	void connectBlock( std::shared_ptr< class Block > block, int connect );
 	void resetConnect( );
@@ -52,12 +58,10 @@ protected://set系
 	void setTx( int tx );//画像内座標
 	void setTy( int ty );//画像内座標
 private:
-	void move( );
 	bool isInCamera( int camera_y ) const;
 private:
 	int _x;
 	int _y;
-	int _vec_y;
 	int _tx;
 	int _ty;
 	int _count_erase;

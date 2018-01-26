@@ -16,21 +16,27 @@ public://get is
 	std::shared_ptr< class Block > getBlock( int x, int y ) const;
 	std::shared_ptr< class Block > getBlockM( int mx, int my ) const;
 	int getLevel( ) const;
+	int getTopY( ) const;
 	bool isFinished( ) const;
 	bool isFireArea( int x, int y ) const;
 public:
 	void eraseBlock( std::shared_ptr< class Block > block );
 	void eraseColumnBlockUp( int x, int y );
+	void setCheck( bool check );
 private:
 	void loadBlock( );
 	void updateBlocks( );
+	void checkBlock( );
 	void checkBlockPos( );
-	void checkConnect( );
-	void checkFall( );
+	void checkBlockConnect( );
+	void checkBlockFall( );
+	void checkBlockFallErase( );
 private:
+	int _top_y;
 	bool _finished;
 	bool _level_erase;
 	int _level;
+	bool _check;
 	std::list< std::shared_ptr< class Block > > _blocks;
 	std::array< std::shared_ptr< class Block >, BLOCK_WIDTH_NUM * BLOCK_HEIGHT_NUM > _virtual_blocks;
 };
