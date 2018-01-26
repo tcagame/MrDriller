@@ -1051,7 +1051,7 @@ bool Player::isRunOutAir( ) const {
 }
 
 void Player::checkDepth( ) {
-	_depth = _y / BLOCK_HEIGHT * BLOCK_DEPTH + BLOCK_DEPTH - 20;
+	_depth = ( _y / BLOCK_HEIGHT - _board->getTopY( ) / BLOCK_HEIGHT + 2 ) * BLOCK_DEPTH;
 }
 
 void Player::checkAirDecreaseSpeed( ) {
