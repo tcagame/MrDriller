@@ -10,10 +10,14 @@ const int DRAW_Depth_Y = 155;
 const int DRAW_Score_X = 650;
 const int DRAW_Score_Y = 285;
 
-const int NUM_WIDTH = 310;
-const int NUM_HEIGHT = 310;
+const int NUM_WIDTH = 128;
+const int NUM_HEIGHT = 128;
 const int DRAW_NUM_SIZE_X = 80;
 const int DRAW_NUM_SIZE_Y = 80;
+
+const int PLEASH_PUSH_DRAW_Y = 650;
+const int PLEASE_PUSH_DRAW_WIDTH = 700;
+const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 
 SceneResult::SceneResult( int score, int depth ):
@@ -34,7 +38,7 @@ void SceneResult::loadGraph( ) {
 	std::shared_ptr< Graph > graph = Graph::get( );
 	graph->load( Graph::GRAPH_NUMBER );
 	graph->load( Graph::GRAPH_RESULT_BG );
-	//graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
+	graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
 }
 
 //-----------Update Draw-----------//
@@ -54,6 +58,7 @@ void SceneResult::draw( ) const {
 	//Graph::get( )->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, FALSE, x1, y1, x2, y2 );
 	drawScore( );
 	drawDepth( );
+	drawPleasePush( );
 }
 
 void SceneResult::drawScore( ) const {
@@ -82,8 +87,8 @@ void SceneResult::drawDepth( ) const {
 	sprintf_s( buf, "%6d", _depth );
 	int x1 = DRAW_Depth_X;
 	int y1 = DRAW_Depth_Y;
-	int x2 = DRAW_Score_X + DRAW_NUM_SIZE_X;
-	int y2 = DRAW_Score_Y + DRAW_NUM_SIZE_Y;
+	int x2 = DRAW_Depth_X + DRAW_NUM_SIZE_X;
+	int y2 = DRAW_Depth_Y + DRAW_NUM_SIZE_Y;
 	int ty = 0;
 
 	for ( int i = 0; i < 6; i++ ) {
@@ -94,4 +99,15 @@ void SceneResult::drawDepth( ) const {
 		x1 += DRAW_NUM_SIZE_X;
 		x2 += DRAW_NUM_SIZE_X;
 	}
+}
+
+void SceneResult::drawPleasePush( ) const{
+	std::shared_ptr<Graph>graph=Graph::get( );
+	int x1 = ( SCREEN_WIDTH - PLEASE_PUSH_DRAW_WIDTH ) / 2;
+	int y1 = PLEASH_PUSH_DRAW_Y;
+	int x2 = x1 + PLEASE_PUSH_DRAW_WIDTH;
+	int y2 = y1 + PLEASE_PUSH_DRAW_HEIGHT;
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA, ( int )( ( sin( _count * 0.06 ) + 1 ) * 64 + 156 ) );//“§–¾‰»
+	Graph::get( )->draw( Graph::GRAPH_PLEASE_PUSH_SPACE, TRUE, x1, y1, x2, y2 );
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND, 0 );
 }

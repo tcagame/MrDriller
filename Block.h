@@ -17,11 +17,11 @@ class Block : std::enable_shared_from_this< Block > {
 public:
 	Block( int tx, int ty );
 	virtual ~Block( );
-public:
+public://‰Šú‰»Eƒ‹[ƒvˆ—
 	void init( int x, int y, std::shared_ptr< class Board > board );
 	void update( );
 	void draw( int camera_y ) const;
-public:
+public://Get Is
 	bool isExistence( int x, int y ) const;
 	bool isFinished( ) const;
 	bool isErase( ) const;
@@ -30,25 +30,25 @@ public:
 	int getGroup( ) const;
 	int getX( ) const;
 	int getY( ) const;
+	std::shared_ptr< class Board > getBoard( );
 	virtual int getBlockID( ) = 0;
-	void setFallGroup( bool fall );
-public:
-	int checkGroupNum( int num );
+public://‚»‚Ì‘¼(Œp³)
 	virtual void erase( bool connect_erase = false, bool destroy = false );
 	virtual void checkConnect( );
-	void connectBlock( std::shared_ptr< class Block > block, int connect );
-	void setGroup( int group );
 	virtual void setFall( bool fall );
+public://‚»‚Ì‘¼
+	int checkGroupNum( int num );
+	void connectBlock( std::shared_ptr< class Block > block, int connect );
 	void resetConnect( );
-protected:
-	std::shared_ptr< class Board > getBoard( );
-	void setFinished( bool finish );
+	void setGroup( int group );
+	void setFallGroup( bool fall );
+protected://Œp³
 	virtual void changeTxByConnect( );
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 	virtual void fall( );//—‰ºˆ—
-protected:
-	//setŒn
+protected://setŒn
+	void setFinished( bool finish );
 	void setTx( int tx );//‰æ‘œ“àÀ•W
 	void setTy( int ty );//‰æ‘œ“àÀ•W
 private:
