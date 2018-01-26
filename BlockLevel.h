@@ -5,6 +5,7 @@ public:
 	BlockLevel( );
 	virtual ~BlockLevel( );
 public:
+	void changeTy( ) { };
 	int getBlockID( ) { return BLOCK_ID_LEVEL; };
 	void setFall( bool fall ) { };
 protected:

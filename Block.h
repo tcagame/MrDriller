@@ -12,7 +12,7 @@ const int CONNECT_UP    = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
 
-const int BLOCK_FALL_TIME = 30;
+const int BLOCK_FALL_TIME = 20;
 const int BLOCK_FALL_COUNT = 6;
 const int BLOCK_FALL_SPEED = BLOCK_HEIGHT / BLOCK_FALL_COUNT;
 
@@ -54,6 +54,7 @@ protected://Œp³
 	virtual void eraseAnimation( );
 	virtual void act( ) = 0;//ŒÅ—Lˆ—
 	virtual void fall( );//—‰ºˆ—
+	virtual void changeTy( );
 protected://setŒn
 	void setFinished( bool finish );
 	void setTx( int tx );//‰æ‘œ“àÀ•W

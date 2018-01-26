@@ -16,4 +16,5 @@ private:
 private:
 	int _count;
 	bool _next;
+	bool _click;
 };
