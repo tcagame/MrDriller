@@ -12,7 +12,7 @@ const int CONNECT_UP    = 0b0000010;
 const int CONNECT_LEFT  = 0b0000100;
 const int CONNECT_RIGHT = 0b0001000;
 
-const int BLOCK_FALL_TIME = 30;
+const int BLOCK_FALL_TIME = 20;
 const int BLOCK_FALL_COUNT = 6;
 const int BLOCK_FALL_SPEED = BLOCK_HEIGHT / BLOCK_FALL_COUNT;
 
@@ -35,6 +35,7 @@ public://Get Is
 	int getGroup( ) const;
 	int getX( ) const;
 	int getY( ) const;
+	int getFallCount( ) const;
 	std::shared_ptr< class Board > getBoard( );
 	virtual int getBlockID( ) = 0;
 public://ÇªÇÃëº(åpè≥)
