@@ -87,10 +87,10 @@ void Game::changeScene( Scene::SCENE scene ) {
 		_scene = std::shared_ptr< Scene >( new SceneModeSelect( &_mode ) );
 		break;
 	case Scene::SCENE_PLAY:
-		_scene = std::shared_ptr< Scene >( new ScenePlay( _mode, &_score, &_depth ) );
+		_scene = std::shared_ptr< Scene >( new ScenePlay( _mode, &_score, &_depth, &_level ) );
 		break;	
 	case Scene::SCENE_RESULT:
-		_scene = std::shared_ptr< Scene >( new SceneResult( _score, _depth ) );
+		_scene = std::shared_ptr< Scene >( new SceneResult( _score, _depth, _level ) );
 		break;	
 	}
 	_scene->loadGraph( );

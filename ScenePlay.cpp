@@ -41,10 +41,11 @@ const int MAX_BRIGHTNESS = 100;
 
 const int SPRITE_SIZE = 64;
 
-ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth ) :
+ScenePlay::ScenePlay( Game::MODE mode, int *score, int *depth, int *level ) :
 _mode( mode ),
 _score( score ),
 _depth( depth ),
+_level( level ),
 _brightness( MAX_BRIGHTNESS ) {
 	_board  = std::shared_ptr< Board  >( new Board( ) );
 	_board->loadBlock( );
@@ -331,4 +332,8 @@ int ScenePlay::getScore( ) {
 
 int ScenePlay::getDepth( ) {
 	return _player->getDepth( );
+}
+
+int ScenePlay::getLevel( ) {
+	return _board->getLevel( ) + 1;
 }

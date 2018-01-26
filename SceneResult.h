@@ -3,7 +3,7 @@
 
 class SceneResult : public Scene {
 public:
-	SceneResult( int score, int depth );
+	SceneResult( int score, int depth, int level );
 	virtual ~SceneResult( );
 public://åpè≥
 	SCENE update( );
@@ -17,6 +17,7 @@ private:
 private:
 	int _score;
 	int _depth;
+	int _level;
 	int _count;
 	//int _se[ 18 ];
 };
