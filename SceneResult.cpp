@@ -4,6 +4,11 @@
 #include "Keyboard.h"
 #include "Game.h"
 
+const int DRAW_COMMENT_X = 400;
+const int DRAW_COMMENT_Y = 400;
+const int DRAW_COMMENT_SIZE_X = 600;
+const int DRAW_COMMENT_SIZE_Y = 250;
+
 const int DRAW_Depth_X = 650;
 const int DRAW_Depth_Y = 155;
 
@@ -38,6 +43,7 @@ void SceneResult::loadGraph( ) {
 	std::shared_ptr< Graph > graph = Graph::get( );
 	graph->load( Graph::GRAPH_NUMBER );
 	graph->load( Graph::GRAPH_RESULT_BG );
+	graph->load( Graph::GRAPH_RESULT_COMMENT );
 	graph->load( Graph::GRAPH_PLEASE_PUSH_SPACE );
 }
 
@@ -59,6 +65,18 @@ void SceneResult::draw( ) const {
 	drawScore( );
 	drawDepth( );
 	drawPleasePush( );
+	drawComment( );
+}
+
+void SceneResult::drawComment( ) const {
+	std::shared_ptr< Graph > graph = Graph::get( );
+	int x1 = DRAW_COMMENT_X;
+	int y1 = DRAW_COMMENT_Y;
+	int x2 = DRAW_COMMENT_X + DRAW_COMMENT_SIZE_X;
+	int y2 = DRAW_COMMENT_Y + DRAW_COMMENT_SIZE_Y;
+	int tx = 0;
+	int ty = 0;
+	graph->draw( Graph::GRAPH_RESULT_COMMENT, TRUE, x1, y1, x2, y2, tx, ty, 850, 300 );
 }
 
 void SceneResult::drawScore( ) const {
