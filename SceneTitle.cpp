@@ -8,7 +8,8 @@ const int PLEASE_PUSH_DRAW_WIDTH = 700;
 const int PLEASE_PUSH_DRAW_HEIGHT = 100;
 
 SceneTitle::SceneTitle( ) :
-_count( 0 ) {
+_count( 0 ),
+_next( false ) {
 }
 
 SceneTitle::~SceneTitle( ) {
