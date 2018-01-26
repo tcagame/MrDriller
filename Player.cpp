@@ -677,8 +677,7 @@ void Player::drawResurrection( int camera_y ) const {
 
 void Player::drawDodgeBack( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
-	int pattern = ANIM_PATTERN - abs( _target_x - _x ) * ANIM_PATTERN / DODGE_X - 1;
-	//int pattern = ANIM_PATTERN - ( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	int pattern = ANIM_PATTERN - ( abs( _target_x - _x ) - 1 )  * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = _x;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
@@ -695,8 +694,7 @@ void Player::drawDodgeBack( int camera_y ) const {
 
 void Player::drawDodgeFront( int camera_y ) const {
 	const int ANIM_PATTERN = 3;
-	int pattern = ANIM_PATTERN - abs( _target_x - _x ) * ANIM_PATTERN / DODGE_X - 1;
-	//int pattern = ANIM_PATTERN - ( abs( abs( _target_x - _x ) - 1 ) ) * ANIM_PATTERN / DODGE_X - 1;
+	int pattern = ANIM_PATTERN - ( abs( _target_x - _x ) - 1 )  * ANIM_PATTERN / DODGE_X - 1;
 	int x1 = _x;
 	int y1 = _y - camera_y;
 	int x2 = x1 + DRAW_WIDTH;
