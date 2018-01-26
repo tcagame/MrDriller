@@ -1056,7 +1056,7 @@ void Player::checkDepth( ) {
 
 void Player::checkAirDecreaseSpeed( ) {
 	_air_decrease_speed = AIR_DECREASE_SPEED + 0.01 * _board->getLevel( );
-	if ( _board->isFireArea( _x, _y ) ) {
+	if ( _board->isFireArea( _x + CENTRAL_X, _y + CENTRAL_Y ) ) {
 		_air_decrease_speed = AIR_DECREASE_SPEED_FIRE;
 	} else {
 		_air_decrease_speed = AIR_DECREASE_SPEED;
