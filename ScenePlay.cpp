@@ -74,7 +74,7 @@ void ScenePlay::loadSound( ) {
 	sound->load( Sound::SOUND_MENU_SELECT  		   );//メニュー選択
 	sound->load( Sound::SOUND_MENU_CLICK  		   );//メニュー決定
 	sound->load( Sound::SOUND_BGM_AIRMAN           );//BGM
-	sound->play( Sound::SOUND_BGM_AIRMAN, true, true, 256 );
+	sound->play( Sound::SOUND_BGM_AIRMAN, true, true, 128 );
 }
 
 void ScenePlay::loadGraph( ) {
